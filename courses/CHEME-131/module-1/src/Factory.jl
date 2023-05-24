@@ -1,32 +1,31 @@
-
-"""
-    build(model::Type{MyUSTreasuryBillModel}, data::NamedTuple) -> MyUSTreasuryBillModel
-"""
-function build(model::Type{MyUSTreasuryBillModel}, data::NamedTuple)::MyUSTreasuryBillModel
-
+function _build(modeltype::Type{T}, data::NamedTuple) where T <: AbstractTreasuryDebtSecurity
+    
     # build an empty model
-    model = MyNetworkEdgeModel();
+    model = modeltype();
 
     # if we have options, add them to the contract model -
     if (isempty(data) == false)
         for key ∈ fieldnames(modeltype)
             
-            # convert the field_name_symbol to a string -
-            field_name_string = string(key)
-
-            # check the for the key -
-            if (haskey(data, key) == false)
-                throw(ArgumentError("NamedTuple is missing: $(field_name_string)"))
+            # check the for the key - if we have it, then grab this value
+            value = nothing
+            if (haskey(data, key) == true)
+                # get the value -
+                value = data[key]
             end
-
-            # get the value -
-            value = data[key]
 
             # set -
             setproperty!(model, key, value)
         end
     end
-
+ 
     # return -
     return model
 end
+
+# == PUBLIC METHODS BELOW HERE ======================================================================================================== #
+"""
+    build(model::Type{MyUSTreasuryBillModel}, data::NamedTuple) -> MyUSTreasuryBillModel
+"""
+build(model::Type{MyUSTreasuryBillModel}, data::NamedTuple)::MyUSTreasuryBillModel = _build(model, data);
+# == PUBLIC METHODS ABOVE HERE ======================================================================================================== #
