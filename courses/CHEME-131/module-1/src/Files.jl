@@ -3,8 +3,6 @@ loadratesfile(; year::String = "2022")::DataFrame
 """
 function loadratesfile(; year::String = "2022")::DataFrame
     
-    # initialize -
-
     # check: do we have the correct year?
     ok_years_set = Set(["2019", "2020", "2021", "2022", "2023"]);
     if (in(year, ok_years_set) == false)
