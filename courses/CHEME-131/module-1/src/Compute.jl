@@ -27,7 +27,9 @@ end
 # define expectation -
 _𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
-
+"""
+    solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)
+"""
 function solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)
 
     # initialize -
@@ -74,6 +76,9 @@ function solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)
     return model;
 end
 
+"""
+    populate(model::MySymmetricBinaryLatticeModel)
+"""
 function populate(model::MySymmetricBinaryLatticeModel)
 
     # initialize -
