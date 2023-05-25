@@ -1,4 +1,4 @@
-function _build(modeltype::Type{T}, data::NamedTuple) where T <: AbstractTreasuryDebtSecurity
+function _build(modeltype::Type{T}, data::NamedTuple) where T <: Union{AbstractTreasuryDebtSecurity, AbstractLatticeModel, AbstractLatticeNodeModel}
     
     # build an empty model
     model = modeltype();
@@ -28,4 +28,6 @@ end
     build(model::Type{MyUSTreasuryBillModel}, data::NamedTuple) -> MyUSTreasuryBillModel
 """
 build(model::Type{MyUSTreasuryBillModel}, data::NamedTuple)::MyUSTreasuryBillModel = _build(model, data);
+build(model::Type{MySymmetricBinaryLatticeModel}, data::NamedTuple)::MySymmetricBinaryLatticeModel = _build(model, data);
+build(model::Type{MyBinaryLatticeNodeModel}, data::NamedTuple)::MyBinaryLatticeNodeModel = _build(model, data);
 # == PUBLIC METHODS ABOVE HERE ======================================================================================================== #
