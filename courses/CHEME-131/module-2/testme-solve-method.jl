@@ -2,11 +2,11 @@
 include("Include.jl")
 
 # setup constants -
-Vₚ = 100000.0
-T = 5.0 # quotes are from 5/26, we are looking at the 5/15 maturation
+Vₚ = 100.0
+T = 30.0 # quotes are from 5/26, we are looking at the 5/15 maturation
 λ = 2
-r = 0.07
-c = 0.08
+r = 0.03966
+c = 0.03625
 
 # build the Bond model -
 model = build(MyUSTreasuryCouponSecurityModel, (
@@ -14,4 +14,4 @@ model = build(MyUSTreasuryCouponSecurityModel, (
 ));
 
 # solve -
-cfd = solve(model, Vₚ = Vₚ)
+model = price(model, Vₚ = Vₚ)

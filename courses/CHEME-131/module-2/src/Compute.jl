@@ -1,7 +1,7 @@
 """
-    solve(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0) -> MyUSTreasuryCouponSecurityModel
+    price(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0) -> MyUSTreasuryCouponSecurityModel
 """
-function solve(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0)
+function price(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0)::MyUSTreasuryCouponSecurityModel
     
     # initialize -
     cashflow = Dict{Int,Float64}()
@@ -16,12 +16,13 @@ function solve(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0)
     N = λ*T; # the number of steps we take
     Cᵢ = (coupon/λ)*Vₚ;
     rᵢ = (rate/λ);
-
+    
     # main loop -
     for i ∈ 1:N
 
         # build the discount rate -
         𝒟ᵢ = (1+rᵢ)^i
+        #𝒟ᵢ = exp(rᵢ*t)
 
         # compute the coupon payments -
         payment =  (1/𝒟ᵢ)*Cᵢ;
@@ -40,6 +41,10 @@ function solve(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0)
     end
     cashflow[0] = -1*cumulative_sum
 
+    # add stuff to model -
+    model.cashflow = cashflow;
+    model.price = abs(cashflow[0]);
+
     # return the updated model -
-    return cashflow
+    return model
 end
