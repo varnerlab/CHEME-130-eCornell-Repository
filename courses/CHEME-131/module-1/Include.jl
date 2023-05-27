@@ -15,6 +15,9 @@ using Plots
 using Colors
 using Statistics
 using Dates
+using StatsPlots
+using Distributions
+using PrettyTables
 using IJulia # not sure why this is required - is this a 1.9 thing?
 
 # load my codes -
