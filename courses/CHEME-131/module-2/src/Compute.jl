@@ -22,7 +22,6 @@ function price(model::MyUSTreasuryCouponSecurityModel; Vₚ::Float64 = 100.0)::M
 
         # build the discount rate -
         𝒟ᵢ = (1+rᵢ)^i
-        #𝒟ᵢ = exp(rᵢ*t)
 
         # compute the coupon payments -
         payment =  (1/𝒟ᵢ)*Cᵢ;
