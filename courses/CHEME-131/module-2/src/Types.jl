@@ -1,5 +1,6 @@
 # abstract types -
 abstract type AbstractTreasuryDebtSecurity end
+abstract type AbstractCompoundingModel end
 
 """
     MyUSTreasuryCouponSecurityModel <: AbstractTreasuryDebtSecurity
@@ -17,4 +18,18 @@ mutable struct MyUSTreasuryCouponSecurityModel <: AbstractTreasuryDebtSecurity
 
     # consturctor -
     MyUSTreasuryCouponSecurityModel() = new();
+end
+
+"""
+    DiscreteCompounding <: AbstractCompoundingModel 
+"""
+struct DiscreteCompoundingModel <: AbstractCompoundingModel 
+    DiscreteCompoundingModel() = new()
+end
+
+"""
+    ContinuousCompoundingModel <: AbstractCompoundingModel 
+"""
+struct ContinuousCompoundingModel <: AbstractCompoundingModel 
+    ContinuousCompoundingModel() = new()
 end
