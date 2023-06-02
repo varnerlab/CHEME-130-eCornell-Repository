@@ -1,13 +1,9 @@
-# Setup local paths -
+# setup paths -
 const _ROOT = pwd();
-const _PATH_TO_DATA = joinpath(_ROOT, "data")
-const _PATH_TO_SRC = joinpath(_ROOT, "src")
+const _PATH_TO_SRC = joinpath(_ROOT, "src");
 
-# load external packages -
-using CSV
-using DataFrames
-using PrettyTables
-using Dates
+# load external pacakges -
+import Pkg; Pkg.activate("."); Pkg.instantiate();
 
 # load my codes -
 include(joinpath(_PATH_TO_SRC, "Types.jl"))
