@@ -1,5 +1,5 @@
 
-function _price_continuous_compounding(model::MyUSTreasuryCouponSecurityModel,face::Float64)
+function _price_continuous_compounding(model::MyUSTreasuryCouponSecurityModel)
 
     # initialize -
     cashflow = Dict{Int,Float64}()
@@ -25,7 +25,6 @@ function _price_continuous_compounding(model::MyUSTreasuryCouponSecurityModel,fa
         τ = (i)*Δ;
 
         # build the discount rate -
-        #𝒟ᵢ = (1+rᵢ)^i
         𝒟ᵢ = exp(τ*rᵢ);
 
         # compute the coupon payments -
@@ -53,7 +52,8 @@ function _price_continuous_compounding(model::MyUSTreasuryCouponSecurityModel,fa
     return model
 end
 
-function _price_discrete_compounding(model::MyUSTreasuryCouponSecurityModel,face::Float64)
+function _price_discrete_compounding(model::MyUSTreasuryCouponSecurityModel)
+    
     # initialize -
     cashflow = Dict{Int,Float64}()
 
@@ -106,15 +106,12 @@ function _price_discrete_compounding(model::MyUSTreasuryCouponSecurityModel,face
 end
 
 """
-    price(model::MyUSTreasuryCouponSecurityModel, compounding::T; 
-        Vₚ::Float64 = 100.0) -> MyUSTreasuryCouponSecurityModel where T <: AbstractCompoundingModel 
+    price(model::MyUSTreasuryCouponSecurityModel, compounding::T) -> MyUSTreasuryCouponSecurityModel where T <: AbstractCompoundingModel 
 """
-function price(model::MyUSTreasuryCouponSecurityModel, compounding::T; 
-    Vₚ::Float64 = 100.0)::MyUSTreasuryCouponSecurityModel where T <: AbstractCompoundingModel 
-    
-    if (isa(compounding, ContinuousCompoundingModel) == true)
-        return _price_continuous_compounding(model,Vₚ);
-    elseif (isa(compounding, DiscreteCompoundingModel) == true)
-        return _price_discrete_compounding(model,Vₚ);
-    end
+function price(model::MyUSTreasuryCouponSecurityModel, compounding::T)::MyUSTreasuryCouponSecurityModel where T <: AbstractCompoundingModel 
+    return compounding(model)
 end
+
+# Shortcut methods
+(compounding::DiscreteCompoundingModel)(model::MyUSTreasuryCouponSecurityModel) = _price_discrete_compounding(model::MyUSTreasuryCouponSecurityModel)
+(compounding::ContinuousCompoundingModel)(model::MyUSTreasuryCouponSecurityModel) = _price_continuous_compounding(model::MyUSTreasuryCouponSecurityModel)
