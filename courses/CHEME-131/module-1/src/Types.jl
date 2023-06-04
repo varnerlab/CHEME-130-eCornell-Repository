@@ -31,11 +31,11 @@ end
 mutable struct MySymmetricBinaryLatticeModel <: AbstractLatticeModel
     
     # data -
-    u::Float64      # up-factor
-    d::Float64      # down-factor
-    p::Float64      # probability of an up move
-    rₒ::Float64     # root value
-    T::Int64        # number of levels in the tree (zero based)
+    u::Float64                      # up-factor
+    d::Float64                      # down-factor
+    p::Float64                      # probability of an up move
+    rₒ::Union{Nothing, Float64}     # root value
+    T::Int64                        # number of levels in the tree (zero based)
     connectivity::Union{Nothing,Dict{Int64, Array{Int64,1}}}    # holds the connectivity of the tree
     levels::Union{Nothing,Dict{Int64,Array{Int64,1}}} # nodes on each level of the tree
     data::Union{Nothing, Dict{Int64, MyBinaryLatticeNodeModel}} # holds data in the tree
