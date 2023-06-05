@@ -2,14 +2,16 @@
 abstract type AbstractTreasuryDebtSecurity end
 abstract type AbstractLatticeModel end
 abstract type AbstractLatticeNodeModel end
+abstract type AbstractCompoundingModel end
 
 # concrete types -
 mutable struct MyUSTreasuryBillModel <: AbstractTreasuryDebtSecurity
     
     # data -
-    par::Float64    # Par value of the bill
-    rate::Float64   # Annual interest rate
-    T::Float64      # Duration in years, measured as a 365 day or a 52 week year
+    par::Float64                        # Par value of the bill
+    rate::Union{Nothing, Float64}       # Annual interest rate
+    T::Float64                          # Duration in years, measured as a 365 day or a 52 week year
+    price::Union{Nothing, Float64}      # price of the T-Bill
     
     # constructor -
     MyUSTreasuryBillModel() = new()
@@ -42,4 +44,18 @@ mutable struct MySymmetricBinaryLatticeModel <: AbstractLatticeModel
 
     # constructor -
     MySymmetricBinaryLatticeModel() = new()
+end
+
+"""
+    DiscreteCompounding <: AbstractCompoundingModel 
+"""
+struct DiscreteCompoundingModel <: AbstractCompoundingModel 
+    DiscreteCompoundingModel() = new()
+end
+
+"""
+    ContinuousCompoundingModel <: AbstractCompoundingModel 
+"""
+struct ContinuousCompoundingModel <: AbstractCompoundingModel 
+    ContinuousCompoundingModel() = new()
 end

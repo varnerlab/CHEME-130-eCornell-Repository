@@ -1,3 +1,44 @@
+function _price_continuous_compounding(model::MyUSTreasuryBillModel)
+
+    # get data from the model -
+    T = model.T;
+    rate = model.rate
+    Vₚ = model.par
+
+    # compute the discount factor -
+    𝒟 = exp(rate*T);
+
+    # compute the price -
+    price = (1/𝒟)*Vₚ
+
+    # update the model -
+    model.price = price;
+
+    # return the updated model -
+    return model
+end
+
+function _price_discrete_compounding(model::MyUSTreasuryBillModel)
+    
+    # get data from the model -
+    T = model.T;
+    rate = model.rate
+    Vₚ = model.par
+
+    # compute the discount factor -
+    𝒟 = (1+rate)^(T)
+
+    # compute the price -
+    price = (1/𝒟)*Vₚ
+
+    # update the model -
+    model.price = price;
+
+    # return -
+    return model
+end
+
+
 """
     _build_nodes_level_dictionary(levels::Int64) -> Dict{Int64,Array{Int64,1}}
 """
@@ -27,10 +68,18 @@ end
 # define expectation -
 _𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
+
 """
-    solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)
+    price(model::MyUSTreasuryCouponSecurityModel, compounding::T) -> MyUSTreasuryCouponSecurityModel where T <: AbstractCompoundingModel 
 """
-function solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)
+function price(model::MyUSTreasuryBillModel, compounding::T)::MyUSTreasuryBillModel where T <: AbstractCompoundingModel 
+    return compounding(model)
+end
+
+"""
+    solve(model::MySymmetricBinaryLatticeModel)::MySymmetricBinaryLatticeModel
+"""
+function solve(model::MySymmetricBinaryLatticeModel)::MySymmetricBinaryLatticeModel
 
     # initialize -
     # ...
@@ -40,6 +89,7 @@ function solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)
     levels = model.levels;
     connectivity = model.connectivity;
     nodes = model.data;
+    Vₚ = model.par;
 
     # all the leaves, have the par value -
     leaves = levels[T];
@@ -231,3 +281,8 @@ function 𝕍(model::MySymmetricBinaryLatticeModel; level::Int = 0)::Float64
     # return -
     return variance_value;
 end
+
+
+# Shortcut methods
+(compounding::DiscreteCompoundingModel)(model::MyUSTreasuryBillModel) = _price_discrete_compounding(model::MyUSTreasuryBillModel)
+(compounding::ContinuousCompoundingModel)(model::MyUSTreasuryBillModel) = _price_continuous_compounding(model::MyUSTreasuryBillModel)
