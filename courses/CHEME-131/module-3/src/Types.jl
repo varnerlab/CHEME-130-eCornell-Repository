@@ -1,5 +1,6 @@
 # abstract types -
 abstract type AbstractTreasuryDebtSecurity end
+abstract type AbstractCompoundingModel end
 
 # concrete types -
 """
@@ -9,7 +10,7 @@ mutable struct MyUSTreasuryZeroCouponBondModel <: AbstractTreasuryDebtSecurity
     
     # data -
     par::Float64                                    # Par value of the bill
-    rate::Float64                                   # Annual interest rate
+    rate::Union{Nothing, Float64}                   # Annual interest rate
     T::Float64                                      # Duration in years, measured as a 365 day or a 52 week year
     price::Union{Nothing, Float64}                  # Price of the bond or note
     cashflow::Union{Nothing, Dict{Int,Float64}}     # Cashflow
@@ -34,4 +35,19 @@ mutable struct MyUSTreasuryCouponSecurityModel <: AbstractTreasuryDebtSecurity
 
     # consturctor -
     MyUSTreasuryCouponSecurityModel() = new();
+end
+
+
+"""
+    DiscreteCompounding <: AbstractCompoundingModel 
+"""
+struct DiscreteCompoundingModel <: AbstractCompoundingModel 
+    DiscreteCompoundingModel() = new()
+end
+
+"""
+    ContinuousCompoundingModel <: AbstractCompoundingModel 
+"""
+struct ContinuousCompoundingModel <: AbstractCompoundingModel 
+    ContinuousCompoundingModel() = new()
 end
