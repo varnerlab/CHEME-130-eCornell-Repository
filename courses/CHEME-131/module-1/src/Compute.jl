@@ -79,7 +79,7 @@ end
 """
     solve(model::MySymmetricBinaryLatticeModel)::MySymmetricBinaryLatticeModel
 """
-function solve(model::MySymmetricBinaryLatticeModel)::MySymmetricBinaryLatticeModel
+function solve(model::MySymmetricBinaryLatticeModel; Vₚ::Float64 = 100.0)::MySymmetricBinaryLatticeModel
 
     # initialize -
     # ...
@@ -89,7 +89,6 @@ function solve(model::MySymmetricBinaryLatticeModel)::MySymmetricBinaryLatticeMo
     levels = model.levels;
     connectivity = model.connectivity;
     nodes = model.data;
-    Vₚ = model.par;
 
     # all the leaves, have the par value -
     leaves = levels[T];
