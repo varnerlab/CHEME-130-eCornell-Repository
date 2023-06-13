@@ -11,6 +11,7 @@ using Dates
 using DataFrames
 using CSV
 using PrettyTables
+using Statistics
 
 # load my codes -
 include(joinpath(_PATH_TO_SRC, "Types.jl"))
