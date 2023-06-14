@@ -78,13 +78,13 @@ function populate(model::MyBinomialEquityPriceTree, Sₒ::Float64, h::Int)::MyBi
     u = model.u;
     p = model.p;
     d = model.d;
-    data = Dict{Int,Array{MyBiomialLatticeEquityNodeModel,1}}() # the node model holds two pieces of data: S is the price, P is the probability of that price
+    nodes_dictionary = Dict{Int, MyBiomialLatticeEquityNodeModel}()
 
     # main loop -
+    counter = 0;
     for t ∈ 0:h
         
         # prices -
-        node_array = Array{MyBiomialLatticeEquityNodeModel,1}()
         for k ∈ 0:t
             
             t′ = big(t)
@@ -99,16 +99,15 @@ function populate(model::MyBinomialEquityPriceTree, Sₒ::Float64, h::Int)::MyBi
             node.price = price
             node.probability = P
           
+            
             # push this into the array -
-            push!(node_array, node)
+            nodes_dictionary[counter] = node;
+            counter += 1
         end
-
-        # grab -
-        data[t] = node_array;
     end
 
     # update the model -
-    model.data = data;
+    model.data = nodes_dictionary;
     model.levels = _build_nodes_level_dictionary(h);
     model.connectivity = _build_connectivity_dictionary(h);
 
