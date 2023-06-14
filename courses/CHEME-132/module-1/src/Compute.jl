@@ -66,6 +66,8 @@ function _build_connectivity_dictionary(h::Int)::Dict{Int64, Array{Int64,1}}
     return connectivity
 end
 
+# define expectation -
+_𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
 """
     populate(model::MyCRRPriceLatticeModel, Sₒ::Float64, T::Int) -> Dict{Int,Array{NamedTuple,1}}
@@ -137,4 +139,72 @@ function entropy(data::Dict{Int,Array{NamedTuple,1}}, level::Int)::Float64
     
     # return -
     return -1*H
+end
+
+"""
+    𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
+"""
+function 𝔼(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
+
+    # initialize -
+    expected_value = 0.0;
+    X = Array{Float64,1}();
+    p = Array{Float64,1}();
+
+    # get the levels dictionary -
+    levels = model.levels;
+    nodes_on_this_level = levels[level]
+    for i ∈ nodes_on_this_level
+
+        # grab the node -
+        node = model.data[i];
+        
+        # get the data -
+        x_value = node.price;
+        p_value = node.probability;
+
+        # store the data -
+        push!(X,x_value);
+        push!(p,p_value);
+    end
+
+    # compute -
+    expected_value = _𝔼(X,p) # inner product
+
+    # return -
+    return expected_value
+end
+
+"""
+    𝕍(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
+"""
+function 𝕍(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
+
+    # initialize -
+    variance_value = 0.0;
+    X = Array{Float64,1}();
+    p = Array{Float64,1}();
+
+    # get the levels dictionary -
+    levels = model.levels;
+    nodes_on_this_level = levels[level]
+    for i ∈ nodes_on_this_level
+ 
+        # grab the node -
+        node = model.data[i];
+         
+        # get the data -
+        x_value = node.price;
+        p_value = node.probability;
+ 
+        # store the data -
+        push!(X,x_value);
+        push!(p,p_value);
+    end
+
+    # update -
+    variance_value = (_𝔼(X.^2,p) - (_𝔼(X,p))^2)
+
+    # return -
+    return variance_value;
 end
