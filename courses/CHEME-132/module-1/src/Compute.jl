@@ -207,3 +207,65 @@ function 𝕍(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
     # return -
     return variance_value;
 end
+
+
+
+"""
+    analyze(R::Array{Float64,1};  Δt::Float64 = (1.0/365.0)) -> Tuple{Float64,Float64,Float64}
+"""
+function analyze(R::Array{Float64,1};  Δt::Float64 = (1.0/365.0))::Tuple{Float64,Float64,Float64}
+    
+    # initialize -
+    u,d,p = 0.0, 0.0, 0.0;
+    darray = Array{Float64,1}();
+    uarray = Array{Float64,1}();
+    N₊ = 0;
+
+    # up -
+    # compute the up moves, and estimate the average u value -
+    index_up_moves = findall(x->x>0, R);
+    for index ∈ index_up_moves
+        R[index] |> (μ -> push!(uarray, exp(μ*Δt)))
+    end
+    u = mean(uarray);
+
+    # down -
+    # compute the down moves, and estimate the average d value -
+    index_down_moves = findall(x->x<0, R);
+    for index ∈ index_down_moves
+        R[index] |> (μ -> push!(darray, exp(μ*Δt)))
+    end
+    d = mean(darray);
+
+    # probability -
+    N₊ = length(index_up_moves);
+    p = N₊/length(R);
+
+    # return -
+    return (u,d,p);
+end
+
+function generate_firm_index_set()::Set{Int64}
+
+    # initialize -
+    list_of_files = readdir(joinpath(_PATH_TO_DATA,"Year-1"), join=true);
+    set_of_firm_indexes = Set{Int64}();
+
+    for file ∈ list_of_files
+
+        # get the file name -
+        file_name = basename(file);
+        if (file_name != ".ipynb_checkpoints")
+            
+            # get the firm index -
+            components = split(file_name,"-")[2] |> (x-> split(x,"."))
+            firm_index = parse(Int64, String.(components) |> (x -> x[1]));
+    
+            # push -
+            push!(set_of_firm_indexes, firm_index);
+        end
+    end
+
+    # return -
+    return set_of_firm_indexes;
+end
