@@ -266,6 +266,9 @@ function generate_firm_index_set()::Set{Int64}
         end
     end
 
+    # delete 268, doesn't exist in Y5
+    set_of_firm_indexes |> (x -> delete!(x, 268))
+
     # return -
     return set_of_firm_indexes;
 end
