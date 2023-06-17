@@ -116,29 +116,29 @@ function populate(model::MyBinomialEquityPriceTree, Sₒ::Float64, h::Int)::MyBi
 end
 
 
-"""
-    entropy(data::Dict{Int,Array{NamedTuple,1}}, level::Int) -> Float64
-"""
-function entropy(data::Dict{Int,Array{NamedTuple,1}}, level::Int)::Float64
+# """
+#     entropy(data::Dict{Int,Array{NamedTuple,1}}, level::Int) -> Float64
+# """
+# function entropy(data::Dict{Int,Array{NamedTuple,1}}, level::Int)::Float64
 
-    # initialize -
-    H = 0.0;
+#     # initialize -
+#     H = 0.0;
 
-    # Hint: to compute log to the base 2, check out the log2 method
+#     # Hint: to compute log to the base 2, check out the log2 method
 
-    # entropy
-    # grab the values for level -
-    prices = data[level];
-    for price_tuple ∈ prices
+#     # entropy
+#     # grab the values for level -
+#     prices = data[level];
+#     for price_tuple ∈ prices
     
-        # get the probability -
-        P = price_tuple.P;
-        H += P*log2(P)
-    end
+#         # get the probability -
+#         P = price_tuple.P;
+#         H += P*log2(P)
+#     end
     
-    # return -
-    return -1*H
-end
+#     # return -
+#     return -1*H
+# end
 
 """
     𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
