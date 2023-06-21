@@ -88,13 +88,13 @@ function 𝔼(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Ar
 
     # setup the time range -
     time_array = range(T₁,stop=T₂, step = Δt) |> collect
-    Nₜ = length(time_array)
+    N = length(time_array)
 
     # expectation -
-    expectation_array = zeros(Nₜ, 2)
+    expectation_array = Array{Float64,2}(undef, N, 2)
 
     # main loop -
-    for i ∈ 1:Nₜ
+    for i ∈ 1:N
 
         # get the time value -
         h = (time_array[i] - time_array[1])
@@ -103,7 +103,7 @@ function 𝔼(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Ar
         value = Sₒ*exp(μ*h)
 
         # capture -
-        expectation_array[i,1] = h+time_array[1]
+        expectation_array[i,1] = h + time_array[1]
         expectation_array[i,2] = value
     end
    
@@ -126,13 +126,13 @@ function 𝕍(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Ar
 
     # setup the time range -
     time_array = range(T₁,stop=T₂, step = Δt) |> collect
-    Nₜ = length(time_array)
+    N = length(time_array)
 
     # expectation -
-    variance_array = zeros(Nₜ, 2)
+    variance_array = Array{Float64,2}(undef, N, 2)
 
     # main loop -
-    for i ∈ 1:Nₜ
+    for i ∈ 1:N
 
         # get the time value -
         h = time_array[i] - time_array[1]
