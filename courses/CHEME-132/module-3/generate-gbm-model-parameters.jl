@@ -1,13 +1,11 @@
 # include -
 include("Include.jl")
 
-function compute_drift_term()::Float64
-end
-
 # initialize -
 df = DataFrame(firm=Int64[], μ=Float64[], σ=Float64[]);
 
 # generate data -
+Δt = (1.0/252.0);
 dataset = Dict{Int64,DataFrame}();
 set_of_firms = generate_firm_index_set();
 years = ["Year-1", "Year-2", "Year-3", "Year-4", "Year-5"];
@@ -38,15 +36,13 @@ end
 list_of_firm_ids = keys(dataset) |> collect |> sort;
 number_of_firms = length(list_of_firm_ids);
 
-# generate the firm index set -
-set_of_firms = generate_firm_index_set();
 for firm_index ∈ list_of_firm_ids
 
     firm_data = dataset[firm_index];
     number_of_trading_days = nrow(firm_data);
 
     all_range = range(1,stop=number_of_trading_days,step=1) |> collect
-    T_all = all_range*(1.0/252.0) .- (1.0/252.0)
+    T_all = all_range*Δt .- Δt;
 
     # Setup the normal equations -
     A = [ones(number_of_trading_days) T_all];
@@ -59,7 +55,6 @@ for firm_index ∈ list_of_firm_ids
     μ̂ = θ[2];
 
     # compute the σ
-    Δt = (1.0/252.0);
     growth_rate_array = Array{Float64,1}(undef, number_of_trading_days-1)
     for j ∈ 2:number_of_trading_days
         
@@ -70,7 +65,6 @@ for firm_index ∈ list_of_firm_ids
 
     R = growth_rate_array.*Δt;
     nd = fit_mle(Normal, R);
-    # μ̂ = params(nd) |> first;
     σ̂ = params(nd) |> last |> sqrt;
 
     # store the data -
