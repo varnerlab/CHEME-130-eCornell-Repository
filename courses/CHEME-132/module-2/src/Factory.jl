@@ -24,6 +24,6 @@ function _build(modeltype::Type{T}, data::NamedTuple) where T <: AbstractAssetMo
 end
 
 """
-    build(model::Type{MyGeometricBrownianMotionEquityModel}, data::NamedTuple) -> MyGeometricBrownianMotionEquityModel
+    build(model::Type{MyOrdinaryBrownianMotionEquityModel}, data::NamedTuple) -> MyOrdinaryBrownianMotionEquityModel
 """
-build(model::Type{MyGeometricBrownianMotionEquityModel}, data::NamedTuple)::MyGeometricBrownianMotionEquityModel = _build(model, data)
+build(model::Type{MyOrdinaryBrownianMotionEquityModel}, data::NamedTuple)::MyOrdinaryBrownianMotionEquityModel = _build(model, data)

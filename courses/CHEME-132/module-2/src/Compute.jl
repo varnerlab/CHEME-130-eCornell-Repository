@@ -1,7 +1,7 @@
 """ 
-    solve(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple) -> Array{Float64,2}
+    solve(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple) -> Array{Float64,2}
 """
-function solve(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple; 
+function solve(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple; 
     number_of_paths::Int64 = 100)::Array{Float64,2}
 
     # get information from data -
@@ -36,7 +36,7 @@ function solve(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple;
 	# main simulation loop -
 	for p ∈ 1:number_of_paths
 		for t ∈ 1:number_of_time_steps-1
-			X[t+1,p+1] = X[t,p+1]*exp((μ - σ^2/2)*Δt + σ*(sqrt(Δt))*ZM[t,p])
+			X[t+1,p+1] = X[t,p+1] + μ*Δt + σ*(sqrt(Δt))*ZM[t,p]
 		end
 	end
 
@@ -75,7 +75,7 @@ function generate_firm_index_set()::Set{Int64}
     return set_of_firm_indexes;
 end
 
-function 𝔼(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
+function 𝔼(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
 
     # get information from data -
     T₁ = data[:T₁]
@@ -100,7 +100,7 @@ function 𝔼(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Ar
         h = (time_array[i] - time_array[1])
 
         # compute the expectation -
-        value = Sₒ*exp(μ*h)
+        value = Sₒ + μ*h
 
         # capture -
         expectation_array[i,1] = h + time_array[1]
@@ -111,8 +111,33 @@ function 𝔼(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Ar
     return expectation_array
 end
 
-Var(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple) = 𝕍(model, data);
-function 𝕍(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
+Var(samples::Array{Float64,2}) = 𝕍(samples::Array{Float64,2});
+function 𝕍(samples::Array{Float64,2})::Array{Float64,2}
+
+    # estimate a variance -
+    (N, M) = size(samples);
+    variance_array = Array{Float64,2}(undef, N, 2)
+
+    # main loop -
+    for i ∈ 1:N
+
+        # get the time value -
+        h = (samples[i,1] - samples[1,1])
+
+        # compute the variance -
+        value = var(samples[i,2:end])
+
+        # capture -
+        variance_array[i,1] = h + samples[1,1]
+        variance_array[i,2] = value
+    end
+
+    # return -
+    return variance_array;
+end
+
+
+function 𝕍(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
 
     # get information from data -
     T₁ = data[:T₁]
