@@ -136,7 +136,7 @@ function 𝕍(samples::Array{Float64,2})::Array{Float64,2}
     return variance_array;
 end
 
-
+Var(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple) = 𝕍(model, data);
 function 𝕍(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
 
     # get information from data -
@@ -163,7 +163,7 @@ function 𝕍(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple)::Arr
         h = time_array[i] - time_array[1]
 
         # compute the expectation -
-        value = (Sₒ^2)*exp(2*μ*h)*(exp((σ^2)*h) - 1)
+        value = (σ^2)*h
 
         # capture -
         variance_array[i,1] = h + time_array[1]
