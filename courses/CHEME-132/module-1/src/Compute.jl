@@ -209,6 +209,49 @@ function 𝕍(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
 end
 
 
+function 𝔼(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0)::Array{Float64,2}
+
+    # initialize -
+    number_of_levels = length(levels);
+    expected_value_array = Array{Float64,2}(undef, number_of_levels, 2);
+
+    # loop -
+    for i ∈ 0:(number_of_levels-1)
+
+        # get the level -
+        level = levels[i+1];
+
+        # get the expected value -
+        expected_value = 𝔼(model, level=level);
+
+        # store -
+        expected_value_array[i+1,1] = level + startindex;
+        expected_value_array[i+1,2] = expected_value;
+    end
+
+    # return -
+    return expected_value_array;
+end
+
+Var(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0) = 𝕍(model, levels, startindex = startindex)
+function 𝕍(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0)::Array{Float64,2}
+
+    # initialize -
+    number_of_levels = length(levels);
+    variance_value_array = Array{Float64,2}(undef, number_of_levels, 2);
+
+    # loop -
+    for i ∈ 0:(number_of_levels - 1)
+        level = levels[i+1];
+        variance_value = 𝕍(model, level=level);
+        variance_value_array[i+1,1] = level + startindex
+        variance_value_array[i+1,2] = variance_value;
+    end
+
+    # return -
+    return variance_value_array;
+end
+
 
 """
     analyze(R::Array{Float64,1};  Δt::Float64 = (1.0/365.0)) -> Tuple{Float64,Float64,Float64}
