@@ -1,7 +1,7 @@
 """ 
-    solve(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple) -> Array{Float64,2}
+    sample(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple) -> Array{Float64,2}
 """
-function solve(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple; 
+function sample(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple; 
     number_of_paths::Int64 = 100)::Array{Float64,2}
 
     # get information from data -
