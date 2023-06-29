@@ -118,21 +118,41 @@ end
 function sample(model::MyBinomialEquityPriceTree; number_of_paths::Int64 = 100)::Array{Float64,2}
 
     # initialize -
-    data = model.data;
     levels = model.levels;
-    connectivity = model.connectivity;
-    h = model.h;
+    data = model.data;
+    h = length(levels)-1;
+
+    # initialize -
+    X = Array{Float64,2}(undef, h+1, number_of_paths);
+    X[1,:] .= data[0].price;
 
     for i ∈ 1:number_of_paths
+        for t ∈ 1:h
+
+            # get the list of nodes -
+            list_of_nodes = levels[t];
+
+            # create a categorical distribution -
+            pvector = Array{Float64,1}()
+            for node_index ∈ list_of_nodes
+                node = data[node_index];
+                push!(pvector, node.probability)
+            end
+            d = Categorical(pvector);
+
+            # sample from the distribution -
+            random_node_index = rand(d);
+            price = data[random_node_index].price;
+
+            # store the price -
+            X[t+1,i] = price;
+        end
     end
 
     # return -
     return X
 end
 
-"""
-    𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
-"""
 
 
 # """
@@ -323,6 +343,11 @@ function analyze(R::Array{Float64,1};  Δt::Float64 = (1.0/365.0))::Tuple{Float6
     return (u,d,p);
 end
 
+"""
+    generate_firm_index_set() -> Set{Int64}
+
+Generates a set of firm indexes in the data set
+"""
 function generate_firm_index_set()::Set{Int64}
 
     # initialize -
