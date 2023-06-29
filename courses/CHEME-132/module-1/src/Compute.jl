@@ -115,19 +115,27 @@ function populate(model::MyBinomialEquityPriceTree, Sₒ::Float64, h::Int)::MyBi
     return model
 end
 
-function sample(model::MyBinomialEquityPriceTree; number_of_paths::Int64 = 100)::Array{Float64,2}
+function sample(model::MyBinomialEquityPriceTree, args::NamedTuple; number_of_paths::Int64 = 100)::Array{Float64,2}
 
     # initialize -
     levels = model.levels;
     data = model.data;
-    h = length(levels)-1;
+    h = length(levels);
+    T₁ = args[:T₁];
+    Δt = args[:Δt];
 
     # initialize -
-    X = Array{Float64,2}(undef, h+1, number_of_paths);
-    X[1,:] .= data[0].price;
+    X = Array{Float64,2}(undef, h-1, number_of_paths+1);
+    X[1,1] = T₁;
+    X[1,2:end] .= data[0].price;
+
+    # fill in the time -
+    for t ∈ 0:(h-2)
+        X[t+1,1] = T₁ + t*Δt;
+    end
 
     for i ∈ 1:number_of_paths
-        for t ∈ 1:h
+        for t ∈ 1:(h - 1)
 
             # get the list of nodes -
             list_of_nodes = levels[t];
@@ -145,7 +153,7 @@ function sample(model::MyBinomialEquityPriceTree; number_of_paths::Int64 = 100):
             price = data[random_node_index].price;
 
             # store the price -
-            X[t+1,i] = price;
+            X[t,i+1] = price;
         end
     end
 
