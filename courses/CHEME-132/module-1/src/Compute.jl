@@ -115,6 +115,25 @@ function populate(model::MyBinomialEquityPriceTree, Sₒ::Float64, h::Int)::MyBi
     return model
 end
 
+function sample(model::MyBinomialEquityPriceTree; number_of_paths::Int64 = 100)::Array{Float64,2}
+
+    # initialize -
+    data = model.data;
+    levels = model.levels;
+    connectivity = model.connectivity;
+    h = model.h;
+
+    for i ∈ 1:number_of_paths
+    end
+
+    # return -
+    return X
+end
+
+"""
+    𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
+"""
+
 
 # """
 #     entropy(data::Dict{Int,Array{NamedTuple,1}}, level::Int) -> Float64
@@ -175,6 +194,41 @@ function 𝔼(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
 end
 
 """
+    𝔼(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; 
+        startindex::Int64 = 0) -> Array{Float64,2}
+
+Computes the expectation of the model simulation. Takes a model::MyBinomialEquityPriceTree instance and a vector of
+tree levels, i.e., time steps and returns a variance array where the first column is the time and the second column is the expectation.
+Each row is a time step.
+"""
+function 𝔼(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; 
+    startindex::Int64 = 0)::Array{Float64,2}
+
+    # initialize -
+    number_of_levels = length(levels);
+    expected_value_array = Array{Float64,2}(undef, number_of_levels, 2);
+
+    # loop -
+    for i ∈ 0:(number_of_levels-1)
+
+        # get the level -
+        level = levels[i+1];
+
+        # get the expected value -
+        expected_value = 𝔼(model, level=level);
+
+        # store -
+        expected_value_array[i+1,1] = level + startindex;
+        expected_value_array[i+1,2] = expected_value;
+    end
+
+    # return -
+    return expected_value_array;
+end
+
+Var(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0) = 𝕍(model, levels, startindex = startindex)
+
+"""
     𝕍(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
 """
 function 𝕍(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
@@ -208,32 +262,13 @@ function 𝕍(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
     return variance_value;
 end
 
+"""
+    𝕍(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0) -> Array{Float64,2}
 
-function 𝔼(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0)::Array{Float64,2}
-
-    # initialize -
-    number_of_levels = length(levels);
-    expected_value_array = Array{Float64,2}(undef, number_of_levels, 2);
-
-    # loop -
-    for i ∈ 0:(number_of_levels-1)
-
-        # get the level -
-        level = levels[i+1];
-
-        # get the expected value -
-        expected_value = 𝔼(model, level=level);
-
-        # store -
-        expected_value_array[i+1,1] = level + startindex;
-        expected_value_array[i+1,2] = expected_value;
-    end
-
-    # return -
-    return expected_value_array;
-end
-
-Var(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0) = 𝕍(model, levels, startindex = startindex)
+Computes the variance of the model simulation. Takes a model::MyBinomialEquityPriceTree instance and a vector of
+tree levels, i.e., time steps and returns a variance array where the first column is the time and the second column is the variance.
+Each row is a time step.
+"""
 function 𝕍(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0)::Array{Float64,2}
 
     # initialize -
