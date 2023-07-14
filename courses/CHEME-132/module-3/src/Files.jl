@@ -14,5 +14,5 @@ end
     loadmodelparametersfile() -> DataFrame
 """
 function loadmodelparametersfile()::DataFrame
-    return CSV.read(joinpath(_PATH_TO_DATA,"Parameters.csv"), DataFrame);
+    return CSV.read(joinpath(_PATH_TO_DATA,"Parameters-Real-World-GBM-Annualized-Volatility.csv"), DataFrame);
 end
