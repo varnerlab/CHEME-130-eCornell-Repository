@@ -75,3 +75,4 @@ function profit(contracts::Array{T,1}, S::Array{Float64,1})::Array{Float64,2} wh
     # return -
     return profit_array;    
 end
+
