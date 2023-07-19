@@ -5,7 +5,7 @@ function _lsqfit_local_regression_model(X::Array{Float64,1},Y::Array{Float64,1})
     @. model(x, p) = p[1]+p[2]*x+(p[3]*x^2)+(p[4]*x^3)+(p[5]*x^4)
 
     # setup the fit -
-    p0 = [-1.0, 3.0, -2.0, -1.0, -0.5]
+    p0 = [-1.0, 3.0, -2.0, 1.0, -0.5]
     
     # run the fit -
     fit_bounds = curve_fit(model, X, Y, p0)
@@ -89,8 +89,6 @@ function premium(contract::T, model::MyLongstaffSchwartzContractPricingModel;
         # fit a local expectation model -
         local_expectation_model = _lsqfit_local_regression_model(X,Y);
 
-        # @show (t, local_expectation_model)
-
         # ok, compute the continuation value -
         continue_values = _evaluate_local_regression_model(local_expectation_model, X);
         exercise_values = intrinsic_value_table[idx_non_zero,t];
@@ -102,22 +100,6 @@ function premium(contract::T, model::MyLongstaffSchwartzContractPricingModel;
             index = idx_non_zero[k];
             a = continue_values[k];
             b = exercise_values[k];
-
-            # if (b>=a)
-                
-            #     # ok: so we should exercise -
-            #     option_value_table[index,t] = b;
-
-            #     # ok, so we exercised, all future values are zero -
-            #     for local_time = (t+1):number_of_periods
-            #         option_value_table[index,local_time] = 0.0;
-            #     end
-
-            #     # # finally, we exercised -
-            #     # option_exercise_table[index,t] = 1
-            # else
-            #     option_value_table[index,t] = 0.0;
-            # end
             option_value_table[index,t] = choice(a,b)
         end
     end
