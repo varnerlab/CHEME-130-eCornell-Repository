@@ -92,7 +92,7 @@ end
 # === PUBLIC METHODS BELOW HERE ====================================================================================== #
 𝒟(r,T) = exp(r*T);
 
-function sample(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple; 
+function sample_endpoint(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple; 
     number_of_paths::Int64 = 100)::Array{Float64,1}
 
     # get information from data -
@@ -113,6 +113,49 @@ function sample(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple;
 	# main simulation loop -
 	for p ∈ 1:number_of_paths
         X[p] = Sₒ*exp((μ - σ^2/2)*T + σ*(sqrt(T))*ZM[p])
+	end
+
+	# return -
+	return X
+end
+
+function sample(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple; 
+    number_of_paths::Int64 = 100)::Array{Float64,2}
+
+    # get information from data -
+    T₁ = data[:T₁]
+    T₂ = data[:T₂]
+    Δt = data[:Δt]
+    Sₒ = data[:Sₒ]
+
+    # get information from model -
+    μ = model.μ
+    σ = model.σ
+
+	# initialize -
+	time_array = range(T₁, stop=T₂, step=Δt) |> collect
+	number_of_time_steps = length(time_array)
+    X = zeros(number_of_time_steps, number_of_paths + 1) # extra column for time -
+
+    # put the time in the first col -
+    for t ∈ 1:number_of_time_steps
+        X[t,1] = time_array[t]
+    end
+
+	# replace first-row w/Sₒ -
+	for p ∈ 1:number_of_paths
+		X[1, p+1] = Sₒ
+	end
+
+	# build a noise array of Z(0,1)
+	d = Normal(0,1)
+	ZM = rand(d,number_of_time_steps, number_of_paths);
+
+	# main simulation loop -
+	for p ∈ 1:number_of_paths
+		for t ∈ 1:number_of_time_steps-1
+			X[t+1,p+1] = X[t,p+1]*exp((μ - σ^2/2)*Δt + σ*(sqrt(Δt))*ZM[t,p])
+		end
 	end
 
 	# return -

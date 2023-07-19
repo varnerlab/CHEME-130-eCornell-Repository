@@ -143,4 +143,5 @@ build(model::Type{MyEuropeanCallContractModel}, data::NamedTuple)::MyEuropeanCal
 build(model::Type{MyEuropeanPutContractModel}, data::NamedTuple)::MyEuropeanPutContractModel = _build(model, data)
 build(model::Type{MyAmericanPutContractModel}, data::NamedTuple)::MyAmericanPutContractModel = _build(model, data)
 build(model::Type{MyAmericanCallContractModel}, data::NamedTuple)::MyAmericanCallContractModel = _build(model, data)
+build(model::Type{MyLongstaffSchwartzContractPricingModel}, data::NamedTuple)::MyLongstaffSchwartzContractPricingModel = _build(model, data)
 build(model::Type{MyGeometricBrownianMotionEquityModel}, data::NamedTuple)::MyGeometricBrownianMotionEquityModel = _build(model, data)

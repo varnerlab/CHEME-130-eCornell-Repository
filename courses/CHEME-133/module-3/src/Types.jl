@@ -33,9 +33,9 @@ mutable struct MyAmericanCallContractModel <: AbstractContractModel
 
     # data -
     K::Float64
-    sense::Int64
-    DTE::Float64
-    IV::Float64
+    sense::Union{Nothing, Int64}
+    DTE::Union{Nothing,Float64}
+    IV::Union{Nothing, Float64}
     premium::Union{Nothing, Float64}
     ticker::Union{Nothing,String}
 
@@ -47,9 +47,9 @@ mutable struct MyAmericanPutContractModel <: AbstractContractModel
 
     # data -
     K::Float64
-    sense::Int64
-    DTE::Float64
-    IV::Float64
+    sense::Union{Nothing, Int64}
+    DTE::Union{Nothing,Float64}
+    IV::Union{Nothing, Float64}
     premium::Union{Nothing, Float64}
     ticker::Union{Nothing,String}
 
@@ -108,4 +108,29 @@ mutable struct MyAdjacencyBasedCRREquityPriceTree <: AbstractPriceTreeModel
 
     # constructor 
     MyAdjacencyBasedCRREquityPriceTree() = new()
+end
+
+mutable struct MyLongstaffSchwartzContractPricingModel <: AbstractPriceTreeModel
+
+    # data -
+    S::Array{Float64,2}
+    r̄::Float64
+    Δt::Float64
+
+    # constructor -
+    MyLongstaffSchwartzContractPricingModel() = new();
+end
+
+struct MyLocalExpectationRegressionModel 
+    
+    # parameters -
+    a0::Float64
+    a1::Float64
+    a2::Float64
+    a3::Float64
+    a4::Float64
+
+    function MyLocalExpectationRegressionModel(a0,a1,a2,a3,a4)
+        this = new(a0,a1,a2,a3,a4)
+    end
 end
