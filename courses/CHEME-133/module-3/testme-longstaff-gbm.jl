@@ -11,10 +11,12 @@ include("Include.jl");
 # AMD -
 Δt = (1.0/365.0);
 Sₒ = 117.50;
-K = 135.0;
+K = 160.0;
 T = 31.0*Δt;
 r̄ = 0.0418;
-σ̄ = 0.5515;
+# σ̄ = 0.6912;
+σ̄ = 0.5175;
+
 
 # models -
 gbm_model = build(MyGeometricBrownianMotionEquityModel, (
