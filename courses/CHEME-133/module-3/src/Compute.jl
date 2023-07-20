@@ -289,3 +289,43 @@ function premium(contract::T, model::MyAdjacencyBasedCRREquityPriceTree;
     # # return -
     return data[0].extrinsic
 end
+
+function premium(contract::MyEuropeanCallContractModel, model::MyBlackScholesContractPricingModel; sigdigits::Int64 = 4)::Float64
+
+    # get data from the contract model - 
+    K = contract.K
+    T = contract.DTE
+    σ = contract.IV
+    
+    # get data from the BSM model -
+    Sₒ = model.Sₒ
+    r = model.r
+
+    # compute the premium -
+    d₊ = (1/σ*sqrt(T))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
+    d₋ = d₊ - σ*sqrt(T);
+    premium = (cdf(Normal(0,1), d₊)*Sₒ - cdf(Normal(0,1), d₋)*K*(1/𝒟(r̄,T))) |> x-> round(x, sigdigits = sigdigits)
+
+    # return -
+    return premium
+end
+
+function premium(contract::MyEuropeanPutContractModel, model::MyBlackScholesContractPricingModel; sigdigits::Int64 = 4)::Float64
+
+    # get data from the contract model - 
+    K = contract.K
+    T = contract.DTE
+    σ = contract.IV
+    
+    # get data from the BSM model -
+    Sₒ = model.Sₒ
+    r = model.r
+
+    # compute the premium -
+    d₊ = (1/σ*sqrt(T))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
+    d₋ = d₊ - σ*sqrt(T);
+    premium = cdf(Normal(0,1), -d₋)*K*(1/𝒟(r̄,T)) - cdf(Normal(0,1), -d₊)*Sₒ |> x-> round(x,sigdigits=sigdigits)
+
+    # return -
+    return premium
+end

@@ -134,3 +134,13 @@ struct MyLocalExpectationRegressionModel
         this = new(a0,a1,a2,a3,a4)
     end
 end
+
+mutable struct MyBlackScholesContractPricingModel <: AbstractPriceTreeModel
+
+    # data -
+    r::Float64
+    Sₒ::Float64
+
+    # constructor -
+    MyBlackScholesContractPricingModel() = new();
+end
