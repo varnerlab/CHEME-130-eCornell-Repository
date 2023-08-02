@@ -290,7 +290,8 @@ function premium(contract::T, model::MyAdjacencyBasedCRREquityPriceTree;
     return data[0].extrinsic
 end
 
-function premium(contract::MyEuropeanCallContractModel, model::MyBlackScholesContractPricingModel; sigdigits::Int64 = 4)::Float64
+function premium(contract::MyEuropeanCallContractModel, 
+    model::MyBlackScholesContractPricingModel; sigdigits::Int64 = 4)::Float64
 
     # get data from the contract model - 
     K = contract.K
@@ -302,9 +303,14 @@ function premium(contract::MyEuropeanCallContractModel, model::MyBlackScholesCon
     r = model.r
 
     # compute the premium -
-    d₊ = (1/σ*sqrt(T))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
+    d₊ = (1/(σ*sqrt(T)))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
     d₋ = d₊ - σ*sqrt(T);
     premium = (cdf(Normal(0,1), d₊)*Sₒ - cdf(Normal(0,1), d₋)*K*(1/𝒟(r̄,T))) |> x-> round(x, sigdigits = sigdigits)
+
+    # check for negative premium -
+    if (premium < 0)
+        premium = 0
+    end
 
     # return -
     return premium
@@ -322,9 +328,14 @@ function premium(contract::MyEuropeanPutContractModel, model::MyBlackScholesCont
     r = model.r
 
     # compute the premium -
-    d₊ = (1/σ*sqrt(T))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
+    d₊ = (1/(σ*sqrt(T)))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
     d₋ = d₊ - σ*sqrt(T);
     premium = cdf(Normal(0,1), -d₋)*K*(1/𝒟(r̄,T)) - cdf(Normal(0,1), -d₊)*Sₒ |> x-> round(x,sigdigits=sigdigits)
+
+     # check for negative premium -
+     if (premium < 0)
+        premium = 0
+    end
 
     # return -
     return premium
