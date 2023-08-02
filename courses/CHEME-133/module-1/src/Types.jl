@@ -38,6 +38,7 @@ mutable struct MyAmericanCallContractModel <: AbstractContractModel
     IV::Union{Nothing, Float64}
     premium::Union{Nothing, Float64}
     ticker::Union{Nothing,String}
+    copy::Union{Nothing, Int64}
 
     # constructor -
     MyAmericanCallContractModel() = new()
@@ -52,6 +53,7 @@ mutable struct MyAmericanPutContractModel <: AbstractContractModel
     IV::Union{Nothing, Float64}
     premium::Union{Nothing, Float64}
     ticker::Union{Nothing,String}
+    copy::Union{Nothing, Int64}
 
     # constructor -
     MyAmericanPutContractModel() = new()
