@@ -60,10 +60,11 @@ function profit(contracts::Array{T,1}, S::Array{Float64,1})::Array{Float64,2} wh
             # get the contract -
             contract = contracts[j];
             sense = contract.sense |> Float64;
+            copy = contract.copy |> Float64;
             premium = contract.premium;
 
             # compute the payoff -
-            profit_array[i,j+1] = (sense)*_payoff(contract, Sᵢ) - (sense)*premium
+            profit_array[i,j+1] = (copy*sense)*(_payoff(contract, Sᵢ) - premium)
         end
     end
 
@@ -75,4 +76,3 @@ function profit(contracts::Array{T,1}, S::Array{Float64,1})::Array{Float64,2} wh
     # return -
     return profit_array;    
 end
-
