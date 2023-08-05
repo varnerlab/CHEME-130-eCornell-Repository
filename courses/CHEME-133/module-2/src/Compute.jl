@@ -302,7 +302,7 @@ function premium(contract::MyEuropeanCallContractModel, model::MyBlackScholesCon
     r = model.r
 
     # compute the premium -
-    d₊ = (1/σ*sqrt(T))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
+    d₊ = (1/(σ*sqrt(T)))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
     d₋ = d₊ - σ*sqrt(T);
     premium = (cdf(Normal(0,1), d₊)*Sₒ - cdf(Normal(0,1), d₋)*K*(1/𝒟(r̄,T))) |> x-> round(x, sigdigits = sigdigits)
 
@@ -322,7 +322,7 @@ function premium(contract::MyEuropeanPutContractModel, model::MyBlackScholesCont
     r = model.r
 
     # compute the premium -
-    d₊ = (1/σ*sqrt(T))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
+    d₊ = (1/(σ*sqrt(T)))*(log(Sₒ/K)+(r+(σ^2)/2)*T);
     d₋ = d₊ - σ*sqrt(T);
     premium = cdf(Normal(0,1), -d₋)*K*(1/𝒟(r̄,T)) - cdf(Normal(0,1), -d₊)*Sₒ |> x-> round(x,sigdigits=sigdigits)
 
