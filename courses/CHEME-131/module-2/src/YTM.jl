@@ -1,4 +1,5 @@
-function _net_present_value(r::Float64, model::MyUSTreasuryCouponSecurityModel, compounding::DiscreteCompoundingModel)
+function _net_present_value(r::Float64, model::MyUSTreasuryCouponSecurityModel, 
+    compounding::DiscreteCompoundingModel)
 
     # initialize -
     cashflow = Dict{Int,Float64}();
@@ -46,7 +47,8 @@ function _net_present_value(r::Float64, model::MyUSTreasuryCouponSecurityModel, 
     return npv_value
 end
 
-function _net_present_value(r::Float64, model::MyUSTreasuryCouponSecurityModel, compounding::ContinuousCompoundingModel)
+function _net_present_value(r::Float64, model::MyUSTreasuryCouponSecurityModel, 
+    compounding::ContinuousCompoundingModel)
 
     # initialize -
     cashflow = Dict{Int,Float64}();
