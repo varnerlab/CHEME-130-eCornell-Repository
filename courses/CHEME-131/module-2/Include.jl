@@ -21,6 +21,7 @@ using StatsPlots
 using JLD2
 using FileIO
 using Distributions
+using PrettyTables
 
 # load my codes -
 include(joinpath(_PATH_TO_SRC, "Files.jl"));
