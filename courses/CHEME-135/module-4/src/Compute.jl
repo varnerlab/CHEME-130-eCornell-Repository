@@ -39,12 +39,44 @@ function _evaluate_expected_return_sim_model(model::MySingleIndexModel, Rₘ::Ar
     # return -
     return R̂
 end
+
+function _extract_portfolio_expected_return(μ::Array{Float64,1}, tickers::Array{Int64,1})::Array{Float64,1}
+
+    # initialize -
+    μ̂ = Array{Float64,1}();
+
+    # main loop -
+    for firm_index ∈ tickers
+        push!(μ̂, μ[firm_index])
+    end
+
+    # return -
+    return μ̂;
+end
+
+function _extract_portfolio_covariance_matrix(Σ::Array{Float64,2}, tickers::Array{Int64,1})::Array{Float64,2}
+
+   # initialize
+    my_number_of_selected_firms = length(tickers)
+    Σ̂ = Array{Float64,2}(undef, my_number_of_selected_firms, my_number_of_selected_firms);
+    for i ∈ eachindex(tickers)
+        row_firm_index = tickers[i]
+        for j ∈ eachindex(tickers)
+            col_firm_index = tickers[j]
+            Σ̂[i,j] = Σ[row_firm_index, col_firm_index]
+        end
+    end
+
+    # return -
+    return Σ̂;
+end
 # ---- PRIVATE FUNCTIONS ABOVE HERE ------------------------------------------------------------------------------- #
 
 # ---- PUBLIC FUNCTIONS BELOW HERE -------------------------------------------------------------------------------- #
 (model::MySingleIndexModel)(Rₘ::Array{Float64,1}, paths::Int64)::Array{Float64,2} = _sample_sim_model(model, Rₘ, number_of_paths=paths);
 (model::MySingleIndexModel)(Rₘ::Array{Float64,1})::Array{Float64,1} = _evaluate_expected_return_sim_model(model, Rₘ);
-
+(μ::Array{Float64,1})(tickers::Array{Int64,1})::Array{Float64,1} = _extract_portfolio_expected_return(μ, tickers);
+(Σ::Array{Float64,2})(tickers::Array{Int64,1})::Array{Float64,2} = _extract_portfolio_covariance_matrix(Σ, tickers);
 
 function log_return_matrix(dataset::Dict{String, DataFrame}, 
     firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0)::Array{Float64,2}
