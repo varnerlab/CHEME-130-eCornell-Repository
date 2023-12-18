@@ -21,7 +21,6 @@ using StatsPlots
 using JLD2
 using FileIO
 using Distributions
-using Distances
 using MathOptInterface
 using DataStructures
 using PrettyTables
