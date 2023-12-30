@@ -25,6 +25,8 @@ using Distances
 using MathOptInterface
 using DataStructures
 using PrettyTables
+using StatsBase
+using KernelFunctions
 
 # load my codes -
 include(joinpath(_PATH_TO_SRC, "Files.jl"));
