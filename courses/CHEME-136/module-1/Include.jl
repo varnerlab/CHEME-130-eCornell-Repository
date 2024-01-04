@@ -9,6 +9,7 @@ using Plots
 using Colors
 using LinearAlgebra
 using Statistics
+using PrettyTables
 
 # load my codes -
 # ...
