@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.5)  8 JAN 2024 15:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.5)  8 JAN 2024 16:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -461,45 +461,47 @@ File: md-frame-0.mdf 2013/07/01\ 1.9b: md-frame-0
 \c@mdf@zref@counter=\count296
 Package zref Info: New property: mdf@pagevalue on input line 895.
 )
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 8
-5.
+\c@definition=\count297
+\c@concept=\count298
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 1
+02.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 ) (./Notes.aux)
 \openout1 = `Notes.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 85.
-LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 102.
+LaTeX Font Info:    ... okay on input line 102.
 
 (/usr/local/texlive/2022/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count297
+\scratchcounter=\count299
 \scratchdimen=\dimen166
 \scratchbox=\box59
-\nofMPsegments=\count298
-\nofMParguments=\count299
+\nofMPsegments=\count300
+\nofMParguments=\count301
 \everyMPshowfont=\toks30
-\MPscratchCnt=\count300
+\MPscratchCnt=\count302
 \MPscratchDim=\dimen167
-\MPnumerator=\count301
-\makeMPintoPDFobject=\count302
+\MPnumerator=\count303
+\makeMPintoPDFobject=\count304
 \everyMPtoPDFconversion=\toks31
 ) (/usr/local/texlive/2022/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -510,7 +512,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 85.
+Package hyperref Info: Link coloring OFF on input line 102.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -522,25 +524,25 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count303
+\c@section@level=\count305
 )
-LaTeX Info: Redefining \ref on input line 85.
-LaTeX Info: Redefining \pageref on input line 85.
-LaTeX Info: Redefining \nameref on input line 85.
+LaTeX Info: Redefining \ref on input line 102.
+LaTeX Info: Redefining \pageref on input line 102.
+LaTeX Info: Redefining \nameref on input line 102.
  (./Notes.out) (./Notes.out)
 \@outlinefile=\write3
 \openout3 = `Notes.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 90.
-
+LaTeX Font Info:    Trying to load font information for U+msa on input line 107
+.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 90.
-
+LaTeX Font Info:    Trying to load font information for U+msb on input line 107
+.
 
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -549,19 +551,32 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: ./figs/Fig-Govt-Debt-Schematic.pdf Graphic file (type pdf)
 <use ./figs/Fig-Govt-Debt-Schematic.pdf>
 Package pdftex.def Info: ./figs/Fig-Govt-Debt-Schematic.pdf  used on input line
- 136.
+ 153.
 (pdftex.def)             Requested size: 399.29463pt x 184.2357pt.
 <./figs/Fig-Bond-Asset-Timeline-Schematic.pdf, id=10, 719.68875pt x 335.2525pt>
 
 File: ./figs/Fig-Bond-Asset-Timeline-Schematic.pdf Graphic file (type pdf)
 <use ./figs/Fig-Bond-Asset-Timeline-Schematic.pdf>
 Package pdftex.def Info: ./figs/Fig-Bond-Asset-Timeline-Schematic.pdf  used on 
-input line 149.
+input line 166.
 (pdftex.def)             Requested size: 352.31625pt x 164.12169pt.
  [1
 
 {/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./figs/
 Fig-Govt-Debt-Schematic.pdf>]
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 185.
+
+! Undefined control sequence.
+l.187 ...of money over time is called the \newterm
+                                                  {time value of money}\inde...
+
+? r
+OK, entering \nonstopmode...
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 188.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -571,6 +586,8 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [2 <./figs/Fig-Bond-Asset-Timeline-Schematic.pdf>]
+Package mdframed Info: Not enough space on this page on input line 188.
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -588,13 +605,13 @@ Package rerunfilecheck Info: File `Notes.out' has not changed.
 ### semi simple group (level 1) entered at line 29 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 12745 strings out of 478268
- 206766 string characters out of 5846348
- 515927 words of memory out of 5000000
- 30758 multiletter control sequences out of 15000+600000
+ 12776 strings out of 478268
+ 207185 string characters out of 5846348
+ 517962 words of memory out of 5000000
+ 30787 multiletter control sequences out of 15000+600000
  489316 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 70i,11n,77p,591b,3023s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 70i,11n,77p,591b,3145s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc
 }</usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></
@@ -606,10 +623,10 @@ l/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/
 texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/t
 exlive/2022/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/
 2022/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on Notes.pdf (3 pages, 149366 bytes).
+Output written on Notes.pdf (3 pages, 151854 bytes).
 PDF statistics:
- 179 PDF objects out of 1000 (max. 8388607)
- 108 compressed objects within 2 object streams
- 12 named destinations out of 1000 (max. 500000)
+ 183 PDF objects out of 1000 (max. 8388607)
+ 112 compressed objects within 2 object streams
+ 14 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

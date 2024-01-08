@@ -64,7 +64,24 @@
 
 \usepackage{mdframed}
 \definecolor{lgray}{rgb}{0.92,0.92,0.92}
-\definecolor{lsalmon}{rgb}{1.0,0.63,0.48}
+\definecolor{antiquewhite}{rgb}{0.98,0.92,0.84}
+\definecolor{lightskyblue}{rgb}{0.93,0.95,0.99}
+
+% defn environment
+\mdfdefinestyle{theoremstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lgray, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=theoremstyle]{definition}{Definition}
+
+% concept environment
+\mdfdefinestyle{conceptstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lightskyblue, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=conceptstyle]{concept}{Concept}
 
 % Single space'd bib -
 \setlength\bibsep{0pt}
@@ -138,7 +155,7 @@ or through a bank or broker to lend money to the U.S. government.
 \end{figure}
 
 
-\section*{Treasury Bills, Notes and Bonds}\label{sec:treasury-bills}
+\subsection*{Treasury Bills, Notes and Bonds}\label{sec:treasury-bills}
 \href{https://treasurydirect.gov/marketable-securities/treasury-bills/}{United States Treasury Bills}, or T-bills are Treasury debt instruments with short-term maturity periods T = 4, 8, 13, 26, and 52 weeks and zero coupon payments
 Thus, Treasury bills (T-bills) are short-term debt securities issued by the U.S. Treasury. \href{https://treasurydirect.gov/marketable-securities/treasury-notes/}{United States Treasury Notes or T-notes}, 
 are debt instruments that provide a stable interest payment every six months until maturity, called a coupon payment.
@@ -154,7 +171,25 @@ Upon maturity, the lender receives the entire par value.
 \end{figure}
 \href{https://treasurydirect.gov/marketable-securities/treasury-bonds/}{Treasury notes and bonds} are coupon debt instruments, which means that the lender receives periodic interest payments based on a coupon rate during the lifespan of the security. 
 The coupon rate is fixed at the time of issuance and is calculated as a percentage of the par value. 
-At maturity, the lender receives the par value of the bond (or note) and a final coupon payment.
+At maturity, the lender receives the par value of the bond (or note) and a final coupon payment. The pricing of these securities is based on the present value of the future cash flows. 
+Thus, we need to develop a mathematical framework to compute the present value of these cash flows which we can use for 
+treasury securities and other financial instruments.
+
+\section*{Abstract Asset and the Time Value of Money}
+The traditional view of an \href{https://en.wikipedia.org/wiki/Asset}{asset} is a resource with economic value that an individual, corporation, or country owns or controls with the expectation that it will provide a future benefit.
+However, in a more general sense, we can define an abstract asset as a sequence of current and future cash flows demarcated in some currency, for example, Euros, Dollars, Yuan, or cryptocurrencies such as Bitcoin.
+The cash flows can be positive or negative, and the asset can be either tangible or intangible.
+The challenge with this perspective is that current and future cash flows are not directly comparable,
+i.e., we cannot add or subtract cash flows that occur at different times.
+
+\begin{concept}[Time value of money]\label{concept:time-value-of-money}
+	The value of money is not conserved over time. One dollar today is not worth the same as one dollar tomorrow. 
+	The change in the value of money over time is called the \newterm{time value of money}\index{The time value of money}.
+	\end{concept}
+	The time value of money is an empirical observation that has been seen over hundreds of years. 
+	But why is this the case? The short answer: money today has a greater Utility than the same amount tomorrow; 
+	because we have an extra day to invest that money. 
+
 
 \section*{Pricing Zero-Coupon Treasury Securities}\label{sec:zero-coupon-treasury-securities}
 The price of a zero-coupon Treasury bill $V_{B}$ with an effective interest rate of $\bar{r}$ and a maturity of \texttt{T}-years at auction 
