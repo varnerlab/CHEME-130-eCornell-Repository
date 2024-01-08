@@ -8,6 +8,6 @@ function _jld2(path::String)::Dict{String,Any}
 end
 
 # Load harded coded specific files -
-function MyTreasuryBillDataSet()::DataFrame
-    return _loadcsvfile(joinpath(_PATH_TO_DATA, "US-TBill-Prices-TD-May-Sept-2023.csv"));
+function MyTreasuryBillDataSet(;path::String = joinpath(_PATH_TO_DATA, "US-TBill-Prices-TD-Apr-2023-Jan-2024.csv"))::DataFrame
+    return _loadcsvfile(path);
 end
