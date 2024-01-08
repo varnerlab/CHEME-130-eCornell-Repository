@@ -1,16 +1,13 @@
 #!/bin/sh
 
 # Clear out junk
-# rm -f *aux
-# rm -f main.ind
-# rm -f main.toc
+rm -f *aux
 
 # Tex this mofo -
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-makeindex main
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-
+pdflatex Notes.tex
+bibtex Notes
+pdflatex Notes.tex
+makeindex Notes
+pdflatex Notes.tex
+bibtex Notes
+pdflatex Notes.tex
