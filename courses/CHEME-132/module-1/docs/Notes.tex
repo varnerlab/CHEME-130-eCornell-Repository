@@ -18,6 +18,10 @@
 \usepackage{makeidx}\makeindex
 \bibliographystyle{plos2015}
 
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+
 % Set the size
 %\textwidth = 6.75 in
 %\textheight = 9.75 in
@@ -38,11 +42,11 @@
 \newtheorem{defn}[thm]{Definition}
 
 \makeatletter
-\renewcommand\subsection{\@startsection
-	{subsection}{2}{0mm}
-	{-0.05in}
-	{-0.5\baselineskip}
-	{\normalfont\normalsize\bfseries}}
+% \renewcommand\subsection{\@startsection
+% 	{subsection}{2}{0mm}
+% 	{-0.05in}
+% 	{0.05\baselineskip}
+% 	{\normalfont\normalsize\bfseries}}
 \renewcommand\subsubsection{\@startsection
 	{subsubsection}{2}{0mm}
 	{-0.05in}
@@ -171,7 +175,7 @@ At time \texttt{2}, the share price can take on one of three possible values: $S
 to the \texttt{up-up} state, $S^{ud} = ud\cdot{S_{\circ}}$ if the world moves to the \texttt{up-down} state, or $S^{dd} = d^{2}\cdot{S_{\circ}}$ if the world moves to the \texttt{down-down} state.
 We can continue to build out the lattice model by adding additional time-steps, for example consider a three-step ahead prediction (Fig. \ref{fig:binomial-lattice-schematic}C).
 
-\section*{Binomial Lattice Model Solution}
+\section*{Binomial Lattice Analytical Solution}
 Let's consider a binomial lattice model with $n$ time-steps. At each time-step, the share price can either go \texttt{up} by a factor of $u$ or \texttt{down} by a factor of $d$.
 Then, at time \texttt{n}, the share price can take on $n+1$ possible values: 
 \begin{equation}
@@ -197,17 +201,128 @@ As the number of time-steps increases we have a series of Bernoulli trials, whic
 	where $\binom{t}{k}$ denotes the binomial coefficient.
 \end{definition}
 
-Now that we have a model for the share price and the probability of the share price taking on a particular value, 
-we can calculate the expected value and variance of the share price. The expected value of the share price is the 
-
-
 \section*{Models of $u$, $d$ and $p$}
 The \texttt{up} and \texttt{down} factors $u$ and $d$, and the probability $p$ can be defined in various ways.  
 For example, we can estimate them from historical data, or we can propose models for their values. 
 
+\subsection*{Historical data}
+Suppose we have a historical share price dataset from time $1,\dots,T$ for some ticker $j$ denoted as $\mathcal{D}_{j} = \left\{S^{(j)}_{1},S^{(j)}_{2},\dots,S^{(j)}_{T}\right\}$, 
+where $S^{(j)}_{i}$ denotes the share price of ticker $j$ at time $i$.
+We can use different values for the share price, e.g., the opening price, closing price, high price, low price, etc. 
+In our case, when dealing with historical data we will typically use the volume weighted average price (VWAP) for the time period, 
+e.g., the VWAP for the day, week, month, etc. Over the time range of the dataset $\mathcal{D}_{j}$, we can calculate the number of \texttt{up} and \texttt{down} moves
+occuring between time $i-1$ and $i$, and the magnitude of these moves. 
+Then, the fraction of \texttt{up} moves is an estimate of the probability $p$, 
+while some measured of the magnitude of the \texttt{up} and \texttt{down} moves, e.g., the average value are estimates of $u$ and $d$ respectively.
 
+\subsubsection*{Estimating $u$, $d$ and $p$ from historical data.}
+Suppose we assume the share price of ticker $j$ is continously compounded with an instanteous discount (interest) rate of 
+$r^{(j)}_{i,i-1}\equiv\mu^{(j)}_{i,i-1}\cdot\Delta{t}$, i.e., we split the return into a growth rate $\mu^{(j)}_{i,i-1}$ and a time step size $\Delta{t}$.
+Then, the share price at time $i$ is goverenved by an expression of the form:
+\begin{equation}\label{eqn:share-price-growth-rate}
+S^{(j)}_{i} = \exp\left(\mu_{i,i-1}\cdot\Delta{t}\right)\cdot{S^{(i)}_{i-1}}
+\end{equation}
+where $\mu^{(j)}_{i,i-1}$ denotes the \textit{growth rate} (units: 1/time) for ticker $j$, and $\Delta{t}$ (units: time) 
+is the time step size during the time period $(i-1)\rightarrow{i}$.
+Solving for the growth rate (and dropping the ticker $j$ superscript for simplicity) gives:
+\begin{equation}
+\mu_{i,i-1} = \left(\frac{1}{\Delta{t}}\right)\cdot\ln\left(\frac{S_{i}}{S_{i-1}}\right)
+\end{equation}
+We'll often use daily price data; thus, the natural time frame between $S_{i-1}$ and $S_{i}$ is a single trading day. 
+However, subsequently, it will be easier to use an annualized value for the $\mu$ parameter; thus, we let $\Delta{t} = 1/252$, 
+i.e., the fraction of an average trading year that occurs in a single trading day; thus, our base time will be years.
+We compute the growth rate for each trading day $i$ in a collection of datasets $\mathcal{D}$ using Algorithm \ref{algo-log-return-distributions-equity}.
+\begin{algorithm}[h]
+    \caption{Logarithmic excess growth rate}\label{algo-log-return-distributions-equity}
+    \begin{algorithmic}[1]
+        
+        \Require Collection of price datasets $\mathcal{D}$, where $\mathcal{D}_{j}\in\mathcal{D}$. All datasets have the same length $N$.	
+		\Require list of stocks $\mathcal{L}$, where $\dim\mathcal{L} = M$.
+        \Require time step size $\Delta{t}$ between $t$ and $t-1$ (units: years), 
+        \Require risk-free rate $r_{f}$ (units: inverse years).
 
+		\Statex
+		\State{$M\leftarrow\text{length}(\mathcal{D}_{1})$}\Comment{Number of trading days in the dataset $\mathcal{D}_{j}$}
+		\State{$N\leftarrow\text{length}(\mathcal{L})$}\Comment{Number of stocks in the dataset $\mathcal{D}$}
+		\State{$\mu\leftarrow\text{Array}(M-1,N)$}\Comment{Initialize empty array of growth rates}
+     
+        \Statex
+        \For{$i\in\mathcal{L}$}
+			\State{$\mathcal{D}_{i} \gets \mathcal{D}[i]$}\Comment{Get dataset for stock $i$}
 
+            \For{$t=2\rightarrow{N}$}
+				\State{$S_{1} \gets \text{VWAP}(\mathcal{D}_{i}[t-1])$}\Comment{Get volume weighted average price for stock $i$ at time $t-1$}
+				\State{$S_{2} \gets \text{VWAP}(\mathcal{D}_{i}[t])$}\Comment{Get volume weighted average price for stock $i$ at time $t$}
+                
+				\State{$\mu[t-1,i] \gets \left(\frac{1}{\Delta{t}}\right)\cdot\ln\left(\frac{S_{2}}{S_{1}}\right) - r_{f}$}\Comment{Set $r_{f} = 0$ for regular growth rate}
+            \EndFor
+        \EndFor
+	
+    \end{algorithmic}
+\end{algorithm}
+Then we can estimate the \texttt{up} and \texttt{down} factors $u$ and $d$ from the growth rate array 
+generated using something like Algorithm \ref{algo-ud-estimation-equity}. 
+\begin{algorithm}[h]
+	\caption{Estimating $u$, $d$ and $p$ from the $\mu$-array}\label{algo-ud-estimation-equity}
+	\begin{algorithmic}[1]
+
+		\Require $\mu$-array from Algorithm \ref{algo-log-return-distributions-equity}.
+
+		\Statex
+		\State{$\mu\leftarrow\text{sort}(\mu_{i,i-1})$}
+		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
+		
+		\Statex
+   	 	\State{$i_{+}\leftarrow \text{findall}(\mu>0)$}\Comment{Find the indices of all \texttt{positive} growth rates}
+    	\For{$i\in {i_{+}}$}
+        	\State{$\mu[i]\rightarrow(\mu\rightarrow\text{push!}(\text{up}, \exp(\mu\cdot{\Delta{t}})))$}\Comment{Push the \texttt{positive} return $\mu\cdot\Delta{t}$ onto $\text{up}$-array}
+    	\EndFor
+		\State{$u\leftarrow\text{mean}(\texttt{up})$}\Comment{mean is our estimate of the \texttt{up} factor $u$}
+    	
+		\Statex
+   	 	\State{$i_{-}\leftarrow \text{findall}(\mu<0)$}\Comment{Find the indices of all \texttt{negative} growth rates}
+    	\For{$i\in {i_{i}}$}
+        	\State{$\mu[i]\rightarrow(\mu\rightarrow\text{push!}(\text{down}, \exp(\mu\cdot{\Delta{t}})))$}\Comment{Push the \texttt{negative} return $\mu\cdot\Delta{t}$ onto $\text{down}$-array}
+    	\EndFor
+		\State{$d\leftarrow\text{mean}(\texttt{down})$}\Comment{mean is our estimate of the \texttt{down} factor $d$}
+
+		\Statex
+		\State{$N_{+} \leftarrow\text{length}(i_{+})$}\Comment{Number of \texttt{positive} growth rates}
+		\State{$p\leftarrow N_{+}/N$}\Comment{Estimate of the probability $p$}
+
+		\Statex
+		\Return{$u$, $d$ and $p$}
+	\end{algorithmic}
+\end{algorithm}
+While this strategy is simple, it may not be robust. For example, if the dataset $\mathcal{D}_{j}$ is short, i.e., only a few trading days,
+then the number of \texttt{up} and \texttt{down} moves will be small, and the estimates of $u$, $d$ and $p$ will be poor.
+If a precise estimate of $u$, $d$ and $p$ is required, the number of trading days in the dataset $\mathcal{D}_{j}$ should be large.
+Furthermore, the estimates of $u$, $d$ and $p$ are not robust to outliers in the dataset $\mathcal{D}_{j}$.
+Thus, we may want to consider other models for computing $u$, $d$ and $p$.
+
+\subsection*{Risk-neutral probability $q$.}
+Another approach to compute the parameters in the lattrice is to use the risk-neutral probability $q$. 
+This a hypothetical probability that is used to price derivatives (as we shall see later), 
+but we could also think of it as a tool to compute a \textit{fair} price for a share of stock.
+Suppose we rewrite Eqn. \eqref{eqn:share-price-growth-rate} as:
+\begin{equation*}
+    \mathcal{D}_{1,0}(\bar{r})\cdot{S_{\circ}} = \mathbb{E}_{\mathbb{Q}}\left(S_{1}\right)
+\end{equation*}
+where $\mathcal{D}_{1,0}(\bar{r})$ is the continuous discount factor between period $0\rightarrow{1}$, 
+and $\bar{r}$ is the effective (constant) risk-free rate. Thus, unlike the previous case, where the share price $S_{i}$ was discounted by the
+return $\mu_{i,i-1}\cdot\Delta{t}$ (which could vary in time), here we discount the share price $S_{i}$ by an effective (constant) risk-free rate $\bar{r}$.
+The expectation operator $\mathbb{E}_{\mathbb{Q}}(\dots)$ is taken with respect to a \textit{risk neutral probability measure} $\mathbb{Q}$.
+Thus, the expectation operator $\mathbb{E}_{\mathbb{Q}}(\dots)$ is:
+\begin{equation}\label{eqn:expectation-operator-risk-neutral}
+\mathcal{D}_{1,0}(\bar{r})\cdot{S_{\circ}} = q\cdot{S^{u}} + (1-q)\cdot{S^{d}}
+\end{equation}
+where $q$ is the risk neutral probability of the \texttt{up} state, and $S^{u}$ and $S^{d}$ are the share prices in the \texttt{up} and \texttt{down} states respectively.
+The share prices in the \texttt{up} and \texttt{down} states are the product of the \texttt{up} factor $u$ (or a \texttt{down} factor $d$) and the initial share price, 
+i.e., $S^{u} = u\cdot{S_{\circ}}$ and $S^{d} = d\cdot{S_{\circ}}$. Substiuting these values in Eqn. \eqref{eqn:expectation-operator-risk-neutral} and solving for $q$ gives:
+\begin{equation*}
+q = \frac{\mathcal{D}_{1,0}(\bar{r}) - d}{u - d}
+\end{equation*}
+Thus, we can compute the risk-neutral probability $q$ from the \texttt{up} and \texttt{down} factors $u$ and $d$ and the effective risk-free rate $\bar{r}$.
 \clearpage
 \printindex
 
