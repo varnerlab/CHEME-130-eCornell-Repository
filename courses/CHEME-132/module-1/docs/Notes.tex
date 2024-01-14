@@ -145,7 +145,67 @@ A lattice model discretizes the potential future states of the world into a fini
 For instance, a binomial lattice model has two future states: \texttt{up} and \texttt{down}, while a ternary lattice model has three: \texttt{up}, \texttt{down}, and \texttt{flat}. 
 To make predictions, we must assign values and probabilities to each of these future states and then calculate the expected value and variance of future values. 
 Thus, we do not know quantities such as share price exactly because we are projecting into the future. Instead, we have only a probabilistic model of the possible future values. 
-Let’s look at the simplest possible lattice model, a binomial lattice. This is our first example of a \href{https://en.wikipedia.org/wiki/Stochastic_proces}{stochastic model}(s) of equity pricing.
+We'll begin with the simplest possible lattice model, a binomial lattice (Fig. \ref{fig:binomial-lattice-schematic}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{./figs/Fig-Binomial-LatticeModels-Schematic.pdf}
+    \caption{Binomial lattice model schematic. 
+	At each node, the share price can either go \texttt{up} by a factor of $u$ or \texttt{down} by a factor of $d$. 
+	The probability of going \texttt{up} is $p$ and the probability of going \texttt{down} is $1-p$. 
+	\textbf{A}: Single time-step lookahead.
+	\textbf{B}: Two time-step lookahead.
+	\textbf{C}: Three time-step lookahead.
+	At level of the tree $l$, the potential share price can take on $l+1$ values.
+	}\label{fig:binomial-lattice-schematic}
+\end{figure}
+
+Let's start with a single time-step lookahead, where we have two possible future states (Fig. \ref{fig:binomial-lattice-schematic}A).
+Let the initial share price at time \texttt{0} be $S_{\circ}$ and the share price at future time \texttt{1} be $S_{1}$.
+During the transition from time \texttt{0}$\rightarrow$\texttt{1} the world transitions from the current state, to one of two possible future states: \texttt{up} or \texttt{down}.
+We move to the \texttt{up} state with probability $p$ or the \texttt{down} state with probability $(1-p)$.
+Thus, at the time \texttt{1}, the share price $S_{1}$ can take on one of two possible values: $S^{u} = u\cdot{S_{\circ}}$ if the world moves 
+to the \texttt{up} state, or $S^{d} = d\cdot{S_{\circ}}$ if the world moves to the \texttt{down} state. 
+As we move to the future, we can continue to build out the lattice model by adding additional time-steps, 
+for example consider a two-step ahead prediction (Fig. \ref{fig:binomial-lattice-schematic}B). 
+At time \texttt{2}, the share price can take on one of three possible values: $S^{uu} = u^{2}\cdot{S_{\circ}}$ if the world moves
+to the \texttt{up-up} state, $S^{ud} = ud\cdot{S_{\circ}}$ if the world moves to the \texttt{up-down} state, or $S^{dd} = d^{2}\cdot{S_{\circ}}$ if the world moves to the \texttt{down-down} state.
+We can continue to build out the lattice model by adding additional time-steps, for example consider a three-step ahead prediction (Fig. \ref{fig:binomial-lattice-schematic}C).
+
+\section*{Binomial Lattice Model Solution}
+Let's consider a binomial lattice model with $n$ time-steps. At each time-step, the share price can either go \texttt{up} by a factor of $u$ or \texttt{down} by a factor of $d$.
+Then, at time \texttt{n}, the share price can take on $n+1$ possible values: 
+\begin{equation}
+	S_{n} = S_{\circ}\times{D_{1}}\times{D_{2}}\times{D_{3}}\times\cdots\times{D_{n}}
+\end{equation}
+where $D_{i}$ is a random variable that can take on one of two values: $u$ or $d$, 
+with probabilities $p$ and $(1-p)$ respectively. 
+Thus, at each time-step, the world flips a coin and lands in either the \texttt{up} state with probability $p$ or the \texttt{down} state with probability $(1-p)$.
+For a single time-step, we model this random process as a Bernoulli trial, where the probability of success is $p$ and the probability of failure is $(1-p)$.
+As the number of time-steps increases we have a series of Bernoulli trials, which is a binomial distribution (Defn: \ref{defn-binomial-distribution}):
+
+\begin{definition}[Binomial Share Price and Probability]\label{defn-binomial-distribution}
+	Let $S_{\circ}$ denote the current share price at t = \texttt{0}, $u$ and $d$ denote the \texttt{up} and \texttt{down} factors, 
+	and $p$ denote the probability of going \texttt{up}.
+	At time $t$, the binomial lattice model predicts the share price $S_{t}$ is given by:
+	\begin{equation*}
+	S_{t} = S_{\circ}\cdot{u}^{t-k}\cdot{d}^{k}\qquad\text{for}\quad{k=0,1,\dots,t}
+	\end{equation*}
+	The probability that the share price takes on a partiuclar value at time $t$ is given by:
+	\begin{equation*}
+	P(S_{t} = S_{\circ}\cdot{u}^{t-k}\cdot{d}^{k}) = \binom{t}{k}\cdot{(1-p)}^{k}\cdot{p}^{t-k}\qquad\text{for}\quad{k=0,1,\dots,t}
+	\end{equation*}
+	where $\binom{t}{k}$ denotes the binomial coefficient.
+\end{definition}
+
+Now that we have a model for the share price and the probability of the share price taking on a particular value, 
+we can calculate the expected value and variance of the share price. The expected value of the share price is the 
+
+
+\section*{Models of $u$, $d$ and $p$}
+The \texttt{up} and \texttt{down} factors $u$ and $d$, and the probability $p$ can be defined in various ways.  
+For example, we can estimate them from historical data, or we can propose models for their values. 
+
+
 
 
 \clearpage
