@@ -124,26 +124,6 @@
 
 \setcounter{page}{1}
 
-% \begin{mdframed}[backgroundcolor=lgray]
-
-% 	\subsection*{Background}
-% 	We have discussed idealized reversible power generation and refrigeration cycles, and considered the impact of
-% 	process irreversibility. In this lecture module, we will expand on the topic of irreversibility. In particular, we will develop expressions for
-% 	the rate of \textit{lost work} caused by irreversibility in terms if the rate of entropy generation and process unit efficiencies.
-
-% 	\vspace{0.1in}
-% 	\subsection*{Student outcomes}
-% 	At the end of this lecture module, students will be able to:
-% 	\begin{itemize}
-% 	  \item[O$_1$]{Describe the terms in the entropy balance for an open time dependent and steady-state system}
-% 		\item[O$_2$]{Relate the rate of lost work $\dot{W}_{lost}$ to the rate of entropy generation $\dot{S}_{G}$ in a steady-state system.}
-% 		\item[O$_3$]{Relate the efficiency of common equipment, e.g., pumps, compressors turbines etc to the rate of entropy generation $\dot{S}_{G}$ in a steady-state system.}
-% 	\end{itemize}
-
-% \end{mdframed}
-
-% \clearpage
-
 \section*{Introduction}
 \href{https://www.investor.gov/introduction-investing/investing-basics/glossary/treasury-securities}{United States Marketable Treasury Securities}, 
 are issued by the U.S. Department of the Treasury to fund its operations and meet financial obligations. 
@@ -158,32 +138,33 @@ or through a bank or broker to lend money to the U.S. government.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.85\textwidth]{./figs/Fig-Govt-Debt-Schematic.pdf}
-    \caption{Schematic of U.S. Government Debt Securities. }\label{fig:govt-debt-schematic}
+    \caption{Schematic of U.S. Government Debt Securities. You lend money to the United States Treasury by purchasing a treasury security.
+	The Treasury pays you back in different fix ways, dependent upon the security.}\label{fig:govt-debt-schematic}
 \end{figure}
 
 \section*{Prerequisites}
-Throughout all the courses we'll make use of a few concepts and approaches from finance, mathematics, statistics, and computer science.
+Throughout all the courses, we'll make use of a few concepts and approaches from finance, mathematics, statistics, and computer science.
 Let's begin this module by reviewing some of these concepts, in particular the concept of an abstract asset and the time value of money.
 These two foundational concepts are essential for understanding the pricing of zero-coupon Treasury securities (and other financial instruments).
 They also provide a useful framework for financial decision-making.
 
 \subsection*{Abstract Assets}
 The traditional view of an \href{https://en.wikipedia.org/wiki/Asset}{asset} is perhaps a physical resource with economic value that an individual, corporation, or country owns or controls with the expectation that it will provide a future benefit.
-For example, a car, house, or piece of land are all assets.
+For example, a car, house, or land are all assets.
 However, in a more general sense, we can also think of an asset as a sequence of current and future cash flows demarcated in some currency, for example, Euros, Dollars, Yuan, or cryptocurrencies such as Bitcoin.
-This more genetral notiion of an asset, which we'll refer to as an \newterm{abstract asset}\index{Abstract asset}, is a useful mental model for thinking about the pricing of financial instruments, e.g., stocks, bonds, and derivatives, 
-as well as the valuation of projects and other investments, and even traditional physical assets.
+This more general notion of an asset, which we'll refer to as an \newterm{abstract asset}\index{Abstract asset}, is a useful mental model for thinking about the pricing of financial instruments, e.g., stocks, bonds, and derivatives, 
+as well as the valuation of projects, other investments, and even traditional physical assets.
 In this model, cash flows can be positive or negative, and assets can be tangible or intangible.
 The challenge with this framework is that current and future cash flows are not directly comparable,
-i.e., we cannot add or subtract a cash flow that occurs today, with a cash flow that occurs at a different time in the future.
+i.e., we cannot add or subtract a cash flow that occurs today from a cash flow that occurs at a different time in the future.
 We can think of these cash flows as being in different currencies, e.g., dollars versus euros, that must be exchanged. 
 Thus, we formulate the equivalent of an exchange rate to compare cash from different periods.
-This is the concept of the time value of money, discount factors, and discount rates which we discuss next.
+This is the concept of the time value of money, discount factors, and discount rates, which we will discuss next.
 
 \subsection*{Time Value of Money}
-At firts glance, the idea that money has a time value seems counterintuitive. 
+At first glance, the idea that money has a time value seems counterintuitive. 
 If I put a dollar in my pocket today, it is still a dollar tomorrow, next week, or next year. 
-However, the value of a dollar today, e.g., the Utility that it brings  to you by purchasing a good or serice is not the same as the value of a dollar tomorrow.
+However, the value of a dollar today, e.g., the Utility it brings to you by purchasing a good or service, is not the same as the value of a dollar tomorrow.
 The change in the value of money over time is called the time value of money (Concept \ref{concept:time-value-of-money}):
 \begin{concept}[Time value of money]\label{concept:time-value-of-money}
 	One dollar today is not worth the same as one dollar tomorrow. 
@@ -205,7 +186,7 @@ This hypothetical scenario assumes that a risk-free investment exists that alway
 does such an investment exist? 
 
 \href{https://www.investopedia.com/terms/r/risk-freerate.asp}{Unfortunately, an actual risk-free investment is only a theoretical concept}. 
-However, the risk-free rate of return $i$ is often approximated by the yield on US Treasury debt securities because US Treasury debt securities are backed by the full faith and credit of the United States government
+However, the risk-free rate of return $i$ is often approximated by the yield on US Treasury debt securities because the full faith and credit of the United States government backs US Treasury debt securities
 and are considered one of the safest investments in the world. 
 Thus, we can use the yield on US Treasury debt securities as a proxy for the risk-free rate of return $i$. 
 This is the first reason why we are interested in these securities.
@@ -245,7 +226,7 @@ The term in the brackets is the \textit{multi-period discrete discount factor}, 
 \end{definition}
 
 Of course, an obvious challenge with this approach is that we need to know the discount rate(s) $r_{j+1,j}$ between every period $j$ and $j+1$.
-In practice, this is not possible. However, supposewe  approximated the discount rate(s) $r_{j+1,j}$ with an effective rate $\bar{r}$ 
+In practice, this is not possible. However, suppose we  approximated the discount rate(s) $r_{j+1,j}$ with an effective rate $\bar{r}$ 
 that was constant over the lifetime of the project or investment such that:
 \begin{equation}\label{eq:effective-rate}
 \left(1+\bar{r}\right)^{t} = \prod_{j=0}^{t-1}\left(1+r_{j+1,j}\right)
@@ -255,8 +236,8 @@ Then, we can rewrite the multi-period discrete discount factor as:
 \mathcal{D}_{t,0}(\bar{r}) = \left(1+\bar{r}\right)^{t}
 \end{equation}
 where $\bar{r}$ is the effective discount rate. Finally, imagine the we have $\lambda$ compounding periods per year, 
-and the effective discount rate $\bar{r}$ is an annualized rate (which is typically the case). 
-Then we can rewrite the effective discount rate as:
+and the effective discount rate $\bar{r}$ is an annualized rate (typically the case). 
+Then, we can rewrite the effective discount rate as:
 \begin{equation}\label{eq:effective-rate-compounded}
 \mathcal{D}_{t,0}(\bar{r}) = \left(1+\frac{\bar{r}}{\lambda}\right)^{\lambda\cdot{t}}
 \end{equation}
@@ -336,7 +317,7 @@ This sum is called the Net Present Value (NPV); NPV is a widespread method for a
 Let $\bar{c}_{t}$ be the net cash flow in period $t$. 
 Then, the net present value (NPV) is the sum of current and future discounted cash flows:
 \begin{equation}    
-\text{NPV}(T,r) = \sum_{i=0}^{T}{\mathcal{D}_{i,0}^{-1}}(r)\cdot\bar{c}_{i}\qquad{T\geq{0}}
+\text{NPV}(T,r) = \sum_{i=0}^{T}{\mathcal{D}_{i,0}^{-1}}(r)\cdot\bar{c}_{i}\qquad{T,r\geq{0}}
 \end{equation}
 where the term \texttt{T} is the number of time periods 
 (lifetime of the project or investment), and $\mathcal{D}_{i,0}(r)$ is the multistep discount factor with discount rate(s) \texttt{r}
@@ -378,7 +359,7 @@ is the discounted face (par) value $V_{P}$ such that the net present value (NPV)
 \text{NPV}(T,\bar{r}) = -V_{B} + \mathcal{D}_{T,0}^{-1}(\bar{r})\cdot{V_{P}} = 0
 \end{equation}
 or equivalently:
-\begin{equation}
+\begin{equation}\label{eq:zero-coupon-treasury-bill-price}
     V_{B} = \mathcal{D}_{T,0}^{-1}(\bar{r})\cdot{V_{P}}
 \end{equation}
 The quantity \texttt{T} denotes the duration of the bill (in years), 
@@ -388,6 +369,39 @@ Theorectically, the discount factor $\mathcal{D}_{T,0}^{-1}(\bar{r})$ can be com
 However, in the case of treasury securities, the discount factor is computed on a discrete basis, assuming $\lambda$ compounding events per year, 
 where typcially $\lambda = 2$, i.e., semi-annual compounding.
 
+The algorithm for computing the price of a zero-coupon Treasury bill is given in Algorithm \ref{algo:zero-coupon-treasury-bill-price}.
+First, we compute the discount factor $\mathcal{D}_{T,0}(\bar{r})$, typcially assuming a effective discrete discounting model.
+Then, we compute the price of the zero-coupon Treasury bill $V_{B}$ using Eqn. \eqref{eq:zero-coupon-treasury-bill-price}.
+\begin{algorithm}[h]
+    \caption{Compute price of zero-coupon Treasury bill}\label{algo:zero-coupon-treasury-bill-price}
+    \begin{algorithmic}[1]
+		\Require Effective annual interest rate $\bar{r}$, maturity $T$ (units: years), par value $V_{P}$, and compounding periods per year $\lambda$.
+
+		\Statex
+		\State{$\mathcal{D} \gets \left(1+\bar{r}/\lambda\right)^{\lambda\cdot{T}}$}\Comment{Compute the discount factor $\mathcal{D}_{T,0}(\bar{r})$}
+		\State{$V_{B} \gets \left(1/\mathcal{D}\right)\cdot{V_{P}}$}\Comment{Compute the price of the zero-coupon Treasury bill}
+	\end{algorithmic}
+\end{algorithm}
+
+If we assume a continuous discounting model, then the price of a zero-coupon Treasury bill can be computed using Algorithm \ref{algo:zero-coupon-treasury-bill-price-continout-discounting}:
+\begin{algorithm}[h]
+    \caption{Zero-coupon Treasury bill price continuous discounting}\label{algo:zero-coupon-treasury-bill-price-continout-discounting}
+    \begin{algorithmic}[1]
+		\Require Effective annual interest rate $\bar{r}$, maturity $T$ (units: years), par value $V_{P}$, and compounding periods per year $\lambda$.
+
+		\Statex
+		\State{$\mathcal{D} \gets \exp\left(r\cdot{T}\right)$}\Comment{Compute the continuous discount factor $\mathcal{D}_{T,0}(\bar{r})$}
+		\State{$V_{B} \gets \left(1/\mathcal{D}\right)\cdot{V_{P}}$}\Comment{Compute the price of the zero-coupon Treasury bill}
+	\end{algorithmic}
+\end{algorithm}
+This is the same procedure as Algorithm \ref{algo:zero-coupon-treasury-bill-price}, except we use the continuous discount factor.
+
+\section*{Summary}
+In this module, we introduced the concept of an abstract asset, the time value of money, different discounting models, and the net present value (NPV).
+We used these ideas to develop a framework for pricing zero-coupon Treasury securities, in particular, zero-coupon Treasury bills.
+Treasury bills are short-term Treasury securities with a maturity of less than or equal to a year, and zero coupon payments.
+Treasury bills are sold at auction, and the price of the bill is the discounted face (par) value of the bill, such that the net present value (NPV) of the bill is zero.
+In the next module, we will extend this framework to price other types of Treasury securities, e.g., Treasury notes and bonds.
 
 \clearpage
 \printindex
