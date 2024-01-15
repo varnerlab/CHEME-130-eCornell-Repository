@@ -7,7 +7,7 @@
 %\usepackage{palatino,lettrine}
 \usepackage{fancyhdr}
 \usepackage{epsfig}
-\usepackage[round,comma,sort]{natbib}
+\usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{simplemargins}
 \usepackage{setspace}
 \usepackage{wrapfig}
@@ -16,6 +16,8 @@
 \usepackage[margin=0pt,font=small,labelfont=bf]{caption}
 \newcommand{\boldindex}[1]{\textbf{\hyperpage{#1}}}
 \usepackage{makeidx}\makeindex
+
+%\bibliographystyle{natbib}
 \bibliographystyle{plos2015}
 
 % Set the size
@@ -120,61 +122,44 @@
 
 \setcounter{page}{1}
 
-% \begin{mdframed}[backgroundcolor=lgray]
-
-% 	\subsection*{Background}
-% 	We have discussed idealized reversible power generation and refrigeration cycles, and considered the impact of
-% 	process irreversibility. In this lecture module, we will expand on the topic of irreversibility. In particular, we will develop expressions for
-% 	the rate of \textit{lost work} caused by irreversibility in terms if the rate of entropy generation and process unit efficiencies.
-
-% 	\vspace{0.1in}
-% 	\subsection*{Student outcomes}
-% 	At the end of this lecture module, students will be able to:
-% 	\begin{itemize}
-% 	  \item[O$_1$]{Describe the terms in the entropy balance for an open time dependent and steady-state system}
-% 		\item[O$_2$]{Relate the rate of lost work $\dot{W}_{lost}$ to the rate of entropy generation $\dot{S}_{G}$ in a steady-state system.}
-% 		\item[O$_3$]{Relate the efficiency of common equipment, e.g., pumps, compressors turbines etc to the rate of entropy generation $\dot{S}_{G}$ in a steady-state system.}
-% 	\end{itemize}
-
-% \end{mdframed}
-
-% \clearpage
-
 \section*{Introduction}
 Previously, we introduced the concept of the time value of money and developed the abstract asset framework to compute the present value of future cash flows.
-We used this approach to compute the price of a zero-coupon Treasury bill (T-bill) at auction, 
-i.e., the price of a T-bill at the time of purchase that makes the net present value (NPV) of the bill zero.
-In this module, we will expand on the topic of the time value of money and develop a mathematical framework to compute the price of coupon-bearing Treasury securities.
-We will use the abstract asset framework to develop a mathematical model for the price of coupon-bearing Treasury securities.
+We used this approach to compute the price of a zero-coupon Treasury bills at auction, 
+i.e., the price of a T-bill at the time of purchase that makes the net present value (NPV) equal to zero.
+In this module, we expand on the topic of the time value of money and develop an approach to compute the price of coupon-bearing Treasury securities.
+Unlike T-bills, coupon-bearing Treasury securities pay the holder periodic interest in the form of coupon payments every six months until maturity, and the face (par) value of the security at maturity.
+Thus, coupon-bearing Treasury securities have multiple cash flow events, and can serve as an income stream for the holder.
+Further, we explore the relationship between the yield and price of a coupon-bearing Treasury security, and conclude with a discussion of potential sources of 
+risk associated with these securities.
 
-\section*{Treasury Bills, Notes and Bonds}
-United States Treasury Bills, or T-bills are Treasury debt instruments with short-term maturity periods T = 4, 8, 13, 26, and 52 weeks and zero coupon payments, 
-i.e., there are two cash flow events, you pay the price of the T-bill at auction, and you receive the face (par) value of the T-bill at maturity. 
-In contrast, coupon-bearing Treasury securities are long-term debt instruments that provide a stable interest payment every six months until maturity, called a coupon payment.
-There are two types of coupon-bearing Treasury securities: Treasury notes and Treasury bonds.
+\section*{Treasury Notes and Bonds}
+Previously, we explored United States Treasury Bills or T-bills. Treasury bills are short-term debt instruments with zero coupon payments, 
+i.e., there are only two cash flow events with a T-bill, you pay the price of the T-bill at auction, and you receive the face (par) value of the T-bill at maturity. 
+In contrast, coupon-bearing Treasury securities are long-term debt instruments that provide a stable interest payment, called a coupon payment, every six months until maturity.
+At maturity, the lender also receives the face (par) value of the instrument, and a final coupon payment.
+Let's explore two types of coupon-bearing Treasury securities: Treasury notes and Treasury bonds.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.85\textwidth]{./figs/Fig-Bond-Asset-Timeline-Schematic.pdf}
     \caption{Asbtract asset schematic of a coupon-bearing Treasury Note (T-note) or Bond (T-bond). 
 	The lender (you) gives the United States Treasury 
     the price $V_{B}$ of the note (bond) at auction. In return, the Treasury pays the note (bond) holder (you) the face (par) value of the note (bond) $V_{P}$ at maturity. 
-	The schematic is written from the note (bond) holder's perspective.}\label{fig:govt-note-bond-schematic}
+	The schematic is written from the note (bond) holder's perspective (you).}\label{fig:govt-note-bond-schematic}
 \end{figure}
+
 \href{https://treasurydirect.gov/marketable-securities/treasury-notes/}{United States Treasury Notes or T-notes}, 
 are debt instruments that provide a stable interest payment every six months until maturity, called a coupon payment, and the face (par) value of the note at maturity (Fig. \ref{fig:govt-note-bond-schematic}).
-Treasury notes are offered in terms of T = 2, 3, 5, 7, and 10 years and can be bought for more or less than their face (par) value. 
-Upon maturity, the lender receives the entire face (par) value of the note. 
-On the other hand,  \href{https://treasurydirect.gov/marketable-securities/treasury-bonds/}{United States Treasury Bonds or T-bonds} 
-are coupon debt instruments with a maturity of more than 10 years, e.g., 20 or 30 years. S
-imilar to notes, bonds are bought for more or less than their face (par) value and pay interest every six months until maturity.
-The coupon rate (interest rate) and the yeild (discount factor) for these securities is fixed at issuance time, and remains constant over the lifetime of the security.
+Treasury notes are offered in terms of T = 2, 3, 5, 7, and 10 years and can be bought for more or less than their face (par) value at auction.
+ On the other hand,  \href{https://treasurydirect.gov/marketable-securities/treasury-bonds/}{United States Treasury Bonds or T-bonds} 
+are coupon debt instruments with a maturity of more than 10 years, e.g., 20 or 30 years. Similar to notes, bonds are purchased for more or less than their face (par) value and pay interest in the form of coupon payments every six months until maturity.
+The coupon rate (interest rate) and the yeild (discount factor) for these securities is fixed when they are issued, i.e., at auction and remain constant over the lifetime of the security.
 At maturity, the lender receives the bond's par value (or note) and a final coupon payment. 
-Similar, to Tteasury bills, the pricing of notes and bonds is based on the present value of the future cash flows. 
+Similar, to Treasury bills, the pricing of notes and bonds is based on the present value of the future cash flows. 
 
-\section*{The Pricing of Coupon-Bearing Treasury Securities}
+\section*{Pricing}
 We will use the abstract asset framework to develop a mathematical model for the price of coupon-bearing Treasury securities.
-A \texttt{T}-year Treasury note (bond) with face value $V_{P}$, an effective yield $\bar{r}$, and $\lambda$ coupon payments per year, costs $V_{B}$ at auction.
-The note (bond) price is the sum of discounted future coupon payments and face value, making the net present value (NPV) zero:
+A \texttt{T}-year Treasury note (bond) with face value $V_{P}$, an effective annual discount rate $\bar{r}$, and $\lambda$ coupon payments per year, costs $V_{B}$ at auction.
+The note (bond) price is the sum of discounted future coupon payments and face value, making the net present value (NPV) equal to zero:
 \begin{equation}
 \text{NPV}(T,\bar{r}) = -V_{B} + \mathcal{D}^{-1}_{\lambda{T},0}(\bar{r})\cdot{V_{P}}+C\cdot\sum_{j=1}^{\lambda{T}}\mathcal{D}_{j,0}^{-1}(\bar{r}) = 0
 \end{equation}
@@ -182,8 +167,8 @@ or equivalently:
 \begin{equation}
 V_{B} = \mathcal{D}^{-1}_{\lambda{T},0}(\bar{r})\cdot{V_{P}}+C\cdot\sum_{j=1}^{\lambda{T}}\mathcal{D}_{j,0}^{-1}(\bar{r})
 \end{equation}
-The term $\mathcal{D}_{j,0}^{-1}(\bar{r})$ represents the inverse multistep discount factor for period $0\rightarrow{j}$. 
-The term $C\equiv(\bar{c}/\lambda)\cdot{V_{P}}$ represents the coupon payment, where $\bar{c}$ is the coupon rate.
+The term $\mathcal{D}_{j,0}^{-1}(\bar{r})$ represents the inverse multistep effective discrete discount factor for period $0\rightarrow{j}$. 
+The term $C\equiv(\bar{c}/\lambda)\cdot{V_{P}}$ is the coupon payment, where $\bar{c}$ is the coupon rate (set at auction).
 Typically, the coupon rate is quoted as an annual rate, so we divide by $\lambda$ to get the semi-annual coupon payment.
 Furher, Treasury notes and bonds typically pay coupons every six months, so $\lambda=2$.
 Finally, the discounting for Treasury instruments uses a discrete compounding model, so the discount factor for these calculations takes the form:
@@ -192,6 +177,31 @@ Finally, the discounting for Treasury instruments uses a discrete compounding mo
 \end{equation}
 where $j$ denotes the period number, and $\bar{r}$ is the effective yield (constant).
 
+\section*{Sensitivities and Risks}
+While United States Treasury securities are considered to be risk-free, they are not without risk. The most obvious risk is the risk of default, i.e., the United States government could default on its debt obligations and not repay the bond holders (you).
+This risk is considered to be very low, and the United States government has never, at least in recent memory, defaulted on its debt obligations (in the absense of technical issues).
+However, there are other risks associated with Treasury securities, including inflation risk, and liquidity risk.
+But the most signifcant non-default risk associated with Treasury securities is interest rate risk.
+The price of a coupon-bearing Treasury securities is a function of the face (par) value of the security, the coupon rate, the yield (discount rate) and the number of coupon payments per year.
+Thus, as these parameter change you would expect the price of the Treasury security to change. 
+Malkiel explored this question, and proposed five theorems that relate the price of a coupon-bearing Treasury security to changes in these parameters \citep{Malkiel-Bonds-1962}:
+\begin{itemize}[leftmargin=*]
+\item{\textbf{Theorem 1}: Bond prices move inversely to bond yields.}
+\item{\textbf{Theorem 2}: For a given change in yield from the nominal yield, changes in bond prices are greater the longer the term to maturity. }
+\item{\textbf{Theorem 3}: The percentage price changes described in Theorem 2 increase at a diminishing rate as N increases. }
+\item{\textbf{Theorem 4}: Price movements resulting from equal absolute increases and decreases in yield are asymmetric; i.e., decreasing yields raises bond prices more than the same increase in yields lowers prices. }
+\item{\textbf{Theorem 5}: The higher the coupon carried by the bond, the smaller the percentage price fluctuation for a given change in yield, except for one-year securities.}
+\end{itemize}
+
+
+
+\section*{Summary}
+In this module, we explored the pricing of coupon-bearing Treasury securities.
+In particular, we used the abstract asset framework to develop a mathematical model for the price of coupon-bearing United States Treasury notes and bonds.
+Notes and bonds are long-term debt instruments that provide a stable interest payment, called a coupon payment, every six months until maturity, and the face (par) value of the note (or bond) at maturity.
+These instruments are priced based on the present value of the future cash flows, where the yield (discount factor) and coupon rate for these securities is fixed when they are issued, i.e., at auction and remains constant over the lifetime of the security.
+
+\bibliography{References_v1}
 
 \clearpage
 \printindex
