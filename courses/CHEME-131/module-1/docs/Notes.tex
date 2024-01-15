@@ -18,6 +18,10 @@
 \usepackage{makeidx}\makeindex
 \bibliographystyle{plos2015}
 
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
 % Set the size
 %\textwidth = 6.75 in
 %\textheight = 9.75 in
@@ -38,11 +42,11 @@
 \newtheorem{defn}[thm]{Definition}
 
 \makeatletter
-\renewcommand\subsection{\@startsection
-	{subsection}{2}{0mm}
-	{-0.05in}
-	{-0.5\baselineskip}
-	{\normalfont\normalsize\bfseries}}
+% \renewcommand\subsection{\@startsection
+% 	{subsection}{2}{0mm}
+% 	{-0.05in}
+% 	{0.1\baselineskip}
+% 	{\normalfont\normalsize\bfseries}}
 \renewcommand\subsubsection{\@startsection
 	{subsubsection}{2}{0mm}
 	{-0.05in}
@@ -157,68 +161,68 @@ or through a bank or broker to lend money to the U.S. government.
     \caption{Schematic of U.S. Government Debt Securities. }\label{fig:govt-debt-schematic}
 \end{figure}
 
+\section*{Prerequisites}
+Throughout all the courses we'll make use of a few concepts and approaches from finance, mathematics, statistics, and computer science.
+Let's begin this module by reviewing some of these concepts, in particular the concept of an abstract asset and the time value of money.
+These two foundational concepts are essential for understanding the pricing of zero-coupon Treasury securities (and other financial instruments).
+They also provide a useful framework for financial decision-making.
 
-\subsection*{Treasury Bills, Notes and Bonds}\label{sec:treasury-bills}
-\href{https://treasurydirect.gov/marketable-securities/treasury-bills/}{United States Treasury Bills}, or T-bills are Treasury debt instruments with short-term maturity periods T = 4, 8, 13, 26, and 52 weeks and zero coupon payments
-Thus, Treasury bills (T-bills) are short-term debt securities issued by the U.S. Treasury. \href{https://treasurydirect.gov/marketable-securities/treasury-notes/}{United States Treasury Notes or T-notes}, 
-are debt instruments that provide a stable interest payment every six months until maturity, called a coupon payment.
-These notes are offered in terms of T = 2, 3, 5, 7, and 10 years and can be bought for more or less than their face (par) value. 
-Upon maturity, the lender receives the entire par value. 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\textwidth]{./figs/Fig-Bill-Asset-Timeline-Schematic.pdf}
-    \caption{Asbtract asset schematic of a zero-coupon Treasury Bill (T-bill). The lender (you) gives the United States Treasury 
-    the price $V_{B}$ of the T-bill at auction. In return, the Treasury pays the bill holder (you) the par value of the T-bill $V_{P}$ at maturity. 
-	The schematic is written from the bill holder's perspective.}\label{fig:govt-bill-schematic}
-\end{figure}
-\href{https://treasurydirect.gov/marketable-securities/treasury-bonds/}{Treasury notes and bonds} are coupon debt instruments, which means that the lender receives periodic interest payments based on a coupon rate during the lifespan of the security. 
-The coupon rate is fixed at issuance time and calculated as a percentage of the par value. 
-At maturity, the lender receives the bond's par value (or note) and a final coupon payment. The pricing of these securities is based on the present value of the future cash flows. 
-Thus, we must develop a mathematical framework to compute the present value of these cash flows, which we can use for 
-treasury securities and other financial instruments.
+\subsection*{Abstract Assets}
+The traditional view of an \href{https://en.wikipedia.org/wiki/Asset}{asset} is perhaps a physical resource with economic value that an individual, corporation, or country owns or controls with the expectation that it will provide a future benefit.
+For example, a car, house, or piece of land are all assets.
+However, in a more general sense, we can also think of an asset as a sequence of current and future cash flows demarcated in some currency, for example, Euros, Dollars, Yuan, or cryptocurrencies such as Bitcoin.
+This more genetral notiion of an asset, which we'll refer to as an \newterm{abstract asset}\index{Abstract asset}, is a useful mental model for thinking about the pricing of financial instruments, e.g., stocks, bonds, and derivatives, 
+as well as the valuation of projects and other investments, and even traditional physical assets.
+In this model, cash flows can be positive or negative, and assets can be tangible or intangible.
+The challenge with this framework is that current and future cash flows are not directly comparable,
+i.e., we cannot add or subtract a cash flow that occurs today, with a cash flow that occurs at a different time in the future.
+We can think of these cash flows as being in different currencies, e.g., dollars versus euros, that must be exchanged. 
+Thus, we formulate the equivalent of an exchange rate to compare cash from different periods.
+This is the concept of the time value of money, discount factors, and discount rates which we discuss next.
 
-\section*{Abstract Assets and the Time Value of Money}
-The traditional view of an \href{https://en.wikipedia.org/wiki/Asset}{asset} is a resource with economic value that an individual, corporation, or country owns or controls with the expectation that it will provide a future benefit.
-However, in a more general sense, we can define an abstract asset as a sequence of current and future cash flows demarcated in some currency, for example, Euros, Dollars, Yuan, or cryptocurrencies such as Bitcoin.
-The cash flows can be positive or negative, and assets can be tangible or intangible.
-The challenge with this perspective is that current and future cash flows are not directly comparable,
-i.e., we cannot add or subtract cash flows that occur at different times.
-
+\subsection*{Time Value of Money}
+At firts glance, the idea that money has a time value seems counterintuitive. 
+If I put a dollar in my pocket today, it is still a dollar tomorrow, next week, or next year. 
+However, the value of a dollar today, e.g., the Utility that it brings  to you by purchasing a good or serice is not the same as the value of a dollar tomorrow.
+The change in the value of money over time is called the time value of money (Concept \ref{concept:time-value-of-money}):
 \begin{concept}[Time value of money]\label{concept:time-value-of-money}
 	One dollar today is not worth the same as one dollar tomorrow. 
 	The change in the value of money over time is called the \newterm{time value of money}\index{The time value of money}.
 \end{concept}
 The time value of money is an empirical observation that has been seen over hundreds of years. 
-But why is this the case? The short answer: money given to us today has a greater \href{https://en.wikipedia.org/wiki/Utility}{Utility} 
-than the same amount tomorrow because we have an extra day to invest that money.
-
-Suppose a \emph{risk-free} investment is guaranteed to return an interest rate of $i>0$ per period.
+But why is this the case? Short answer: Money given to us today has a greater \href{https://en.wikipedia.org/wiki/Utility}{Utility} 
+than the same amount tomorrow because we have an extra day to invest (or use) that money. Suppose a \emph{risk-free} investment is guaranteed to return an interest rate of $i>0$ per period.
 If we invested $P$ dollars today in this risk-free investment, at the end of the investment period, e.g., a day, week, year, etc., 
 we are \emph{guaranteed} to get $F$ dollars back (because the investment is risk-free):
-\begin{equation}
+\begin{equation*}
 F = (1+i)\cdot{P}
-\end{equation}
+\end{equation*}
 where $F$ is the future value of the investment, $P$ is the present value of the investment, and $i$ is the interest rate per period.
 Thus, if given a choice between $P$ dollars today or $P$ dollars one investment period in the future, 
 a rational investor would always choose to take the $P$ dollars now. By taking $P$ dollars today, you could invest those $P$ dollars risk-free and get $F = (1+i)\cdot{P}$ back, where $F>P$. 
 In this hypothetical world, the only case where it makes sense to take the future money is if $i\leq{0}$, i.e., $F\leq{P}$, which is forbidden by the condition $i>0$. 
 This hypothetical scenario assumes that a risk-free investment exists that always returns an interest rate of $i>0$; 
-does such an investment exist? \href{https://www.investopedia.com/terms/r/risk-freerate.asp}{Unfortunately, an actual risk-free investment is only a theoretical concept}. 
-However, the risk-free rate of return $i$ is often approximated by the yield on US Treasury debt securities because US Treasury debt securities are backed by the full faith and credit of the United States government
-and are considered one of the safest investments in the world.
+does such an investment exist? 
 
-\subsection*{Exchange rate model}
+\href{https://www.investopedia.com/terms/r/risk-freerate.asp}{Unfortunately, an actual risk-free investment is only a theoretical concept}. 
+However, the risk-free rate of return $i$ is often approximated by the yield on US Treasury debt securities because US Treasury debt securities are backed by the full faith and credit of the United States government
+and are considered one of the safest investments in the world. 
+Thus, we can use the yield on US Treasury debt securities as a proxy for the risk-free rate of return $i$. 
+This is the first reason why we are interested in these securities.
+
+\subsubsection*{Exchange rate model.}
 Now that we have established money’s present value is higher than its future value, we need a way to compare cash from different periods. 
 A useful mental model for the time value of money is to think of money from different periods 
 as being in other currencies (e.g., dollars versus euros) that must be exchanged. 
-Thus, we formulate the equivalent of an exchange rate to compare money or cash flows from different periods. 
+Thus, we can formulate the equivalent of an exchange rate to compare money or cash flows from different periods. 
 For example, suppose we have an active asset over multiple periods, e.g., a multi-period project or some other transaction that occurs over many periods. 
+Further, suppose we have a cash flow $\dot{c}_{t}$ in period $t$ that we want to convert to a cash flow $\dot{c}_{0}$ in period zero, e.g., the future sale of shares of stock.
 In this case, we develop a multi-period conversion easily constructed by sequentially applying many one-period calculations. 
 To see this idea, let's start with period zero to period one:
 \begin{equation}\label{eq:period-zero-to-one}
 \dot{c}_{1} = \left(1+r_{10}\right)\cdot\dot{c}_{0}
 \end{equation}
-where $r_{10}$ is the exchange rate from period zero to period one, and $\dot{c}_{0}$ is the cash flow in period zero.
+where $r_{10}$ is the exchange rate (what we'll later call the \texttt{short rate}) from period zero to period one, and $\dot{c}_{0}$ is the cash flow in period zero.
 Then, period one to period two is given by:
 \begin{equation}\label{eq:period-one-to-two}
 \dot{c}_{2} = \left(1+r_{21}\right)\cdot\dot{c}_{1}
@@ -237,10 +241,17 @@ Further, let $r_{j+1,j}$ represent the discount rate between discrete periods $j
 \begin{equation}
 \dot{c}_{t} = \left[\prod_{j=0}^{t-1}\left(1+r_{j+1,j}\right)\right]\cdot\dot{c}_{0}\qquad{t=1,2,\dots,T}
 \end{equation}
-The product term is the \textit{multi-period discount factor}, which we represent as the function $\mathcal{D}_{t,0}(r)$.
+The product term is the \textit{multi-period discrete discount factor}, which we represent as the function $\mathcal{D}_{t,0}(r)$.
 \end{definition}
 
-\section*{Net Present Value of an Abstract Asset}
+\subsubsection*{Discounting from a different perspective.}
+In the exchange rate model, we convert cash flows from the future to the present (and vice-versa) using a discount rate $r_{t+1,t}$, and a discount factor $\mathcal{D}_{t,0}(r)$.
+However, students often find this approach confusing. For example, its not what discount rate to use, what the discount factor means, etc.
+Toward this challenge, let's introduce a different perspective on discounting.
+Another way to think about discont rates is to consider the discount rate as the minimum rate of return that a decision-maker would accept, 
+i.e., as hypothetical interest rate that would be required to make an investment or project worthwhile.
+
+\subsection*{Net Present Value (NPV)}
 Now that we have tools to account for the time value of money, we can return to the question of how to value an asset. 
 The most intuitive approach is to compute the net cash flow at every node. Imagine at node $t=k$ we have $\mathcal{S}^{t=k}$ cash streams,
 denoted as $\dot{c}_{s}$, entering (or exiting) the asset node ({numref}`cash-financial-node-flow-fig`). Then, the net cash flow at node $t=k$ is given by:
@@ -276,7 +287,25 @@ To compare a potential asset or project with an alternative investment, we can e
 \item{$\textbf{NPV}>0$:~}{A positive NPV indicates the proposed project will generate more income than a hypothetical alternative investment, e.g., a zero-coupon bond at the same discount rate and time-to-maturity as the project.}
 \end{itemize}
 
-\section*{Pricing Zero-Coupon Treasury Securities}\label{sec:zero-coupon-treasury-securities}
+
+\section*{Zero-coupon Treasury Bills}\label{sec:treasury-bills}
+\href{https://treasurydirect.gov/marketable-securities/treasury-bills/}{United States Treasury Bills}, or \texttt{T-bills} are Treasury debt instruments with short-term maturity periods T = 4, 8, 13, 26, and 52 weeks 
+and zero coupon payments, i.e., no semiannual interest payments (Fig. \ref{fig:t-bill-schematic}).
+In the context of the abstract asset framework, T-bills have two cashflow events, namely when the lender (you) buys the T-bill at auction and when the borrower (United States Treasury
+pays the lender (you) the face (par) value of the T-bill at maturity.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./figs/Fig-Bill-Asset-Timeline-Schematic.pdf}
+    \caption{Asbtract asset schematic of a zero-coupon Treasury Bill (T-bill). The lender (you) gives the United States Treasury 
+    the price $V_{B}$ of the T-bill at auction. In return, the Treasury pays the bill holder (you) the par value of the T-bill $V_{P}$ at maturity. 
+	The schematic is written from the bill holder's perspective.}\label{fig:t-bill-schematic}
+\end{figure}
+\href{https://treasurydirect.gov/marketable-securities/treasury-bonds/}{Treasury notes and bonds} are coupon debt instruments, which means that the lender receives periodic interest payments based on a coupon rate during the lifespan of the security. 
+The coupon rate is fixed at issuance time and calculated as a percentage of the par value. 
+At maturity, the lender receives the bond's par value (or note) and a final coupon payment. The pricing of these securities is based on the present value of the future cash flows. 
+Thus, we must develop a mathematical framework to compute the present value of these cash flows, which we can use for 
+treasury securities and other financial instruments.
+
 The price of a zero-coupon Treasury bill $V_{B}$ with an effective interest rate of $\bar{r}$ and a maturity of \texttt{T}-years at auction 
 is the discounted face (par) value $V_{P}$ such that the net present value (NPV) of the bill is zero:
 \begin{equation}    
@@ -291,9 +320,6 @@ $\bar{r}$ is the effective annualized interest rate,  and $\mathcal{D}_{T,0}^{-1
 for period $0\rightarrow{T}$. 
 The discount factor $\mathcal{D}_{T,0}^{-1}(\bar{r})$ can be either computed on a discrete or continuous basis. 
 In the case of treasury securities, the discount factor is computed on a discrete basis, assuming $m$ compounding periods per year.
-
-\subsection*{Multiperiod Discrete Discount Factor}
-Fill me in.
 
 
 \clearpage
