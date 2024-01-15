@@ -235,27 +235,96 @@ However, we can substitute $\dot{c}_{1}$ from Equation \ref{eq:period-zero-to-on
 If we do this computation between 2 and 3, and then 3 to 4, etc, we develop a relationship between the initial value of cash flow 
 $\dot{c}_{0}$ and future $\dot{c}_{t}$ cash flow values (Defn. \ref{defn:multiple-period-discrete-conversion}):
 
-\begin{definition}[Multiple period discrete conversion]\label{defn:multiple-period-discrete-conversion}
+\begin{definition}[Multiple period-dependent discrete discount]\label{defn:multiple-period-discrete-conversion}
 Let $\dot{c}_0$ be the present cash flow, and $\dot{c}_t$ be the future cash flow in period $t$. 
 Further, let $r_{j+1,j}$ represent the discount rate between discrete periods $j$ and $j+1$. Then: 
 \begin{equation}
 \dot{c}_{t} = \left[\prod_{j=0}^{t-1}\left(1+r_{j+1,j}\right)\right]\cdot\dot{c}_{0}\qquad{t=1,2,\dots,T}
 \end{equation}
-The product term is the \textit{multi-period discrete discount factor}, which we represent as the function $\mathcal{D}_{t,0}(r)$.
+The term in the brackets is the \textit{multi-period discrete discount factor}, which we represent as the function $\mathcal{D}_{t,0}(r)$.
 \end{definition}
 
-\subsubsection*{Discounting from a different perspective.}
-In the exchange rate model, we convert cash flows from the future to the present (and vice-versa) using a discount rate $r_{t+1,t}$, and a discount factor $\mathcal{D}_{t,0}(r)$.
-However, students often find this approach confusing. For example, its not what discount rate to use, what the discount factor means, etc.
-Toward this challenge, let's introduce a different perspective on discounting.
-Another way to think about discont rates is to consider the discount rate as the minimum rate of return that a decision-maker would accept, 
-i.e., as hypothetical interest rate that would be required to make an investment or project worthwhile.
+Of course, an obvious challenge with this approach is that we need to know the discount rate(s) $r_{j+1,j}$ between every period $j$ and $j+1$.
+In practice, this is not possible. However, supposewe  approximated the discount rate(s) $r_{j+1,j}$ with an effective rate $\bar{r}$ 
+that was constant over the lifetime of the project or investment such that:
+\begin{equation}\label{eq:effective-rate}
+\left(1+\bar{r}\right)^{t} = \prod_{j=0}^{t-1}\left(1+r_{j+1,j}\right)
+\end{equation}
+Then, we can rewrite the multi-period discrete discount factor as:
+\begin{equation}\label{eq:multi-period-discrete-discount-factor}
+\mathcal{D}_{t,0}(\bar{r}) = \left(1+\bar{r}\right)^{t}
+\end{equation}
+where $\bar{r}$ is the effective discount rate. Finally, imagine the we have $\lambda$ compounding periods per year, 
+and the effective discount rate $\bar{r}$ is an annualized rate (which is typically the case). 
+Then we can rewrite the effective discount rate as:
+\begin{equation}\label{eq:effective-rate-compounded}
+\mathcal{D}_{t,0}(\bar{r}) = \left(1+\frac{\bar{r}}{\lambda}\right)^{\lambda\cdot{t}}
+\end{equation}
+where $\bar{r}$ is the discount rate, and $\lambda$ is the number of discounting events per period
+(Defn. \ref{defn:multiple-effective-period-discrete-conversion}).
+\begin{definition}[Multiple period effective discrete discount]\label{defn:multiple-effective-period-discrete-conversion}
+	Let $\dot{c}_0$ be the present cash flow, and $\dot{c}_t$ be the future cash flow in period $t$. 
+	Further, let $\bar{r}$ represent the (constant) effective discount rate, $\lambda$ is the number of discounting events per period. 
+	Then:
+	\begin{equation}
+	\dot{c}_{t} = \left[\left(1+\frac{\bar{r}}{\lambda}\right)^{\lambda\cdot{t}}\right]\cdot\dot{c}_{0}\qquad{t=1,2,\dots,T}
+	\end{equation}
+	The term in the brackets is the \textit{multi-period effective discrete discount factor}, which we represent as the function $\mathcal{D}_{t,0}(\bar{r})$.
+\end{definition}
+
+\subsubsection*{A different perspective.}
+In the exchange rate model, we converted cash flows from the future to the present (and vice-versa) using a period-dependent discount rate $r_{t+1,t}$, 
+or an effective discount rate $\bar{r}$, and a discount factor $\mathcal{D}_{t,0}(r)$. These acted like exchange rates between different currencies.
+However, this approach is often seen as confusing. For example, its not clear what discount rate to use, what a discount factor actually means practically, etc.
+Toward this challenge, let's introduce a different perspective of discounting, and the discount rate.
+Suppose we think of the discount rate $r_{t+1,t}$  (or $\bar{r}$) as the minimum 
+\newterm{rate of return}\index{rate of return} that a decision-maker 
+would accept for a project or investment. In this context, discount rates are like interest rates, that we can earn on an investment.
+Let's continue with this idea and introduce the concept of interest, and interest rates.
+
+There are two types of interest, simple and compound. The distinction between simple and compound interest is crucial in the world of finance and investing.
+These concepts significantly impact investment growth and borrowing costs, making them fundamental aspects to consider when making financial decisions. 
+Simple interest is paid only on the initial principle. 
+For example, if amount $A(0)$ is invested in an account at $t=0$ which pays a simple interest rate of $r$ per period, 
+then after $n$ periods the account will hold amount $A(n)$ (assuming no withdrawals, etc):
+\begin{equation}\label{eq:simple-interest}
+A(n) = A(0)\cdot\left(1+rn\right)
+\end{equation}
+On the other hand, compound interest considers both the principal and the interest accumulated over time. 
+For example, if amount $A(0)$ is invested in an account at $t=0$ which pays a compound interest rate $r$ per period, 
+then after $n$ periods the account will hold amount $A(n)$ (assuming no withdrawals, etc):
+\begin{equation}\label{eq:compound-interest}
+A(n) = A(0)\cdot\left(1+r\right)^n
+\end{equation}
+If there are multiple compounding periods per year, then the interest rate $r$ is divided by the number of compounding periods per year $\lambda$
+and we arrive at the following expression for compound interest:
+\begin{equation}\label{eq:compound-interest-multiple}
+A(n) = A(0)\cdot\left(1+\frac{r}{\lambda}\right)^{n\cdot\lambda}
+\end{equation}
+Clearly, compound interest is more advantageous to the investor than simple interest. 
+Furhtermore, Eqn. \eqref{eq:compound-interest-multiple} is equivalent to Defn. \ref{defn:multiple-effective-period-discrete-conversion}
+when the interest rate $r$ is the effective discount rate $\bar{r}$, and the number of compounding periods per year $\lambda$ is the number of discounting events per period.
+Finally, consider the case when the number of compounding periods per year $\lambda\rightarrow\infty$, i.e., we have continuous compounding (Defn. \ref{defn:continuous-compounding}):
+\begin{definition}[Continuous compounding]\label{defn:continuous-compounding}
+Let there be n-compounding periods per period, e.g., year and an annualized interest rate of $r$.  
+Then an initial investment $A(0)$ will be worth:
+\begin{equation}\label{eqn-compound-interest-model-discrete}
+A(m) = A(0)\cdot\left(1+r/n\right)^{mn}
+\end{equation}
+after m-periods, e.g., m-years. As the number of compounding periods $n\rightarrow\infty$, 
+the investment $A(m)$ approaches the continuous compounding limit:
+\begin{equation}\label{eqn-compound-interest-model-cont}    
+\lim_{n\rightarrow\infty}A(m) = A(0)\cdot\exp\left(rm\right)
+\end{equation}
+The quantity $\exp\left(rm\right)$ is the \textit{continuous compounding (discount) factor}, 
+which we also represent (with a slight abuse of notiion) as $\mathcal{D}_{m,0}(r)$.
+\end{definition}
 
 \subsection*{Net Present Value (NPV)}
 Now that we have tools to account for the time value of money, we can return to the question of how to value an asset. 
-The most intuitive approach is to compute the net cash flow at every node. Imagine at node $t=k$ we have $\mathcal{S}^{t=k}$ cash streams,
-denoted as $\dot{c}_{s}$, entering (or exiting) the asset node ({numref}`cash-financial-node-flow-fig`). Then, the net cash flow at node $t=k$ is given by:
-
+The most intuitive approach is to compute the net cash flow at every time point. Imagine at node $t=k$ we have $\mathcal{S}^{t=k}$ cash streams,
+denoted as $\dot{c}_{s}$, entering (or exiting) the asset node. 
+Then, the net cash flow at node $t=k$ is given by:
 \begin{equation}\label{eq:net-cash-flow}
 \bar{c}_{k} = \sum_{s\in\mathcal{S}^{t=k}}\nu_{s}\dot{c}_{s}
 \end{equation}
@@ -263,50 +332,47 @@ where $\nu_{s}$ is a direction parameter; $\nu_{s}=+1$ if stream $s$ enters node
 Finally, we sum all the current and future cash flows, converted to some shared basis, e.g., current dollars. 
 This sum is called the Net Present Value (NPV); NPV is a widespread method for asset valuation and financial decision-making 
 (Defn. \ref{defn:net-present-value}): 
-
 \begin{definition}[Net Present Value (NPV)]\label{defn:net-present-value}
-The net present value (NPV) is the sum of current and future discounted cash flows:
+Let $\bar{c}_{t}$ be the net cash flow in period $t$. 
+Then, the net present value (NPV) is the sum of current and future discounted cash flows:
 \begin{equation}    
-\text{NPV}(T,r) = \sum_{i=0}^{T}{\mathcal{D}_{i,0}^{-1}}(r)\cdot\bar{c}_{t}
+\text{NPV}(T,r) = \sum_{i=0}^{T}{\mathcal{D}_{i,0}^{-1}}(r)\cdot\bar{c}_{i}\qquad{T\geq{0}}
 \end{equation}
-where the quantity $\bar{c}_{t}$ denotes the net cash flow in time period \texttt{t}, the quantity \texttt{T} is the number of time periods 
-(lifetime of the project or investment), and $\mathcal{D}_{i,0}(r)$ is the multistep discount factor with discount rate(s) \texttt{r}.
-\begin{itemize}
-\item{The discount factor $\mathcal{D}_{i,0}(r)$ can be modeled using either a discrete or a continuous discounting model.}
+where the term \texttt{T} is the number of time periods 
+(lifetime of the project or investment), and $\mathcal{D}_{i,0}(r)$ is the multistep discount factor with discount rate(s) \texttt{r}
+between period $i$ and period $0$.
+\begin{itemize}[leftmargin=*]
+\item{The discount factor $\mathcal{D}_{i,0}(r)$ can be either a discrete or a continuous discounting model.}
 \item{The NPV does not require that the discount rate is constant over the lifetime of the project or investment, but this is often assumed.}
 \item{The discount  $\mathcal{D}_{0,0}(r) = 1$ for all values of $r$.}
 \end{itemize}
 \end{definition}
-
-When calculating net present value, the discount rate $r_{t+1,t}$ represents the minimum rate of return that a decision-maker would accept 
-for a project or investment compared with a hypothetical alternative investment. 
-To compare a potential asset or project with an alternative investment, we can establish the following criteria:
-\begin{itemize}
-\item{$\textbf{NPV}<0$:~}{A negative NPV indicates the proposed project will generate less income than the alternative investment, e.g., a zero-coupon bond at the same discount rate and time-to-maturity as the project.}
-\item{$\textbf{NPV}=0$:~}{A zero NPV indicates the proposed project will generate the same income as the alternative investment, e.g., a zero-coupon bond at the same discount rate and time-to-maturity as the project. }
+The net present value (NPV) is a useful metric for financial decision-making.
+In this context, the NPV has the following interpretations:
+\begin{itemize}[leftmargin=*]
+\item{$\textbf{NPV}<0$:~}{A negative NPV indicates the proposed project will generate less income than a hypothetical alternative investment, e.g., a risk-free investment at the same discount rate and time-to-maturity as the project.}
+\item{$\textbf{NPV}=0$:~}{A zero NPV indicates the proposed project will generate the same income as a hypothetical alternative investment, e.g., a zero-coupon bond at the same discount rate and time-to-maturity as the project. }
 \item{$\textbf{NPV}>0$:~}{A positive NPV indicates the proposed project will generate more income than a hypothetical alternative investment, e.g., a zero-coupon bond at the same discount rate and time-to-maturity as the project.}
 \end{itemize}
+The connection of the net present value (NPV) to the time value of money is clear.
+However, the connection of the NPV with a zero-coupon bond is not. 
+As we will see, the NPV of a project or investment with a zero NPV is equivalent to the price of a zero-coupon bond with the same time-to-maturity 
+and discount rate. Thus, a rational investor would be indifferent between investing in a NPV = 0 project or investing in a zero-coupon bond.
 
-
-\section*{Zero-coupon Treasury Bills}\label{sec:treasury-bills}
-\href{https://treasurydirect.gov/marketable-securities/treasury-bills/}{United States Treasury Bills}, or \texttt{T-bills} are Treasury debt instruments with short-term maturity periods T = 4, 8, 13, 26, and 52 weeks 
-and zero coupon payments, i.e., no semiannual interest payments (Fig. \ref{fig:t-bill-schematic}).
-In the context of the abstract asset framework, T-bills have two cashflow events, namely when the lender (you) buys the T-bill at auction and when the borrower (United States Treasury
-pays the lender (you) the face (par) value of the T-bill at maturity.
+\section*{Zero-Coupon Treasury Bills}\label{sec:treasury-bills}
+Finally, let's focus on our first example of a U.S. Treasury security, the \href{https://treasurydirect.gov/marketable-securities/treasury-bills/}{Treasury Bill}.
+\href{https://treasurydirect.gov/marketable-securities/treasury-bills/}{United States Treasury Bills}, \texttt{T-bills} or just \texttt{Zeros} are Treasury debt instruments with short-term maturity periods T = 4, 8, 13, 26, and 52 weeks 
+and zero coupon payments, i.e., no seperate semiannual interest payments to the lender (you).
+In the context of the abstract asset framework, T-bills have two cashflow events, namely when the lender (you) buys the T-bill at auction 
+and when the borrower (United States Treasury) pays the lender (you) the face (par) value of the T-bill at maturity (Fig. \ref{fig:t-bill-schematic}).
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth]{./figs/Fig-Bill-Asset-Timeline-Schematic.pdf}
-    \caption{Asbtract asset schematic of a zero-coupon Treasury Bill (T-bill). The lender (you) gives the United States Treasury 
-    the price $V_{B}$ of the T-bill at auction. In return, the Treasury pays the bill holder (you) the par value of the T-bill $V_{P}$ at maturity. 
-	The schematic is written from the bill holder's perspective.}\label{fig:t-bill-schematic}
+    \caption{Asbtract asset schematic of a zero-coupon Treasury bill. The lender (you) gives the United States Treasury 
+    the price $V_{B}$ of the T-bill at auction at $ t = 0$. In return, the Treasury pays the bill holder (you) the par value of the T-bill $V_{P}$ at maturity $t>0$. 
+	The schematic is written from the perspective of the borrower (United States Treasury).}\label{fig:t-bill-schematic}
 \end{figure}
-\href{https://treasurydirect.gov/marketable-securities/treasury-bonds/}{Treasury notes and bonds} are coupon debt instruments, which means that the lender receives periodic interest payments based on a coupon rate during the lifespan of the security. 
-The coupon rate is fixed at issuance time and calculated as a percentage of the par value. 
-At maturity, the lender receives the bond's par value (or note) and a final coupon payment. The pricing of these securities is based on the present value of the future cash flows. 
-Thus, we must develop a mathematical framework to compute the present value of these cash flows, which we can use for 
-treasury securities and other financial instruments.
-
-The price of a zero-coupon Treasury bill $V_{B}$ with an effective interest rate of $\bar{r}$ and a maturity of \texttt{T}-years at auction 
+The price of a zero-coupon Treasury bill $V_{B}$ with an effective (constant) interest (discount) rate of $\bar{r}$ and a maturity of \texttt{T}-years at auction 
 is the discounted face (par) value $V_{P}$ such that the net present value (NPV) of the bill is zero:
 \begin{equation}    
 \text{NPV}(T,\bar{r}) = -V_{B} + \mathcal{D}_{T,0}^{-1}(\bar{r})\cdot{V_{P}} = 0
@@ -318,8 +384,9 @@ or equivalently:
 The quantity \texttt{T} denotes the duration of the bill (in years), 
 $\bar{r}$ is the effective annualized interest rate,  and $\mathcal{D}_{T,0}^{-1}(\bar{r})$ is the inverse multistep discount factor
 for period $0\rightarrow{T}$. 
-The discount factor $\mathcal{D}_{T,0}^{-1}(\bar{r})$ can be either computed on a discrete or continuous basis. 
-In the case of treasury securities, the discount factor is computed on a discrete basis, assuming $m$ compounding periods per year.
+Theorectically, the discount factor $\mathcal{D}_{T,0}^{-1}(\bar{r})$ can be computed on either a discrete or continuous basis. 
+However, in the case of treasury securities, the discount factor is computed on a discrete basis, assuming $\lambda$ compounding events per year, 
+where typcially $\lambda = 2$, i.e., semi-annual compounding.
 
 
 \clearpage
