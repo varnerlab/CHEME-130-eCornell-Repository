@@ -175,7 +175,7 @@ At time \texttt{2}, the share price can take on one of three possible values: $S
 to the \texttt{up-up} state, $S^{ud} = ud\cdot{S_{\circ}}$ if the world moves to the \texttt{up-down} state, or $S^{dd} = d^{2}\cdot{S_{\circ}}$ if the world moves to the \texttt{down-down} state.
 We can continue to build out the lattice model by adding additional time-steps, for example consider a three-step ahead prediction (Fig. \ref{fig:binomial-lattice-schematic}C).
 
-\section*{Binomial Lattice Analytical Solution}
+\section*{Analytical solution}
 Let's consider a binomial lattice model with $n$ time-steps. At each time-step, the share price can either go \texttt{up} by a factor of $u$ or \texttt{down} by a factor of $d$.
 Then, at time \texttt{n}, the share price can take on $n+1$ possible values: 
 \begin{equation}
@@ -300,29 +300,75 @@ If a precise estimate of $u$, $d$ and $p$ is required, the number of trading day
 Furthermore, the estimates of $u$, $d$ and $p$ are not robust to outliers in the dataset $\mathcal{D}_{j}$.
 Thus, we may want to consider other models for computing $u$, $d$ and $p$.
 
-\subsection*{Risk-neutral probability $q$.}
-Another approach to compute the parameters in the lattrice is to use the risk-neutral probability $q$. 
-This a hypothetical probability that is used to price derivatives (as we shall see later), 
-but we could also think of it as a tool to compute a \textit{fair} price for a share of stock.
-Suppose we rewrite Eqn. \eqref{eqn:share-price-growth-rate} as:
+\subsection*{Risk-neutral probability $q$}
+Another approach to computing the parameters in the lattrice is to use the risk-neutral probability $q$. 
+Let's consider a single-step binomial lattice model (Fig. \ref{fig:binomial-lattice-schematic}A). 
+The  expected value of the share price at time \texttt{1} for a single step is given by:
 \begin{equation*}
-    \mathcal{D}_{1,0}(\bar{r})\cdot{S_{\circ}} = \mathbb{E}_{\mathbb{Q}}\left(S_{1}\right)
+	\mathbb{E}_{\mathbb{Q}}(S_{1} | S_{\circ}) = q\cdot{S^{u}} + (1-q)\cdot{S^{d}}
 \end{equation*}
+where $\mathbb{E}_{\mathbb{Q}}(\dots)$ denotes the expectation operator written with respect to the risk-neutral probability measure $\mathbb{Q}$, 
+the term $q$ denotes the risk-neutral probability of the \texttt{up} state, and $S^{u}$ and $S^{d}$ are the share prices in the \texttt{up} and \texttt{down} states respectively.
+The hypothetical probability $q$ is used to price derivatives (as we shall see later), 
+however, we could also think of it as a tool to compute a \textit{fair} price for a share of stock.
+Suppose we rewrite Eqn. \eqref{eqn:share-price-growth-rate} as:
+\begin{equation}\label{eqn:share-price-growth-rate-2}
+    \mathcal{D}_{1,0}(\bar{r})\cdot{S_{\circ}} = \mathbb{E}_{\mathbb{Q}}\left(S_{1}|S_{\circ}\right)
+\end{equation}
 where $\mathcal{D}_{1,0}(\bar{r})$ is the continuous discount factor between period $0\rightarrow{1}$, 
 and $\bar{r}$ is the effective (constant) risk-free rate. Thus, unlike the previous case, where the share price $S_{i}$ was discounted by the
 return $\mu_{i,i-1}\cdot\Delta{t}$ (which could vary in time), here we discount the share price $S_{i}$ by an effective (constant) risk-free rate $\bar{r}$.
-The expectation operator $\mathbb{E}_{\mathbb{Q}}(\dots)$ is taken with respect to a \textit{risk neutral probability measure} $\mathbb{Q}$.
-Thus, the expectation operator $\mathbb{E}_{\mathbb{Q}}(\dots)$ is:
+The expectation operator $\mathbb{E}_{\mathbb{Q}}(\dots)$ can be matched with the expansion:
 \begin{equation}\label{eqn:expectation-operator-risk-neutral}
 \mathcal{D}_{1,0}(\bar{r})\cdot{S_{\circ}} = q\cdot{S^{u}} + (1-q)\cdot{S^{d}}
 \end{equation}
-where $q$ is the risk neutral probability of the \texttt{up} state, and $S^{u}$ and $S^{d}$ are the share prices in the \texttt{up} and \texttt{down} states respectively.
 The share prices in the \texttt{up} and \texttt{down} states are the product of the \texttt{up} factor $u$ (or a \texttt{down} factor $d$) and the initial share price, 
-i.e., $S^{u} = u\cdot{S_{\circ}}$ and $S^{d} = d\cdot{S_{\circ}}$. Substiuting these values in Eqn. \eqref{eqn:expectation-operator-risk-neutral} and solving for $q$ gives:
-\begin{equation*}
+i.e., $S^{u} = u\cdot{S_{\circ}}$ and $S^{d} = d\cdot{S_{\circ}}$. Substiuting these price values into Eqn. \eqref{eqn:expectation-operator-risk-neutral} and solving for $q$ gives:
+\begin{equation}\label{eqn:risk-neutral-probability}
 q = \frac{\mathcal{D}_{1,0}(\bar{r}) - d}{u - d}
-\end{equation*}
+\end{equation}
 Thus, we can compute the risk-neutral probability $q$ from the \texttt{up} and \texttt{down} factors $u$ and $d$ and the effective risk-free rate $\bar{r}$.
+
+% \subsubsection*{Symmetric binomial lattice model.}
+% The risk neutral probability $q$ is a function of the \texttt{up} and \texttt{down} factors $u$ and $d$ and the effective risk-free rate $\bar{r}$.
+% Thus, we must still compute values (or propose models) for the \texttt{up} and \texttt{down} factors $u$ and $d$.
+% One simple model is the symmetric binomial lattice model, where $u = 1/d$.
+
+\section*{Binomial lattice trade strategy}
+Suppose we purchase $n_{o}$ share of ticker \texttt{XYZ} at time $t=0$ for $S_{o}$ USD/share.
+Then, at some later date $t=T$, we sell all $n_{o}$ shares for $S_{T}$ USD/share. 
+The NPV of this trade is:
+\begin{equation*}
+\text{NPV}(\bar{r},T) = -n_{o}\cdot{S_{o}} + n_{o}\cdot{S_{T}}\cdot\mathcal{D}_{T,0}^{-1}(\bar{r})
+\end{equation*}
+where $\mathcal{D}_{T,0}^{-1}(\bar{r})$ is the inverse of the continuous discount factor 
+for period $0\rightarrow{T}$ with effective discount rate $\bar{r}$. 
+Factoring out $n_{o}$ gives:
+\begin{equation*}
+\text{NPV}(\bar{r},T) = n_{o}\cdot\left(S_{T}\cdot\mathcal{D}_{T,0}^{-1}(\bar{r}) - S_{o}\right)
+\end{equation*}
+The term in the parenthesis is the net change in the share price, i.e., the change in the share price $S_{T}$ discounted by the effective discount rate $\bar{r}$.
+However, if we hold the shares for a short period, e.g., on order days or months, then we approximate as $\mathcal{D}_{T,0}^{-1}(\bar{r})\approx{1}$, which
+simplifies to:
+\begin{equation*}
+\text{NPV}(\bar{r}, T) \simeq n_{o}\cdot(S_{T}-S_{o})
+\end{equation*}
+Dividing by the initial investment $n_{o}\cdot{S_{o}}$ gives the return on investment (ROI) as a fraction:
+\begin{equation}\label{eqn:roi-fractional-return}
+\frac{\text{NPV}(\bar{r}, T)}{n_{o}\cdot{S_{o}}} \simeq \frac{S_{T}-S_{o}}{S_{o}} = \frac{S_{T}}{S_{o}} - 1
+\end{equation}
+Equation \eqref{eqn:roi-fractional-return} is the fractional return on investment. 
+At time $t=T$, the share price $S_{T}$ is a random variable which takes the form (from Defn. \ref{defn-binomial-distribution}):
+\begin{equation*}
+S_{T} \in \left\{S_{\circ}\cdot{u}^{t-k}\cdot{d}^{k}\right\}_{k=0}^{T}
+\end{equation*}
+where $S_{\circ}$ is the initial share price, $u$ and $d$ are the \texttt{up} and \texttt{down} factors, and $p$ is the probability of going \texttt{up}.
+Substiuting this expression into Eqn. \eqref{eqn:roi-fractional-return} gives:
+\begin{equation}
+	\frac{\text{NPV}(\bar{r}, T)}{n_{o}\cdot{S_{o}}} \in \left\{u^{T-k}\cdot{d}^{k} - 1\right\}_{k=0}^{T}
+\end{equation}
+
+
 \clearpage
 \printindex
 
