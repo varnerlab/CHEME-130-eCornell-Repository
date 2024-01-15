@@ -337,37 +337,39 @@ Thus, we can compute the risk-neutral probability $q$ from the \texttt{up} and \
 \section*{Binomial lattice trade strategy}
 Suppose we purchase $n_{o}$ share of ticker \texttt{XYZ} at time $t=0$ for $S_{o}$ USD/share.
 Then, at some later date $t=T$, we sell all $n_{o}$ shares for $S_{T}$ USD/share. 
-The NPV of this trade is:
+The net present value (NPV) of this trade has two cashflow events, the initial purchase of $n_{o}$ shares for $S_{o}$ USD/share,
+and the sale of $n_{o}$ shares for $S_{T}$ USD/share at some later date $t=T$:
 \begin{equation*}
 \text{NPV}(\bar{r},T) = -n_{o}\cdot{S_{o}} + n_{o}\cdot{S_{T}}\cdot\mathcal{D}_{T,0}^{-1}(\bar{r})
 \end{equation*}
 where $\mathcal{D}_{T,0}^{-1}(\bar{r})$ is the inverse of the continuous discount factor 
-for period $0\rightarrow{T}$ with effective discount rate $\bar{r}$. 
-Factoring out $n_{o}$ gives:
+for period $0\rightarrow{T}$, assuming an effective discount rate $\bar{r}$. 
+Factoring the initial number of shares $n_{o}$ from the NPV expression gives:
 \begin{equation*}
 \text{NPV}(\bar{r},T) = n_{o}\cdot\left(S_{T}\cdot\mathcal{D}_{T,0}^{-1}(\bar{r}) - S_{o}\right)
 \end{equation*}
 The term in the parenthesis is the net change in the share price, i.e., the change in the share price $S_{T}$ discounted by the effective discount rate $\bar{r}$.
-However, if we hold the shares for a short period, e.g., on order days or months, then we approximate as $\mathcal{D}_{T,0}^{-1}(\bar{r})\approx{1}$, which
-simplifies to:
+However, if we hold the shares for only a short period, e.g., on order days or months, then $\mathcal{D}_{T,0}^{-1}(\bar{r})\approx{1}$, which
+simplifies the NPV expression to:
 \begin{equation*}
 \text{NPV}(\bar{r}, T) \simeq n_{o}\cdot(S_{T}-S_{o})
 \end{equation*}
-Dividing by the initial investment $n_{o}\cdot{S_{o}}$ gives the return on investment (ROI) as a fraction:
+Dividing by the initial investment $n_{o}\cdot{S_{o}}$ gives the fraction return on investment, or just the fractional return:
 \begin{equation}\label{eqn:roi-fractional-return}
 \frac{\text{NPV}(\bar{r}, T)}{n_{o}\cdot{S_{o}}} \simeq \frac{S_{T}-S_{o}}{S_{o}} = \frac{S_{T}}{S_{o}} - 1
 \end{equation}
-Equation \eqref{eqn:roi-fractional-return} is the fractional return on investment. 
-At time $t=T$, the share price $S_{T}$ is a random variable which takes the form (from Defn. \ref{defn-binomial-distribution}):
-\begin{equation*}
-S_{T} \in \left\{S_{\circ}\cdot{u}^{t-k}\cdot{d}^{k}\right\}_{k=0}^{T}
-\end{equation*}
+In a binomial world, the share price $S_{T}$ is a random variable which takes on $T+1$ possible values:
+\begin{equation}
+S_{T} \in \left\{S_{\circ}\cdot{u}^{T-k}\cdot{d}^{k}\right\}_{k=0}^{T}
+\end{equation}
 where $S_{\circ}$ is the initial share price, $u$ and $d$ are the \texttt{up} and \texttt{down} factors, and $p$ is the probability of going \texttt{up}.
 Substiuting this expression into Eqn. \eqref{eqn:roi-fractional-return} gives:
 \begin{equation}
 	\frac{\text{NPV}(\bar{r}, T)}{n_{o}\cdot{S_{o}}} \in \left\{u^{T-k}\cdot{d}^{k} - 1\right\}_{k=0}^{T}
 \end{equation}
 
+\section*{Summary}
+Fill me in.
 
 \clearpage
 \printindex
