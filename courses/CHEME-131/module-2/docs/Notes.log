@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.5)  16 JAN 2024 08:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.5)  16 JAN 2024 08:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -642,7 +642,7 @@ xmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2022/tex
 mf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2022/texmf-dist
 /fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2022/texmf-dist/fonts/
 type1/urw/helvetic/uhvro8a.pfb>
-Output written on Notes.pdf (4 pages, 139039 bytes).
+Output written on Notes.pdf (4 pages, 139030 bytes).
 PDF statistics:
  123 PDF objects out of 1000 (max. 8388607)
  84 compressed objects within 1 object stream
