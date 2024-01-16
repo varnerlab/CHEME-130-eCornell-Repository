@@ -81,7 +81,7 @@
 \mdfdefinestyle{conceptstyle}{% 
     linecolor=black,linewidth=1pt,% 
     frametitlerule=true,% 
-    frametitlebackgroundcolor=antiquewhite, 
+    frametitlebackgroundcolor=lightskyblue, 
     innertopmargin=\topskip,} 
 \mdtheorem[style=conceptstyle]{concept}{Concept}
 \newcommand{\newterm}[1]{{\it #1}}
@@ -182,10 +182,8 @@ While United States Treasury securities are considered to be risk-free, they are
 This risk is considered to be very low, and the United States government has never, at least in recent memory, defaulted on its debt obligations (in the absence of technical issues). Other risks are associated with Treasury securities, including inflation and liquidity risks.
 However, interest rate risk is the most significant non-default risk associated with Treasury securities.
 The price of coupon-bearing Treasury securities is a function of the face (par) value of the security, the coupon rate, the yield (discount rate), and the number of coupon payments per year.
-Thus, as these parameters change, e.g., the yield (discount rate), you would expect the price of the Treasury security to change (Concept \ref{concept:malkiel-theorems}):
-
-\begin{concept}[Malkiel's Theorems]\label{concept:malkiel-theorems}
-	Malkiel explored the question of bond pricing and proposed five theorems that relate the price of a coupon-bearing Treasury security to changes in these parameters \citep{Malkiel-Bonds-1962}:
+Thus, as these parameters, e.g., the yield (discount rate), change, you would expect the price of the Treasury security to change. 
+Malkiel explored this question and proposed five theorems that relate the price of a coupon-bearing Treasury security to changes in these parameters \citep{Malkiel-Bonds-1962}:
 \begin{itemize}[leftmargin=*]
 \item{\textbf{Theorem 1}: Bond prices move inversely to bond yields.}
 \item{\textbf{Theorem 2}: For a given change in yield from the nominal yield, changes in bond prices are greater the longer the term to maturity. }
@@ -193,12 +191,10 @@ Thus, as these parameters change, e.g., the yield (discount rate), you would exp
 \item{\textbf{Theorem 4}: Price movements resulting from equal absolute increases and decreases in yield are asymmetric; i.e., decreasing yields raise bond prices more than the same increase in yields lowers prices. }
 \item{\textbf{Theorem 5}: The higher the coupon carried by the bond, the smaller the percentage price fluctuation for a given change in yield, except for one-year securities.}
 \end{itemize}
-\vspace{0.01in}
-\noindent{\textit{Notation}}: when Malkiel refers to the yield, he is referring to the effective annual discount rate, $\bar{r}$. The coupon rate, $\bar{c}$ in our bond (note) pricing model is often called the interest rate.
-\end{concept}
+One notational note: when Malkiel refers to the yield, he is referring to the effective annual discount rate, $\bar{r}$, not the coupon rate, $\bar{c}$ in our bond (note) pricing model.
+Further, the coupon rate is called the interest rate in Malkiel's work.
 
-
-The price of a coupon-bearing Treasury security in many ways behaves similar to a T-bill.
+The sensitivity of the price of a coupon-bearing Treasury security would be similar to that of a T-bill.
 For example, in \texttt{Module-1}, we explored the relationship between the yield (discount rate) and the price of a zero-coupon Treasury bill. 
 Theorem 1 tells us that the relationship between the yield and price of a coupon-bearing Treasury security is similar to that of a T-bill, i.e., the cost of the security is inversely related to the yield.
 Further, Theorem 2 tells us that the longer the term to maturity, the greater the price change for a given change in yield, which we also saw for T-bills 
