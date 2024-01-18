@@ -49,40 +49,7 @@ function log_return_matrix(dataset::Dict{String, DataFrame},
     return return_matrix;
 end
 
-"""
-    analyze(R::Array{Float64,1};  Δt::Float64 = (1.0/365.0)) -> Tuple{Float64,Float64,Float64}
-"""
-function analyze(R::Array{Float64,1};  Δt::Float64 = (1.0/252.0))::Tuple{Float64,Float64,Float64}
-    
-    # initialize -
-    u,d,p = 0.0, 0.0, 0.0;
-    darray = Array{Float64,1}();
-    uarray = Array{Float64,1}();
-    N₊ = 0;
 
-    # up -
-    # compute the up moves, and estimate the average u value -
-    index_up_moves = findall(x->x>0, R);
-    for index ∈ index_up_moves
-        R[index] |> (μ -> push!(uarray, exp(μ*Δt)))
-    end
-    u = mean(uarray);
-
-    # down -
-    # compute the down moves, and estimate the average d value -
-    index_down_moves = findall(x->x<0, R);
-    for index ∈ index_down_moves
-        R[index] |> (μ -> push!(darray, exp(μ*Δt)))
-    end
-    d = mean(darray);
-
-    # probability -
-    N₊ = length(index_up_moves);
-    p = N₊/length(R);
-
-    # return -
-    return (u,d,p);
-end
 
 """
     𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
