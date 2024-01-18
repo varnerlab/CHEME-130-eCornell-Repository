@@ -7,7 +7,7 @@
 %\usepackage{palatino,lettrine}
 \usepackage{fancyhdr}
 \usepackage{epsfig}
-\usepackage[round,comma,sort]{natbib}
+\usepackage[square,sort,comma,numbers]{natbib}
 \usepackage{simplemargins}
 \usepackage{setspace}
 \usepackage{wrapfig}
@@ -181,10 +181,13 @@ As the number of time steps increases, we have a series of Bernoulli trials, whi
 \end{definition}
 
 \section*{Models of $u$, $d$ and $p$}
-The \texttt{up} and \texttt{down} factors $u$ and $d$, and the probability $p$ can be defined in various ways.  
+The \texttt{up} and \texttt{down} factors $u$ and $d$, and the probability $p$ can be computed in various ways.  
 For example, we can estimate them from historical data or propose models for their values. 
+Let's start by looking at approaches to estimate these parameters from historical data,
+and then we'll introduce an imprtant model developed by Cox, Ross and Rubinstein (CRR) to compute $u$, $d$ and $p$ in the 
+context of options pricing that we'll see later \citep{COX1979229}.
 
-\subsection*{Historical data}
+\subsection*{Real-world probability $p$}
 Suppose we have a historical share price dataset from time $1,\dots, T$ for some ticker $j$ denoted as $\mathcal{D}_{j} = \left\{S^{(j)}_{1},S^{(j)}_{2},\dots, S^{(j)}_{T}\right\}$, 
 where $S^{(j)}_{i}$ denotes the share price of ticker $j$ at time $i$.
 We can use different values for the share price, e.g., the opening price, closing price, high price, low price, etc. 
@@ -194,7 +197,6 @@ occurring between time $i-1$ and $i$, and the magnitude of these moves.
 Then, the fraction of \texttt{up} moves is an estimate of the probability $p$, 
 while some measured of the magnitude of the \texttt{up} and \texttt{down} moves, e.g., the average value are estimates of $u$ and $d$ respectively.
 
-\subsubsection*{Estimating $u$, $d$ and $p$ from historical data.}
 Suppose we assume the share price of ticker $j$ is continuously compounded with an instantaneous discount (interest) rate of 
 $r^{(j)}_{i,i-1}\equiv\mu^{(j)}_{i,i-1}\cdot\Delta{t}$, i.e., we split the return into a growth rate $\mu^{(j)}_{i,i-1}$ and a time step size $\Delta{t}$.
 Then, the share price at time an expression of the form governs $i$:
@@ -306,12 +308,73 @@ i.e., $S^{u} = u\cdot{S_{\circ}}$ and $S^{d} = d\cdot{S_{\circ}}$. Substiuting t
 \begin{equation}\label{eqn:risk-neutral-probability}
 q = \frac{\mathcal{D}_{1,0}(\bar{r}) - d}{u - d}
 \end{equation}
-Thus, we can compute the risk-neutral probability $q$ from the \texttt{up} and \texttt{down} factors $u$ and $d$ and the effective risk-free rate $\bar{r}$.
+Thus, we can compute the risk-neutral probability $q$ from the \texttt{up} and \texttt{down} factors $u$ and $d$ 
+and the effective risk-free rate $\bar{r}$. The risk neutral probability $q$, and the \texttt{up} and \texttt{down} factors $u$ and $d$ 
+can be estimated using Algorithm \ref{algo-risk-neutral-ud-estimation-equity}.
 
 % \subsubsection*{Symmetric binomial lattice model.}
 % The risk neutral probability $q$ is a function of the \texttt{up} and \texttt{down} factors $u$ and $d$ and the effective risk-free rate $\bar{r}$.
 % Thus, we must still compute values (or propose models) for the \texttt{up} and \texttt{down} factors $u$ and $d$.
 % One simple model is the symmetric binomial lattice model, where $u = 1/d$.
+
+\begin{algorithm}[h]
+	\caption{Risk-neutral estimate of $u$, $d$ and $q$ from the $\mu$-array}\label{algo-risk-neutral-ud-estimation-equity}
+	\begin{algorithmic}[1]
+
+		\Require Growth-rate $\mu$-array from Algorithm \ref{algo-log-return-distributions-equity}.
+		\Require Effective risk-free rate $\bar{r}$ (units: inverse years).
+		\Require time step size $\Delta{t}$ between $t$ and $t-1$ (units: years) of the price data
+		\Require \texttt{mean} function
+
+		\Statex
+		\State{$\mu\leftarrow\text{sort}(\mu_{i,i-1})$}
+		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
+		
+		\Statex
+   	 	\State{$i_{+}\leftarrow \text{findall}(\mu>0)$}\Comment{Find the indices of all \texttt{positive} growth rates}
+    	\For{$i\in {i_{+}}$}
+			\State{$\text{push!}(\text{up}, \exp(\mu[i]\cdot{\Delta{t}})))$}\Comment{Push the \texttt{positive} return $\mu\cdot\Delta{t}$ onto $\text{up}$-array}
+    	\EndFor
+		\State{$u\leftarrow\text{\texttt{mean}}(\texttt{up})$}\Comment{mean is our estimate of the \texttt{up} factor $u$}
+    	
+		\Statex
+   	 	\State{$i_{-}\leftarrow \text{findall}(\mu<0)$}\Comment{Find the indices of all \texttt{negative} growth rates}
+    	\For{$i\in {i_{i}}$}
+			\State{$\text{push!}(\text{down}, \exp(\mu[i]\cdot{\Delta{t}}))$}\Comment{Push the \texttt{negative} return $\mu\cdot\Delta{t}$ onto $\text{down}$-array}
+    	\EndFor
+		\State{$d\leftarrow\text{\texttt{mean}}(\texttt{down})$}\Comment{mean is our estimate of the \texttt{down} factor $d$}
+
+		\Statex
+		\State{$q \gets \frac{\exp(\bar{r}\cdot{\Delta{t}}) - d}{u - d}$}\Comment{Compute the risk-neutral probability $q$}
+
+		\State
+		\State
+		\Return{$u$, $d$ and $q$}
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection*{Cox-Ross-Rubinstein (CRR) model}
+The \href{https://en.wikipedia.org/wiki/Binomial_options_pricing_model}{Cox, Ross, and Rubinstein (CRR) lattice model} 
+assumes a risk-neutral probability $q$ to describe the probability of an \texttt{up} move. However, unlike a purely data-driven risk-neutral probability where we estimnate 
+values for $u$ and $d$ from data, the CRR model proposes a model for $u$ and $d$ that is consistent with the variance of the return of the underlying asset.
+The \texttt{up} factor $u$ is constructed so that the CRR model matches the variance of the log return $\text{Var}(S_{j}/S_{j-1})=\sigma^{2}\Delta{t}$:
+\begin{equation*}
+	\text{Var}(S_{j}/S_{j-1}) = \mathbb{E}\left[(S_{j}/S_{j-1})^{2}\right] - \mathbb{E}\left[S_{j}/S_{j-1}\right]^{2} = \sigma^{2}\Delta{t}
+\end{equation*}
+which after subtitution of the price and probability expressions from Defn. \ref{defn-binomial-distribution} gives:
+\begin{equation}\label{eqn:variance-of-log-return}
+    q(u-1)^{2} + (1-q)(d-1)^{2} + \left[p(u-1)+(1-q)(d-1)\right]^{2} = \sigma^{2}\Delta{t}
+\end{equation}
+where $\sigma$ is the volatility (standard deviation) of the return, and $\Delta{t}$ is the time step.
+Equation \eqref{eqn:variance-of-log-return} is a quadratic equation in $u$, which can be solved for $u$ (assuming $\Delta{t}^{2}$ terms and above are ignored):
+\begin{equation*}
+    u = \exp(\sigma\cdot\sqrt{\Delta{t}})
+\end{equation*} 
+In the CRR approach, the \texttt{up} and \texttt{down} factors are related by $ud=1$, i.e., the lattice is symmetric.
+
+To use the CRR model, we must first specify the volatility $\sigma$ of the return of the underlying asset, e.g., shares of stock.
+We can estimate this from data by first computing the return (or the growth) and the estimatinf the volatility of the return, which is a backward-looking approach, 
+or we can use the implied volatility from the options market, which is a forward-looking approach (the market's estimate of future price movements).
 
 \section*{Binomial lattice trade strategy}
 Suppose we purchase $n_{o}$ share of ticker \texttt{XYZ} at time $t=0$ for $S_{o}$ USD/share.
@@ -349,6 +412,8 @@ Substiuting the $S_{T}$ expression into Eqn. \eqref{eqn:roi-fractional-return} g
 
 \section*{Summary}
 Fill me in.
+
+\bibliography{References_v1}
 
 \clearpage
 \printindex
