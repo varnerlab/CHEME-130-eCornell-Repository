@@ -318,7 +318,7 @@ can be estimated using Algorithm \ref{algo-risk-neutral-ud-estimation-equity}.
 % One simple model is the symmetric binomial lattice model, where $u = 1/d$.
 
 \begin{algorithm}[h]
-	\caption{Risk-neutral estimate of $u$, $d$ and $q$ from the $\mu$-array}\label{algo-risk-neutral-ud-estimation-equity}
+	\caption{Risk-neutral estimate of $u$, $d$ and $q$}\label{algo-risk-neutral-ud-estimation-equity}
 	\begin{algorithmic}[1]
 
 		
@@ -355,7 +355,7 @@ can be estimated using Algorithm \ref{algo-risk-neutral-ud-estimation-equity}.
 		\Statex
 		\State{$q \gets \frac{\exp(\bar{r}\cdot{\Delta{t}}) - d}{u - d}$}\Comment{Compute the risk-neutral probability $q$}
 		\Statex
-		
+
 		\State
 		\Return{$u$, $d$ and $q$}
 		\EndProcedure
