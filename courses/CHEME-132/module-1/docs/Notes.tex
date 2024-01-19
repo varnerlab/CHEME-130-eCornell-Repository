@@ -321,35 +321,44 @@ can be estimated using Algorithm \ref{algo-risk-neutral-ud-estimation-equity}.
 	\caption{Risk-neutral estimate of $u$, $d$ and $q$ from the $\mu$-array}\label{algo-risk-neutral-ud-estimation-equity}
 	\begin{algorithmic}[1]
 
+		
+
 		\Require Growth-rate $\mu$-array from Algorithm \ref{algo-log-return-distributions-equity}.
 		\Require Effective risk-free rate $\bar{r}$ (units: inverse years).
 		\Require time step size $\Delta{t}$ between $t$ and $t-1$ (units: years) of the price data
-		\Require \texttt{mean} function
+		\Require \texttt{mean} function, \texttt{find} function, \texttt{length} function, and \texttt{push} function.
 
 		\Statex
-		\State{$\mu\leftarrow\text{sort}(\mu_{i,i-1})$}
+		\Procedure{risk neutral}{$\mu$, $\bar{r}$, $\Delta{t}$}
+		\State
+		\State{\textit{Initialize}:}
 		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
+		\State{$\text{up}\leftarrow\text{Array}()$}\Comment{Initialize empty array of \texttt{up} factors}
+		\State{$\text{down}\leftarrow\text{Array}()$}\Comment{Initialize empty array of \texttt{down} factors}
 		
 		\Statex
-   	 	\State{$i_{+}\leftarrow \text{findall}(\mu>0)$}\Comment{Find the indices of all \texttt{positive} growth rates}
+		\State \textit{Compute $u$:}
+   	 	\State{$i_{+}\leftarrow \text{find}(\mu>0)$}\Comment{Find the indices of all \texttt{positive} growth rates}
     	\For{$i\in {i_{+}}$}
-			\State{$\text{push!}(\text{up}, \exp(\mu[i]\cdot{\Delta{t}})))$}\Comment{Push the \texttt{positive} return $\mu\cdot\Delta{t}$ onto $\text{up}$-array}
+			\State{$\text{push}(\text{up}, \exp(\mu[i]\cdot{\Delta{t}})))$}\Comment{Push the \texttt{positive} return $\mu\cdot\Delta{t}$ onto $\text{up}$-array}
     	\EndFor
 		\State{$u\leftarrow\text{\texttt{mean}}(\texttt{up})$}\Comment{mean is our estimate of the \texttt{up} factor $u$}
     	
 		\Statex
-   	 	\State{$i_{-}\leftarrow \text{findall}(\mu<0)$}\Comment{Find the indices of all \texttt{negative} growth rates}
-    	\For{$i\in {i_{i}}$}
-			\State{$\text{push!}(\text{down}, \exp(\mu[i]\cdot{\Delta{t}}))$}\Comment{Push the \texttt{negative} return $\mu\cdot\Delta{t}$ onto $\text{down}$-array}
+		\State \textit{Compute $d$:}
+   	 	\State{$i_{-}\leftarrow \text{find}(\mu<0)$}\Comment{Find the indices of all \texttt{negative} growth rates}
+    	\For{$i\in {i_{-}}$}
+			\State{$\text{push}(\text{down}, \exp(\mu[i]\cdot{\Delta{t}}))$}\Comment{Push the \texttt{negative} return $\mu\cdot\Delta{t}$ onto $\text{down}$-array}
     	\EndFor
 		\State{$d\leftarrow\text{\texttt{mean}}(\texttt{down})$}\Comment{mean is our estimate of the \texttt{down} factor $d$}
 
 		\Statex
 		\State{$q \gets \frac{\exp(\bar{r}\cdot{\Delta{t}}) - d}{u - d}$}\Comment{Compute the risk-neutral probability $q$}
-
-		\State
+		\Statex
+		
 		\State
 		\Return{$u$, $d$ and $q$}
+		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 
