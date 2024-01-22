@@ -135,11 +135,11 @@ We'll begin with the simplest possible lattice model, a binomial lattice (Fig. \
     \includegraphics[width=0.85\textwidth]{./figs/Fig-Binomial-LatticeModels-Schematic.pdf}
     \caption{Binomial lattice model schematic. 
 	At each node, the share price can either go \texttt{up} by $u$ or \texttt{down} by $d$. 
-	The probability of going \texttt{up} is $p$, and the probability of going \texttt{down} is $1-p$. 
+	The probability of going \texttt{up} is $p$, and the likelihood of going \texttt{down} is $1-p$. 
 	\textbf{A}: Single time-step lookahead.
 	\textbf{B}: Two time-step lookahead.
 	\textbf{C}: Three time-step lookahead.
-	At level of the tree $l$, the potential share price can take on $l+1$ values.
+	At the tree $l$ level, the potential share price can take on $l+1$ values.
 	}\label{fig:binomial-lattice-schematic}
 \end{figure}
 
@@ -163,7 +163,7 @@ Then, at time \texttt{n}, the share price can take on $n+1$ possible values:
 where $D_{i}$ is a random variable that can take on one of two values: $u$ or $d$, 
 with probabilities $p$ and $(1-p)$ respectively. 
 Thus, at each time-step, the world flips a coin and lands in either the \texttt{up} state with probability $p$ or the \texttt{down} state with probability $(1-p)$.
-For a single time step, we model this random process as a Bernoulli trial, where the probability of success is $p$ and the probability of failure is $(1-p)$.
+For a single time step, we model this random process as a Bernoulli trial, where the probability of success is $p$ and the likelihood of failure is $(1-p)$.
 As the number of time steps increases, we have a series of Bernoulli trials, which is a binomial distribution (Defn: \ref{defn-binomial-distribution}):
 
 \begin{definition}[Binomial Share Price and Probability]\label{defn-binomial-distribution}
@@ -183,15 +183,14 @@ As the number of time steps increases, we have a series of Bernoulli trials, whi
 \section*{Models of $u$, $d$ and $p$}
 The \texttt{up} and \texttt{down} factors $u$ and $d$, and the probability $p$ can be computed in various ways.  
 For example, we can estimate them from historical data or propose models for their values. 
-Let's start by looking at approaches to estimate these parameters from historical data,
-and then we'll introduce an imprtant model developed by Cox, Ross and Rubinstein (CRR) to compute $u$, $d$ and $p$ in the 
+Let's start by looking at approaches to estimate these parameters from historical data. Then, we'll introduce an important model developed by Cox, Ross, and Rubinstein (CRR) to compute $u$, $d$, and $p$ in the 
 context of options pricing that we'll see later \citep{COX1979229}.
 
 \subsection*{Real-world probability $p$}
-Suppose we have a historical share price dataset from time $1,\dots, T$ for some ticker $j$ denoted as $\mathcal{D}_{j} = \left\{S^{(j)}_{1},S^{(j)}_{2},\dots, S^{(j)}_{T}\right\}$, 
+Suppose we have a historical share price dataset from time $1,\dots, T$ for some ticker $j$ denoted as $\mathcal{D}_{j} = \left\{S^{(j)}_{1}, S^{(j)}_{2},\dots, S^{(j)}_{T}\right\}$, 
 where $S^{(j)}_{i}$ denotes the share price of ticker $j$ at time $i$.
 We can use different values for the share price, e.g., the opening price, closing price, high price, low price, etc. 
-In our case, when dealing with historical data, we will typically use the volume-weighted average price (VWAP) for the period, 
+When dealing with historical data, we will typically use the volume-weighted average price (VWAP) for the period, 
 e.g., the VWAP for the day, week, month, etc. Over the time range of the dataset $\mathcal{D}_{j}$, we can calculate the number of \texttt{up} and \texttt{down} moves
 occurring between time $i-1$ and $i$, and the magnitude of these moves. 
 Then, the fraction of \texttt{up} moves is an estimate of the probability $p$, 
@@ -209,7 +208,7 @@ Solving for the growth rate (and dropping the ticker $j$ superscript for simplic
 \begin{equation}
 \mu_{i,i-1} = \left(\frac{1}{\Delta{t}}\right)\cdot\ln\left(\frac{S_{i}}{S_{i-1}}\right)
 \end{equation}
-We'll often use daily price data; thus, a single trading day is a natural time frame between $S_{i-1}$ and $S_{i}$. 
+We often use daily price data; thus, a single trading day is a natural time frame between $S_{i-1}$ and $S_{i}$. 
 However, subsequently, it will be easier to use an annualized value for the $\mu$ parameter; thus, we let $\Delta{t} = 1/252$, 
 i.e., the fraction of an average trading year that occurs in a single trading day; thus, our base time will be years.
 We compute the growth rate for each trading day $i$ in a collection of datasets $\mathcal{D}$ using Algorithm \ref{algo-log-return-distributions-equity}.
@@ -247,32 +246,46 @@ generated using something like Algorithm \ref{algo-ud-estimation-equity}.
 	\caption{Estimating $u$, $d$ and $p$ from the $\mu$-array}\label{algo-ud-estimation-equity}
 	\begin{algorithmic}[1]
 
-		\Require $\mu$-array from Algorithm \ref{algo-log-return-distributions-equity}.
+		\Require Growth-rate $\mu$-array from Algorithm \ref{algo-log-return-distributions-equity}.
+		\Require Effective risk-free rate $\bar{r}$ (units: inverse years).
+		\Require time step size $\Delta{t}$ between $t$ and $t-1$ (units: years) of the price data
+		\Require \texttt{mean} function, \texttt{find} function, \texttt{length} function, and \texttt{push} function.
 
 		\Statex
-		\State{$\mu\leftarrow\text{sort}(\mu_{i,i-1})$}
+		\Procedure{real world probability}{$\mu$, $\bar{r}$, $\Delta{t}$}
+		\State
+		\State{\textit{Initialize}:}
 		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
+		\State{$\text{up}\leftarrow\text{Array}()$}\Comment{Initialize empty array of \texttt{up} factors}
+		\State{$\text{down}\leftarrow\text{Array}()$}\Comment{Initialize empty array of \texttt{down} factors}
 		
 		\Statex
-   	 	\State{$i_{+}\leftarrow \text{findall}(\mu>0)$}\Comment{Find the indices of all \texttt{positive} growth rates}
+		\State \textit{Compute $u$:}
+   	 	\State{$i_{+}\leftarrow \text{find}(\mu>0)$}\Comment{Find the indices of all \texttt{positive} growth rates}
     	\For{$i\in {i_{+}}$}
-        	\State{$\mu[i]\rightarrow(\mu\rightarrow\text{push!}(\text{up}, \exp(\mu\cdot{\Delta{t}})))$}\Comment{Push the \texttt{positive} return $\mu\cdot\Delta{t}$ onto $\text{up}$-array}
+			\State{$\text{push}(\text{up}, \exp(\mu[i]\cdot{\Delta{t}})))$}\Comment{Push the \texttt{positive} return $\mu\cdot\Delta{t}$ onto $\text{up}$-array}
     	\EndFor
-		\State{$u\leftarrow\text{mean}(\texttt{up})$}\Comment{mean is our estimate of the \texttt{up} factor $u$}
+		\State{$u\leftarrow\text{\texttt{mean}}(\texttt{up})$}\Comment{mean is our estimate of the \texttt{up} factor $u$}
     	
 		\Statex
-   	 	\State{$i_{-}\leftarrow \text{findall}(\mu<0)$}\Comment{Find the indices of all \texttt{negative} growth rates}
-    	\For{$i\in {i_{i}}$}
-        	\State{$\mu[i]\rightarrow(\mu\rightarrow\text{push!}(\text{down}, \exp(\mu\cdot{\Delta{t}})))$}\Comment{Push the \texttt{negative} return $\mu\cdot\Delta{t}$ onto $\text{down}$-array}
+		\State \textit{Compute $d$:}
+   	 	\State{$i_{-}\leftarrow \text{find}(\mu<0)$}\Comment{Find the indices of all \texttt{negative} growth rates}
+    	\For{$i\in {i_{-}}$}
+			\State{$\text{push}(\text{down}, \exp(\mu[i]\cdot{\Delta{t}}))$}\Comment{Push the \texttt{negative} return $\mu\cdot\Delta{t}$ onto $\text{down}$-array}
     	\EndFor
-		\State{$d\leftarrow\text{mean}(\texttt{down})$}\Comment{mean is our estimate of the \texttt{down} factor $d$}
+		\State{$d\leftarrow\text{\texttt{mean}}(\texttt{down})$}\Comment{mean is our estimate of the \texttt{down} factor $d$}
+
+
 
 		\Statex
 		\State{$N_{+} \leftarrow\text{length}(i_{+})$}\Comment{Number of \texttt{positive} growth rates}
 		\State{$p\leftarrow N_{+}/N$}\Comment{Estimate of the probability $p$}
-
 		\Statex
+
+		\State
 		\Return{$u$, $d$ and $p$}
+		\Statex
+		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 While this strategy is simple, it may not be robust. For example, if the dataset $\mathcal{D}_{j}$ is short, i.e., only a few trading days,
@@ -329,7 +342,7 @@ can be estimated using Algorithm \ref{algo-risk-neutral-ud-estimation-equity}.
 		\Require \texttt{mean} function, \texttt{find} function, \texttt{length} function, and \texttt{push} function.
 
 		\Statex
-		\Procedure{risk neutral}{$\mu$, $\bar{r}$, $\Delta{t}$}
+		\Procedure{risk neutral probability}{$\mu$, $\bar{r}$, $\Delta{t}$}
 		\State
 		\State{\textit{Initialize}:}
 		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
@@ -358,6 +371,7 @@ can be estimated using Algorithm \ref{algo-risk-neutral-ud-estimation-equity}.
 
 		\State
 		\Return{$u$, $d$ and $q$}
+		\Statex
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
@@ -390,21 +404,21 @@ Suppose we purchase $n_{o}$ share of ticker \texttt{XYZ} at time $t=0$ for $S_{o
 Then, at some later date $t=T$, we sell all $n_{o}$ shares for $S_{T}$ USD/share. 
 The net present value (NPV) of this trade has two cashflow events, the initial purchase of $n_{o}$ shares for $S_{o}$ USD/share,
 and the sale of $n_{o}$ shares for $S_{T}$ USD/share at some later date $t=T$:
-\begin{equation*}
+\begin{equation}
 \text{NPV}(\bar{r},T) = -n_{o}\cdot{S_{o}} + n_{o}\cdot{S_{T}}\cdot\mathcal{D}_{T,0}^{-1}(\bar{r})
-\end{equation*}
+\end{equation}
 where $\mathcal{D}_{T,0}^{-1}(\bar{r})$ is the inverse of the continuous discount factor 
 for period $0\rightarrow{T}$, assuming an effective discount rate $\bar{r}$. 
 Factoring the initial number of shares $n_{o}$ from the NPV expression gives:
-\begin{equation*}
+\begin{equation}
 \text{NPV}(\bar{r},T) = n_{o}\cdot\left(S_{T}\cdot\mathcal{D}_{T,0}^{-1}(\bar{r}) - S_{o}\right)
-\end{equation*}
+\end{equation}
 The term in the parenthesis is the net change in the share price, i.e., the change in the share price $S_{T}$ discounted by the effective discount rate $\bar{r}$.
 However, if we hold the shares for only a short period, e.g., on order days or months, then $\mathcal{D}_{T,0}^{-1}(\bar{r})\approx{1}$, which
 simplifies the NPV expression to:
-\begin{equation*}
+\begin{equation}
 \text{NPV}(\bar{r}, T) \simeq n_{o}\cdot(S_{T}-S_{o})
-\end{equation*}
+\end{equation}
 Dividing by the initial investment $n_{o}\cdot{S_{o}}$ gives the fraction return on investment, or just the fractional return:
 \begin{equation}\label{eqn:roi-fractional-return}
 \frac{\text{NPV}(\bar{r}, T)}{n_{o}\cdot{S_{o}}} \simeq \frac{S_{T}-S_{o}}{S_{o}} = \frac{S_{T}}{S_{o}} - 1
@@ -415,12 +429,25 @@ S_{T} \in \left\{S_{\circ}\cdot{u}^{T-k}\cdot{d}^{k}\right\}_{k=0}^{T}
 \end{equation}
 where $S_{\circ}$ is the initial share price, $u$ and $d$ are the \texttt{up} and \texttt{down} factors, and $p$ is the probability of going \texttt{up}.
 Substiuting the $S_{T}$ expression into Eqn. \eqref{eqn:roi-fractional-return} gives:
-\begin{equation}
+\begin{equation}\label{eqn:roi-fractional-return-2}
 	\frac{\text{NPV}(\bar{r}, T)}{n_{o}\cdot{S_{o}}} \in \left\{u^{T-k}\cdot{d}^{k} - 1\right\}_{k=0}^{T}
 \end{equation}
+Equation \eqref{eqn:roi-fractional-return-2} describes the distribution of the fractional return on investment 
+predicted by the binomial lattice model. Because we also have the probability of each future share price,
+we can compute a number of interesting properties of the distribution of the fractional returns, e.g., the mean, variance, etc.
+Furthermore, we can compute the probability that the fractional return is greater than some desired threshold, e.g., 10\%, by 
+reconstructing the cumulative distribution function (CDF) of the fractional return.
+We'll illustrate this idea with the project for this module.
 
 \section*{Summary}
-Fill me in.
+In this module we introduced the binomial lattice model for equity share price. The binomial lattice model is a discrete-time model, 
+where the furture share price can take on one of two possible values at each time step: \texttt{up} or \texttt{down}.
+In the \texttt{up} state, the share price increases by a factor of $u$, while in the \texttt{down} state, the share price decreases by a factor of $d$.
+The binomial lattice model is a probabilistic model, where the probability of going \texttt{up} is $p$ and the probability of going \texttt{down} is $(1-p)$.
+The \texttt{up} and \texttt{down} factors $u$ and $d$, and the probability $p$ can be computed in various ways, but are assumed to be constant over time.
+For example, we can compute the \texttt{up} and \texttt{down} factors $u$ and $d$ from historical data, or we can propose a model for $u$ and $d$.
+Finally, we developed a simple trade strategy which relied on the binomial lattice model to compute a future price distribution, 
+where the net present value was used to value the trade strategy.
 
 \bibliography{References_v1}
 
