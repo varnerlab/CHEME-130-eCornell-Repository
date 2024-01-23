@@ -1,175 +1,180 @@
-""" 
-    sample(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple) -> Array{Float64,2}
-"""
-function sample(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple; 
-    number_of_paths::Int64 = 100)::Array{Float64,2}
+_𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
-    # get information from data -
-    T₁ = data[:T₁]
-    T₂ = data[:T₂]
-    Δt = data[:Δt]
-    Sₒ = data[:Sₒ]
 
-    # get information from model -
-    μ = model.μ
-    σ = model.σ
-
-	# initialize -
-	time_array = range(T₁, stop=T₂, step=Δt) |> collect
-	number_of_time_steps = length(time_array)
-    X = zeros(number_of_time_steps, number_of_paths + 1) # extra column for time -
-
-    # put the time in the first col -
-    for t ∈ 1:number_of_time_steps
-        X[t,1] = time_array[t]
-    end
-
-	# replace first-row w/Sₒ -
-	for p ∈ 1:number_of_paths
-		X[1, p+1] = Sₒ
-	end
-
-	# build a noise array of Z(0,1)
-	d = Normal(0,1)
-	ZM = rand(d,number_of_time_steps, number_of_paths);
-
-	# main simulation loop -
-	for p ∈ 1:number_of_paths
-		for t ∈ 1:number_of_time_steps-1
-			X[t+1,p+1] = X[t,p+1] + μ*Δt + σ*(sqrt(Δt))*ZM[t,p]
-		end
-	end
-
-	# return -
-	return X
-end
-
-"""
-    generate_firm_index_set() -> Set{Int64}
-"""
-function generate_firm_index_set()::Set{Int64}
+function log_return_matrix(dataset::Dict{String, DataFrame}, 
+    firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0)::Array{Float64,2}
 
     # initialize -
-    list_of_files = readdir(joinpath(_PATH_TO_DATA,"Year-1"), join=true);
-    set_of_firm_indexes = Set{Int64}();
+    number_of_firms = length(firms);
+    number_of_trading_days = nrow(dataset["AAPL"]);
+    return_matrix = Array{Float64,2}(undef, number_of_trading_days-1, number_of_firms);
 
-    for file ∈ list_of_files
+    # main loop -
+    for i ∈ eachindex(firms) 
 
-        # get the file name -
-        file_name = basename(file);
-        if (file_name != ".ipynb_checkpoints")
-            
-            # get the firm index -
-            components = split(file_name,"-")[2] |> (x-> split(x,"."))
-            firm_index = parse(Int64, String.(components) |> (x -> x[1]));
-    
-            # push -
-            push!(set_of_firm_indexes, firm_index);
+        # get the firm data -
+        firm_index = firms[i];
+        firm_data = dataset[firm_index];
+
+        # compute the log returns -
+        for j ∈ 2:number_of_trading_days
+            S₁ = firm_data[j-1, :volume_weighted_average_price];
+            S₂ = firm_data[j, :volume_weighted_average_price];
+            return_matrix[j-1, i] = (1/Δt)*log(S₂/S₁) - risk_free_rate;
         end
     end
 
-    # delete 268, doesn't exist in Y5
-    set_of_firm_indexes |> (x -> delete!(x, 268))
-
     # return -
-    return set_of_firm_indexes;
+    return return_matrix;
 end
 
-function 𝔼(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
+function log_return_matrix(dataset::Dict{String, DataFrame}, 
+    firm::String; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0)::Array{Float64,1}
 
-    # get information from data -
-    T₁ = data[:T₁]
-    T₂ = data[:T₂]
-    Δt = data[:Δt]
-    Sₒ = data[:Sₒ]
-    
-    # get information from model -
-    μ = model.μ
+    # initialize -
+    number_of_trading_days = nrow(dataset["AAPL"]);
+    return_matrix = Array{Float64,1}(undef, number_of_trading_days-1);
 
-    # setup the time range -
-    time_array = range(T₁,stop=T₂, step = Δt) |> collect
-    N = length(time_array)
+    # get the firm data -
+    firm_data = dataset[firm];
 
-    # expectation -
-    expectation_array = Array{Float64,2}(undef, N, 2)
-
-    # main loop -
-    for i ∈ 1:N
-
-        # get the time value -
-        h = (time_array[i] - time_array[1])
-
-        # compute the expectation -
-        value = Sₒ + μ*h
-
-        # capture -
-        expectation_array[i,1] = h + time_array[1]
-        expectation_array[i,2] = value
-    end
-   
-    # return -
-    return expectation_array
-end
-
-Var(samples::Array{Float64,2}) = 𝕍(samples::Array{Float64,2});
-function 𝕍(samples::Array{Float64,2})::Array{Float64,2}
-
-    # estimate a variance -
-    (N, M) = size(samples);
-    variance_array = Array{Float64,2}(undef, N, 2)
-
-    # main loop -
-    for i ∈ 1:N
-
-        # get the time value -
-        h = (samples[i,1] - samples[1,1])
-
-        # compute the variance -
-        value = var(samples[i,2:end])
-
-        # capture -
-        variance_array[i,1] = h + samples[1,1]
-        variance_array[i,2] = value
+    # compute the log returns -
+    for j ∈ 2:number_of_trading_days
+        S₁ = firm_data[j-1, :volume_weighted_average_price];
+        S₂ = firm_data[j, :volume_weighted_average_price];
+        return_matrix[j-1] = (1/Δt)*log(S₂/S₁) - risk_free_rate;
     end
 
     # return -
-    return variance_array;
+    return return_matrix;
 end
 
-Var(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple) = 𝕍(model, data);
-function 𝕍(model::MyOrdinaryBrownianMotionEquityModel, data::NamedTuple)::Array{Float64,2}
 
-    # get information from data -
-    T₁ = data[:T₁]
-    T₂ = data[:T₂]
-    Δt = data[:Δt]
-    Sₒ = data[:Sₒ]
 
-    # get information from model -
-    μ = model.μ
-    σ = model.σ
+"""
+    𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
+"""
+function 𝔼(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
 
-    # setup the time range -
-    time_array = range(T₁,stop=T₂, step = Δt) |> collect
-    N = length(time_array)
+    # initialize -
+    expected_value = 0.0;
+    X = Array{Float64,1}();
+    p = Array{Float64,1}();
 
-    # expectation -
-    variance_array = Array{Float64,2}(undef, N, 2)
+    # get the levels dictionary -
+    levels = model.levels;
+    nodes_on_this_level = levels[level]
+    for i ∈ nodes_on_this_level
 
-    # main loop -
-    for i ∈ 1:N
+        # grab the node -
+        node = model.data[i];
+        
+        # get the data -
+        x_value = node.price;
+        p_value = node.probability;
 
-        # get the time value -
-        h = time_array[i] - time_array[1]
-
-        # compute the expectation -
-        value = (σ^2)*h
-
-        # capture -
-        variance_array[i,1] = h + time_array[1]
-        variance_array[i,2] = value
+        # store the data -
+        push!(X,x_value);
+        push!(p,p_value);
     end
-   
+
+    # compute -
+    expected_value = _𝔼(X,p) # inner product
+
     # return -
-    return variance_array
+    return expected_value
+end
+
+"""
+    𝔼(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; 
+        startindex::Int64 = 0) -> Array{Float64,2}
+
+Computes the expectation of the model simulation. Takes a model::MyBinomialEquityPriceTree instance and a vector of
+tree levels, i.e., time steps and returns a variance array where the first column is the time and the second column is the expectation.
+Each row is a time step.
+"""
+function 𝔼(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; 
+    startindex::Int64 = 0)::Array{Float64,2}
+
+    # initialize -
+    number_of_levels = length(levels);
+    expected_value_array = Array{Float64,2}(undef, number_of_levels, 2);
+
+    # loop -
+    for i ∈ 0:(number_of_levels-1)
+
+        # get the level -
+        level = levels[i+1];
+
+        # get the expected value -
+        expected_value = 𝔼(model, level=level);
+
+        # store -
+        expected_value_array[i+1,1] = level + startindex;
+        expected_value_array[i+1,2] = expected_value;
+    end
+
+    # return -
+    return expected_value_array;
+end
+
+Var(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0) = 𝕍(model, levels, startindex = startindex)
+
+"""
+    𝕍(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
+"""
+function 𝕍(model::MyBinomialEquityPriceTree; level::Int = 0)::Float64
+
+    # initialize -
+    variance_value = 0.0;
+    X = Array{Float64,1}();
+    p = Array{Float64,1}();
+
+    # get the levels dictionary -
+    levels = model.levels;
+    nodes_on_this_level = levels[level]
+    for i ∈ nodes_on_this_level
+ 
+        # grab the node -
+        node = model.data[i];
+         
+        # get the data -
+        x_value = node.price;
+        p_value = node.probability;
+ 
+        # store the data -
+        push!(X,x_value);
+        push!(p,p_value);
+    end
+
+    # update -
+    variance_value = (_𝔼(X.^2,p) - (_𝔼(X,p))^2)
+
+    # return -
+    return variance_value;
+end
+
+"""
+    𝕍(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0) -> Array{Float64,2}
+
+Computes the variance of the model simulation. Takes a model::MyBinomialEquityPriceTree instance and a vector of
+tree levels, i.e., time steps and returns a variance array where the first column is the time and the second column is the variance.
+Each row is a time step.
+"""
+function 𝕍(model::MyBinomialEquityPriceTree, levels::Array{Int64,1}; startindex::Int64 = 0)::Array{Float64,2}
+
+    # initialize -
+    number_of_levels = length(levels);
+    variance_value_array = Array{Float64,2}(undef, number_of_levels, 2);
+
+    # loop -
+    for i ∈ 0:(number_of_levels - 1)
+        level = levels[i+1];
+        variance_value = 𝕍(model, level=level);
+        variance_value_array[i+1,1] = level + startindex
+        variance_value_array[i+1,2] = variance_value;
+    end
+
+    # return -
+    return variance_value_array;
 end

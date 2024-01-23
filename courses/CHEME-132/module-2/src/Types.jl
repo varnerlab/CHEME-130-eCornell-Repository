@@ -1,14 +1,8 @@
-abstract type AbstractAssetModel end
+function _nodes(tree::MyBinomialEquityPriceTree, level::Int64)::Array{MyBiomialLatticeEquityNodeModel,1}
 
-"""
-    mutable struct MyOrdinaryBrownianMotionEquityModel <: AbstractSecurityModel
-"""
-mutable struct MyOrdinaryBrownianMotionEquityModel <: AbstractAssetModel
-
-    # data -
-    μ::Float64
-    σ::Float64
-
-    # constructor -
-    MyOrdinaryBrownianMotionEquityModel() = new()
+    # initialize -
+    return tree.levels[level] .|> x-> tree.data[x]
 end
+
+
+(tree::MyBinomialEquityPriceTree)(level::Int64)::Array{MyBiomialLatticeEquityNodeModel,1} = _nodes(tree, level)
