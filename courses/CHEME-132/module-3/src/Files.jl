@@ -1,18 +1,5 @@
-"""
-loaddatafile(; firm::Int = 1, year::String = "2022")::DataFrame
-"""
-function loaddatafile(; firm::Int = 1, year::String = "2022")::DataFrame
-    
-    # build the path -
-    path = joinpath(_PATH_TO_DATA, "$(year)", "Firm-$(firm).csv")
-    
-    # load the data 
-    return CSV.read(path,DataFrame);
+function _jld2(path::String)::Dict{String,Any}
+    return load(path);
 end
 
-"""
-    loadmodelparametersfile() -> DataFrame
-"""
-function loadmodelparametersfile()::DataFrame
-    return CSV.read(joinpath(_PATH_TO_DATA,"Parameters-Real-World-GBM-Annualized-Volatility.csv"), DataFrame);
-end
+MyMarketDataSet() = _jld2(joinpath(_PATH_TO_DATA, "SP500-Daily-OHLC-1-3-2018-to-12-29-2023.jld2"));
