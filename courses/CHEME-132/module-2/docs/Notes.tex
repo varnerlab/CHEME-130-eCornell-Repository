@@ -200,7 +200,7 @@ The expectation and variance of the GBM model is given by:
 where $\Delta{t} = t - t_{\circ}$.
 
 \section*{Model parameters}
-\subsection*{Estimating the growth parameter $\mu$}
+\subsection*{Estimating the drift parameter $\mu$}
 Let's assume that we have a time series of share price values $S(t_{1}), S(t_{2}), \dots, S(t_{k})$ and we want to estimate the detereministic growth of the share price, i.e., the drift parameter $\mu$.
 There are several ways to do this, but we will use a detereministic linear model of the natural log of the share price values.
 To estimate the deterministic component of the share price, we first set the volatility parameter $\sigma = 0$ in Eqn. \ref{eqn:analytical-soln-GBM}.
@@ -233,8 +233,9 @@ and then fitting a normal distribution to the residuals, using some technique su
 (where the $\hat{\star}$ denotes an estimate of the parameter).
 
 \subsection*{Estimating the volatility parameter $\sigma$}
-To compute the volatility parameter $\sigma$, we first estimate the drift parameter $\mu$ using the method described above.
-Then, we can estimate the volatility parameter $\sigma$ by solving the overdetermined system of equations:
+Generally, methods to calculate the volatility parameter can be classified into two categories - historical volatility estimates based on past return data and future volatility 
+estimates based on the \href{https://en.wikipedia.org/wiki/Implied_volatility}{Implied Volatility (IV)} of \href{https://en.wikipedia.org/wiki/Option_(finance)}{options contracts}. 
+Here, we estimate the volatility $\sigma$ from historical data.
 
 \section*{Summary}
 Fill me in.
