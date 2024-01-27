@@ -109,7 +109,7 @@
 \begin{document}
 
 %\begin{titlepage}
-{\par\centering\textbf{\Large CHEME 132 Module 2: Single Asset Geometric Brownian Motion Simulations}}
+{\par\centering\textbf{\Large CHEME 132 Module 2: Single Asset Geometric Brownian Motion}}
 \vspace{0.2in}
 {\par \centering \large{Jeffrey D. Varner}}
 \vspace{0.05in}
@@ -233,9 +233,56 @@ and then fitting a normal distribution to the residuals, using some technique su
 (where the $\hat{\star}$ denotes an estimate of the parameter).
 
 \subsection*{Estimating the volatility parameter $\sigma$}
-Generally, methods to calculate the volatility parameter can be classified into two categories - historical volatility estimates based on past return data and future volatility 
+Generally, methods to estimate the volatility parameter can be classified into two categories - historical volatility estimates based on past return data and future volatility 
 estimates based on the \href{https://en.wikipedia.org/wiki/Implied_volatility}{Implied Volatility (IV)} of \href{https://en.wikipedia.org/wiki/Option_(finance)}{options contracts}. 
-Here, we estimate the volatility $\sigma$ from historical data.
+Here, we estimate the volatility $\sigma$ from historical data, i.e., from the past returns of the share price.
+
+A return refers to the increase or decrease in the price of an asset, e.g., shares of a stock, over a specific period, e.g., minutes, days, weeks, or even years. 
+Assume the share price of a stock at time $t$ is given by $S(t)$. Then, if we assume continuous compounding, the price of the stock at time $t+\Delta{t}$ is given by:
+\begin{equation}
+    S(t+\Delta{t}) = S(t)\cdot\exp\left(\mu\cdot{\Delta{t}}\right)
+\end{equation}
+where $\mu$ denotes the instantenous growth rate (units: inverse years) of the share price over the time horizon $t\rightarrow{t+\Delta{t}}$. 
+The continuously compounded share price gives rise to the logarithmic return model (Defn. \ref{defn-log-return-1}):
+\begin{definition}[Logarithmic Return]\label{defn-log-return-1}
+Let $S_{i,t-1}$ denote the continuously compounding share price of ticker $i$ at time $t-1$. Then, at time $t$, the share price for ticker $i$, denoted as $S_{i,t}$,
+is given by:
+\begin{equation}
+    S_{i,t} = S_{i,t-1}\cdot\exp\left(\mu^{(i)}_{t,t-1}\cdot{\Delta{t}}\right)
+\end{equation}
+where $\mu^{(i)}_{t,t-1}$ denotes the instantenous growth rate (units: inverse years) of ticker $i$ over time horizon $(t-1)\rightarrow{t}$, 
+and $\Delta{t}$ is the time interval between $t-1$ and $t$ (units: years). The logarithmic return on asset $i$ over time horizon $(t-1)\rightarrow{t}$, 
+denoted by $r^{(i)}_{t,t-1}$, is defined as:
+\begin{equation}
+r^{(i)}_{t,t-1} \equiv \ln\left(\frac{S_{i,t}}{S_{i,t-1}}\right) = \mu^{(i)}_{t,t-1}\cdot{\Delta{t}}
+\end{equation} 
+\end{definition}
+Given Defn. \ref{defn-log-return-1}, we compute the logarithmic return distribution using Algorithm \ref{algo-log-return-distributions-equity}.
+For each stock $i$, we compute the logarithmic return $\mu^{(i)}_{t,t-1}$ for each time interval $(t-1)\rightarrow{t}$, and then compute the mean and variance of the logarithmic return distribution.
+\begin{algorithm}[h]
+    \caption{Logarithmic Excess Growth Rate}\label{algo-log-return-distributions-equity}
+    \begin{algorithmic}[1]
+
+        \Statex
+        \Require data set $\mathcal{D}_{i} = \left\{S_{i,t}\right\}_{t=1}^{N}\in\mathcal{D}$ where $S_{i,t}$ denotes the price of stock $i$ at time $t$, all stocks have the same time horizon $N\gg{2}$, 
+		and $\mathcal{D}$ denotes the data set of all stocks.
+        \Require The time interval $\Delta{t}$ between $t$ and $t-1$ (units: years), and a list of stocks $\mathcal{L} = \left\{i\right\}_{i=1}^{M}$ that we are interested in, where $M = \dim\mathcal{D}$.
+        \Require The risk-free rate $r_{f}$ (units: inverse years).
+     
+        \Statex
+		\Procedure{log return}{$\mathcal{D}$, $\mathcal{L}$, $\Delta{t}$, $r_{f}$}
+		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
+        \For{$i\in\mathcal{L}$}
+			\State{$\mathcal{D}_{i} \gets \mathcal{D}[i]$}\Comment{Select the data for stock $i$ from the dataset collection $\mathcal{D}$}
+            \For{$t=2\rightarrow{N}$}
+                \State{$S_{i,t-1} \gets \mathcal{D}_{i}[t-1]$}\Comment{Select the price of stock $i$ at time $t-1$}
+                \State{$S_{i,t} \gets \mathcal{D}_{i}[t]$}\Comment{Select the price of stock $i$ at time $t$}
+                \State{$\mu^{(i)}_{t,t-1} \gets \left(1/\Delta{t}\right)\cdot\ln\left(S_{i,t}/{S_{i,t-1}}\right) - r_{f}$}\Comment{Set $r_{f} = 0$ for regular growth rate}
+            \EndFor
+        \EndFor
+		\EndProcedure
+    \end{algorithmic}
+\end{algorithm}
 
 \section*{Summary}
 Fill me in.
