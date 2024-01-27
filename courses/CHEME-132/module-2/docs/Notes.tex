@@ -126,15 +126,37 @@
 
 \section*{Introduction}
 \href{https://en.wikipedia.org/wiki/Geometric_Brownian_motion}{Geometric Brownian motion (GBM)} is a continuous-time stochastic model in which the random variable $S(t)$, 
-e.g., the share price of a firm, is described by a deterministic trajectory corrupted by a \href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener stochastic noise process}:
+e.g., the share price of a firm. 
+Geometric Brownian motion was popularized as a financial model by Samuelson in the 1950s and 1960s \cite{Merton2006}, 
+but is arguably most commonly associated with the Black–Scholes options pricing model, which we will describe later 
+\cite{BlackScholes1973}. Let's start with the single asset case (in the absence of dividends), 
+and then consider the multiple asset case in the next module.
+
+
+Geometric Brownian motion (GBM) assumes that the share price $S(t)$ of a firm can be modeled as a detereministic
+drift term (which is proportional to the share price) that is corrupted by a \href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}, also proportional to the share price:
 \begin{equation}\label{eqn:GBM}
 \frac{dS}{S} = {\mu}\,dt + \sigma\,{dW}
 \end{equation}
 The constant $\mu$ denotes a drift parameter, i.e., the growth rate of the share price return, $\sigma$ is a volatility parameter, i.e., 
-the dispersion of the return, $dt$ denotes an infinitesimal time step, and $dW$ represents the output of a 
-\href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}.  
-Thus, Eqn. \ref{eqn:GBM} is the continuous-time analog of the discrete-time binomial lattice model we developed previously. 
-In this module, we will develop analytical solutions to Eqn. \ref{eqn:GBM}, and tools to estimate the parameters $\mu$ and $\sigma$ from historical data. 
+the dispersion of the return, $dt$ denotes an infinitesimal time step, and $dW$ is the output of a 
+\href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}.  A \href{https://en.wikipedia.org/wiki/Wiener_process)}{Wiener Process} 
+(also often referred to as a standard Brownian motion) is a real-valued continuous-time stochastic 
+process named after \href{https://en.wikipedia.org/wiki/Norbert_Wiener}{Norbert Wiener} for the study of one-dimensional Brownian motion (Defn. \ref{defn-wiener-process}):
+\begin{definition}[Wiener Process]\label{defn-wiener-process}
+A Wiener process is a continuous one-dimensional stochastic process $\left\{W\left(t\right), 0\leq{t}\leq{T}\right\}$ with the following properties:
+\begin{itemize}
+\setlength\itemsep{0em}
+\item{W$\left(0\right)$ = $0$ with probability $1$}
+\item{The increments $\left\{W(t_{1}) - W(t_{o}),\dots, W(t_{k}) - W(t_{k-1})\right\}$ are independent for any $k$ and $0\leq{t_{o}}< t_{1} < \dots < t_{k} \leq{T}$}
+\item{The increment W(t) - W(s) $\sim~N\left(0,t-s\right)$ for any $0\leq{s}< t \leq{T}$, where $N\left(0,t-s\right)$ denotes a normally distributed random variable with mean $0$ and variance $t - s$.}
+\end{itemize}
+\end{definition}
+Equation \ref{eqn:GBM} is a continuous-time analog of the discrete-time binomial lattice model we developed previously. 
+It has several interesting properties, for example it has an analytical solution, and that solution is a lognormal distribution.
+Futher, it has analytical expressions for the expectation and variance of the share price.
+In this module, we will develop analytical solutions to Eqn. \ref{eqn:GBM}, and tools to estimate 
+the parameters $\mu$ and $\sigma$ from historical data. We'll then use these tools to simulate the share price of firms.
 
 
 \section*{Analytical solution}
@@ -170,22 +192,34 @@ S(t) = S_{\circ}\exp\Biggl[\left(\mu-\frac{\sigma^{2}}{2}\right)\left(t - t_{\ci
 \end{equation}
 where $S_{\circ}$ denotes the share price at $t_{\circ}$, and $Z_{t}(0,1)$ denotes a 
 \href{https://en.wikipedia.org/wiki/Normal_distribution#Standard_normal_distribution}{standard normal random variable} at time $t$.
-The expectation and variance of a GBM model is:
+The expectation and variance of the GBM model is given by:
 \begin{eqnarray*}
 \mathbb{E}\left(S_{t}\right) &=& S_{o}\cdot\exp\left(\mu\cdot\Delta{t}\right)\\
 \text{Var}\left(S_{t}\right) &=& S_{\circ}^{2}e^{2\mu\cdot\Delta{t}}\left[e^{\sigma^{2}{\Delta{t}}} - 1\right]
 \end{eqnarray*}
+where $\Delta{t} = t - t_{\circ}$.
 
 \section*{Model parameters}
 \subsection*{Estimating the growth parameter $\mu$}
-Let $\mathbf{A}$ denote a $\mathcal{S}\times{2}$ matrix, where each row corresponds to a time value. 
+Let's assume that we have a time series of share price values $S(t_{1}), S(t_{2}), \dots, S(t_{k})$ and we want to estimate the detereministic growth of the share price, i.e., the drift parameter $\mu$.
+There are several ways to do this, but we will use a detereministic linear model of the natural log of the share price values.
+To estimate the deterministic component of the share price, we first set the volatility parameter $\sigma = 0$ in Eqn. \ref{eqn:analytical-soln-GBM}.
+Then, at some future time $t$, the share price (after some algebra) is given by:
+\begin{equation}\label{eqn:log-share-price-linear-model}
+\ln\,S_{i} = \ln\,S_{\circ} + \mu\cdot\left(t_{i}-t_{\circ}\right)
+\end{equation}
+where $\ln\,S_{\star}$ denotes the natural log of the share price at time $t_{\star}$.
+Equation \ref{eqn:log-share-price-linear-model} is a linear model of the form $y = mx + b$, where $y = \ln\,S_{i}$, $x = t_{i}-t_{\circ}$, $m = \mu$, and $b = \ln\,S_{\circ}$.
+Thus, we can estimate the growth parameter $\mu$ by fitting a linear model to the log of the share price values by solving an overdetermined system of linear equations.
+
+Let $\mathbf{A}$ denote a $\mathcal{S}\times{2}$ matrix, where each row corresponds to a time value $t>0$. 
 The first column of $\mathbf{A}$ is all 1's while the second column holds the $(t_{k}-t_{\circ})$ values. 
-Further, let $\mathbf{Y}$ denote the $\ln$ of the share price values (in the same order as the $\mathbf{A}$ matrix). 
+Further, let $\mathbf{Y}$ denote the natural log of the share price values (in the same temperal order as the $\mathbf{A}$ matrix). 
 Then, the y-intercept and slope (drift parameter) can be estimated by solving the overdetermined system of equations:
 \begin{equation*}
 \mathbf{A}\mathbf{\theta} + \mathbf{\epsilon} = \mathbf{Y}
 \end{equation*}
-where $\mathbf{\theta}$ denotes the vector of unknown parameters. 
+where $\mathbf{\theta}$ denotes the vector of unknown parameters (the y-intercept and slope), and $\mathbf{\epsilon}$ denotes an error model, e.g., a normal distribution with mean zero and variance $\sigma_{\epsilon}^{2}$.
 This system can be solved as:
 \begin{equation*}
 \mathbf{\theta} = (\mathbf{A}^{T}\mathbf{A})^{-1}\mathbf{A}^{T}\mathbf{Y} - (\mathbf{A}^{T}\mathbf{A})^{-1}\mathbf{A}^{T}\mathbf{\epsilon}
@@ -195,7 +229,8 @@ Finally, we can estimate the error term $\mathbf{\epsilon}$ by calculating the r
 \begin{equation*}
 \mathbf{\epsilon} = \mathbf{Y} - \mathbf{A}\mathbf{\theta}
 \end{equation*}
-and then fitting a normal distribution to the residuals to compute the uncertainty in the estimate of the mean of the drift parameter $\hat{\mu}$. 
+and then fitting a normal distribution to the residuals, using some technique such as maximum likelihood estimation, to compute the uncertainty in the estimate of the drift parameter $\hat{\mu}$ 
+(where the $\hat{\star}$ denotes an estimate of the parameter).
 
 \subsection*{Estimating the volatility parameter $\sigma$}
 
