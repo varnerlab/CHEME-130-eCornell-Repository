@@ -10,4 +10,24 @@ Black F, Scholes M.
 \newblock The Pricing of Options and Corporate Liabilities.
 \newblock Journal of Political Economy. 1973;81(3):637--654.
 
+\bibitem{Mandelbrot-1963}
+Mandelbrot B.
+\newblock The Variation of Certain Speculative Prices.
+\newblock The Journal of Business. 1963;36(4):394--419.
+
+\bibitem{Mandelbrot-1967}
+Mandelbrot B.
+\newblock The Variation of Some Other Speculative Prices.
+\newblock The Journal of Business. 1967;40(4):393--413.
+
+\bibitem{Cont-QuantFinance-2001}
+Cont R.
+\newblock Empirical properties of asset returns: stylized facts and statistical
+  issues.
+\newblock Quantitative Finance. 2001;1(2):223--236.
+
+\bibitem{ratliffcrain2023revisiting}
+Ratliff-Crain E, Oort CMV, Bagrow J, Koehler MTK, Tivnan BF. Revisiting
+  Stylized Facts for Modern Stock Markets; 2023.
+
 \end{thebibliography}

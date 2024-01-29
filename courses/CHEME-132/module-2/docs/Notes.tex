@@ -129,11 +129,10 @@
 e.g., the share price of a firm. 
 Geometric Brownian motion was popularized as a financial model by Samuelson in the 1950s and 1960s \cite{Merton2006}, 
 but is arguably most commonly associated with the Black–Scholes options pricing model, which we will describe later 
-\cite{BlackScholes1973}. Let's start with the single asset case (in the absence of dividends), 
+\cite{BlackScholes1973}. Let's start with the single asset case (in the absence of dividends) 
 and then consider the multiple asset case in the next module.
 
-
-Geometric Brownian motion (GBM) assumes that the share price $S(t)$ of a firm can be modeled as a detereministic
+Geometric Brownian motion (GBM) assumes that the share price $S(t)$ of a firm can be modeled as a deterministic
 drift term (which is proportional to the share price) that is corrupted by a \href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}, also proportional to the share price:
 \begin{equation}\label{eqn:GBM}
 \frac{dS}{S} = {\mu}\,dt + \sigma\,{dW}
@@ -153,15 +152,11 @@ A Wiener process is a continuous one-dimensional stochastic process $\left\{W\le
 \end{itemize}
 \end{definition}
 Equation \ref{eqn:GBM} is a continuous-time analog of the discrete-time binomial lattice model we developed previously. 
-It has several interesting properties, for example it has an analytical solution, and that solution is a lognormal distribution.
-Futher, it has analytical expressions for the expectation and variance of the share price.
-In this module, we will develop analytical solutions to Eqn. \ref{eqn:GBM}, and tools to estimate 
-the parameters $\mu$ and $\sigma$ from historical data. We'll then use these tools to simulate the share price of firms.
-
+It has several exciting properties; for example, it has an analytical solution and analytical expressions for the expectation and variance of the share price. In this module, we will develop analytical solutions to Eqn. \ref{eqn:GBM}, and tools to estimate the parameters $\mu$ and $\sigma$ from historical data. We'll then use these tools to simulate the share price of firms and analyze properties of the return distributions in the example and project for this module. 
 
 \section*{Analytical solution}
 Using Ito's lemma, we can formulate an analytical solution to the GBM equation for a single asset.
-Ito's Lemma, developed by K. Ito in 1951, is an analog of the Taylor series for stochastic systems.
+K. Ito's Lemma, developed in 1951, is an analog of the Taylor series for stochastic systems.
 Let the random variable $X(t)$ be governed by the general stochastic differential equation:
 \begin{equation*}
 dX = a\left(X(t),t\right)dt + b\left(X(t),t\right)dW(t)
@@ -270,8 +265,8 @@ For each stock $i$, we compute the logarithmic return $\mu^{(i)}_{t,t-1}$ for ea
         \Require The risk-free rate $r_{f}$ (units: inverse years).
      
         \Statex
-		\Procedure{log return}{$\mathcal{D}$, $\mathcal{L}$, $\Delta{t}$, $r_{f}$}
-		\State{$N\leftarrow\text{length}(\mu)$}\Comment{Number of growth rates}
+		\Procedure{log growth rate}{$\mathcal{D}$, $\mathcal{L}$, $\Delta{t}$, $r_{f}$}
+		\State{$N\leftarrow\text{length}(\mathcal{D})$}\Comment{Number of trading days for each stock $i\in\mathcal{L}$}
         \For{$i\in\mathcal{L}$}
 			\State{$\mathcal{D}_{i} \gets \mathcal{D}[i]$}\Comment{Select the data for stock $i$ from the dataset collection $\mathcal{D}$}
             \For{$t=2\rightarrow{N}$}
@@ -280,12 +275,51 @@ For each stock $i$, we compute the logarithmic return $\mu^{(i)}_{t,t-1}$ for ea
                 \State{$\mu^{(i)}_{t,t-1} \gets \left(1/\Delta{t}\right)\cdot\ln\left(S_{i,t}/{S_{i,t-1}}\right) - r_{f}$}\Comment{Set $r_{f} = 0$ for regular growth rate}
             \EndFor
         \EndFor
+        \Statex
+        \Return{$\mu^{(1)},\dots,\mu^{(\dim\mathcal{L})}$}\Comment{Return the logarithmic growth rate array for each stock $i\in\mathcal{L}$}
 		\EndProcedure
     \end{algorithmic}
 \end{algorithm}
+Once we estimated the logarithmic growth distribution for each stock, we can estimate the volatility parameter $\sigma$ by computing the standard deviation of the return distribution.
+Typically, we use the daily data, but we want the annualized standard deviation of the logarithmic return distribution, thus we multiply the daily standard deviation by $\sqrt{252}$, where $252$ is the average number of trading days in a year, 
+i.e, $\sigma\leftarrow \sqrt{252}\cdot\sigma$.
+
+\section*{Stylized facts}
+Geometric Brownian motion is a widely used as a pricing model. 
+However, whether geometric Brownian motion replicates many of the statistical properties of actual pricing and return data is unclear. 
+These properties, referred to as \textit{stylized facts} have been observed for decades, 
+dating back to early work of Mandelbrot \cite{Mandelbrot-1963,Mandelbrot-1967} and later by Cont \cite{Cont-QuantFinance-2001} 
+and more recently by Ratliff-Crain et al. \cite{ratliffcrain2023revisiting} who reviewed the original stylized facts 
+proposed by Cont using newer data.
+
+Computing and understanding the stylized facts of financial data is important for several reasons. 
+However, here we'll focus on only two, namely, the shape of the return distribution and the autocorrelation of the returns.
+The shape of the return distribution is important because it is used to compute the probability of extreme events.
+For example, the probability of a 10\% drop in the share price of a firm in a single day. 
+Typiclly, we assume that the return distribution is normal, but this is not always the case. 
+Instead, retruns are often leptokurtic, i.e., they have fat tails, for example following a Laplace distribution.
+The autocorrelation of the returns is important because it is used to compute the probability of a run of consecutive up or down days.
+If the returns are uncorrelated in time, then consecutive up or down days are independent events, i.e., 
+the return (up or down) on day $t$ is independent of the return on day $t-1$. Thus, the market is behaving like a random walk.
+However, if the returns are correlated in time, then consecutive up or down days are not independent events, i.e., 
+past returns influence future returns. This is a very active area of research, and we will not be able to cover all of the stylized facts here. However, the 
+the lack of autcorrelation goes to the heart of the efficient market hypothesis, which is at the core of modern finance theory, 
+and one of the foundation principeles of quantitative finance over the last 50 years.
+
+In the example and project for this module, we will compute the stylized facts of the share price of firms in the S\&P 500 index.
+In particular, we will compute the shape of the return distribution and the autocorrelation of the returns. 
+We'll show that the returns are leptokurtic, for the majority of the firms in the S\&P 500 index, and that the returns are uncorrelated in time.
+
 
 \section*{Summary}
-Fill me in.
+In this module we introduced the single asset geometric Brownian motion model, and developed analytical solutions to the model.
+This model is a continuous-time analog of the discrete-time binomial lattice model we developed previously.
+The GBM model requires two parameters, the drift parameter $\mu$ and the volatility parameter $\sigma$. 
+We developed methods to estimate these parameters from historical data, 
+and then used these parameters to simulate the share price of firms in the example and project for this module.
+Finally, we discussed the stylized facts of financial data, and particularly the shape of the return distribution and the autocorrelation of the returns.
+The shape of the return distribution is important because it is used to compute the probability of extreme events, 
+while the autcorrelation of the returns is important because it is used to compute the correlation in time of the returns. 
 
 \bibliography{References_v1}
 
