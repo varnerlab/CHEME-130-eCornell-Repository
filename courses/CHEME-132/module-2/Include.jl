@@ -14,10 +14,11 @@ using DataFrames
 using CSV
 using Dates
 using LinearAlgebra
-using Statistics
 using Plots
 using Colors
+using Statistics
 using StatsPlots
+using StatsBase
 using JLD2
 using FileIO
 using Distributions

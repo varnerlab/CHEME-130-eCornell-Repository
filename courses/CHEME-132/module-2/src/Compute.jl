@@ -2,11 +2,11 @@ _𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
 
 function log_return_matrix(dataset::Dict{String, DataFrame}, 
-    firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0)::Array{Float64,2}
+    firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0, testfirm="AAPL")::Array{Float64,2}
 
     # initialize -
     number_of_firms = length(firms);
-    number_of_trading_days = nrow(dataset["AAPL"]);
+    number_of_trading_days = nrow(dataset[testfirm]);
     return_matrix = Array{Float64,2}(undef, number_of_trading_days-1, number_of_firms);
 
     # main loop -
