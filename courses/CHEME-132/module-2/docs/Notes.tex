@@ -137,7 +137,7 @@ drift term (which is proportional to the share price) that is corrupted by a \hr
 \begin{equation}\label{eqn:GBM}
 \frac{dS}{S} = {\mu}\,dt + \sigma\,{dW}
 \end{equation}
-The constant $\mu$ denotes a drift parameter, i.e., the growth rate of the share price return, $\sigma$ is a volatility parameter, i.e., 
+The constant $\mu$ denotes a drift parameter, i.e., the growth rate of the share price return, $\sigma>0$ is a volatility parameter, i.e., 
 the dispersion of the return, $dt$ denotes an infinitesimal time step, and $dW$ is the output of a 
 \href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}.  A \href{https://en.wikipedia.org/wiki/Wiener_process)}{Wiener Process} 
 (also often referred to as a standard Brownian motion) is a real-valued continuous-time stochastic 
@@ -180,7 +180,7 @@ which gives:
 \begin{equation*}
 \ln\left(\frac{S_{t}}{S_{\circ}}\right) = \left(\mu - \frac{\sigma^{2}}{2}\right)\left(t - t_{\circ}\right) + \sigma\cdot\sqrt{t-t_{\circ}}\cdot{Z(0,1)}
 \end{equation*}
-where the noise term makes use of the definition of the integral of a Wiener process.
+where the noise term makes use of the definition of the integral of a Wiener process, and the properties of Normal random variables.
 Finally, we exponentiate both sides of the equation to obtain the analytical solution to the GBM model:
 \begin{equation}\label{eqn:analytical-soln-GBM}
 S(t) = S_{\circ}\exp\Biggl[\left(\mu-\frac{\sigma^{2}}{2}\right)\left(t - t_{\circ}\right) + (\sigma\sqrt{t-t_{\circ}})\cdot{Z_{t}(0,1)}\Biggr]
@@ -231,7 +231,6 @@ and then fitting a normal distribution to the residuals, using some technique su
 Generally, methods to estimate the volatility parameter can be classified into two categories - historical volatility estimates based on past return data and future volatility 
 estimates based on the \href{https://en.wikipedia.org/wiki/Implied_volatility}{Implied Volatility (IV)} of \href{https://en.wikipedia.org/wiki/Option_(finance)}{options contracts}. 
 Here, we estimate the volatility $\sigma$ from historical data, i.e., from the past returns of the share price.
-
 A return refers to the increase or decrease in the price of an asset, e.g., shares of a stock, over a specific period, e.g., minutes, days, weeks, or even years. 
 Assume the share price of a stock at time $t$ is given by $S(t)$. Then, if we assume continuous compounding, the price of the stock at time $t+\Delta{t}$ is given by:
 \begin{equation}
