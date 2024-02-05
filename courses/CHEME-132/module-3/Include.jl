@@ -6,7 +6,6 @@ const _PATH_TO_DATA = joinpath(_ROOT, "data");
 # make sure all is up to date -
 using Pkg
 Pkg.add(path="https://github.com/varnerlab/VLQuantitativeFinancePackage.jl.git")
-Pkg.add(path="https://github.com/varnerlab/POETs.jl.git")
 Pkg.activate("."); Pkg.resolve(); Pkg.instantiate(); Pkg.update();
 
 # load external packages -
