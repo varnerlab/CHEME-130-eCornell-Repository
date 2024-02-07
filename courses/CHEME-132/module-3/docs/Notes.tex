@@ -150,7 +150,7 @@ S_{i}(t_{k}) = S_{i}(t_{k-1})\cdot\exp\Biggl[\left(\mu_{i}-\frac{\sigma_{i}^{2}}
 where $S_{i}(t_{k-1})$ is the share price for firm $i\in\mathcal{P}$ at time $t_{k-1}$,  the term $\Delta{t} = t_{k} - t_{k-1}$ denotes the time difference (step-size) 
 for each time step (fixed), and $Z_{j}(0,1)$ is a standard normal random variable for firm $j\in\mathcal{P}$.
 
-\section*{Estimating the drift vector $\mu$ and covariance matrix $\Sigma$}
+\section*{Drift and Covariance}
 The drift vector $\mu$ and covariance matrix $\Sigma$ are key parameters in the multi-dimensional GBM model.
 We can estimate the drift vector $\mu$, which will be a $\dim\mathcal{P}\times{1}$ vector, from historical data by computing the logarithmic excess growth rate of the assets in the portfolio $\mathcal{P}$, 
 as we have shown previosly; we simply repeat the process for each asset in the portfolio $\mathcal{P}$.
@@ -195,7 +195,7 @@ while the off-diagonal measure the relationship between assets $i$ and $j$ in th
     \end{algorithmic}
 \end{algorithm}
 
-\section*{Estimating the noise coefficients $a_{ij}$}
+\subsection*{Estimating the noise coefficients $a_{ij}$}
 The noise coefficients $a_{ij}$ modify the noise terms in the multi-dimensional GBM model, 
 and describe the connection between firms $i$ and firms $j$ in the portfolio $\mathcal{P}$. 
 The noise coefficients are given by the Cholesky decomposition of the covariance matrix $\Sigma$:
@@ -207,38 +207,102 @@ The Cholesky decomposition is a matrix factorization that decomposes the covaria
 into the product of a lower triangular matrix $\mathbf{A}$ and its complex conjugate transpose $\mathbf{A}^{\top}$;
 given that $\Sigma$ is a positive-definite matrix, the Cholesky decomposition is unique.
 
-\section*{Multiasset GBM simulation algorithm}
+\section*{Multiasset Simulation}
 Now that we have estimated the drift vector $\mu$, the covariance matrix $\Sigma$, and the noise coefficients $a_{ij}$, we can
 simulate the multi-dimensional GBM model to predict the share price of a firm at a future time point. 
 Much like the single asset GBM model, we can simulate the multi-dimensional GBM model using the analytical solution, 
 except in this case we will simulate the share price of each firm in the portfolio $\mathcal{P}$ at each time point.
 Thus, we'll need a vector of initial share prices $\mathbf{S}(t_{0})$, the drift vector $\mu$, the covariance matrix $\Sigma$,
 along with user-defined time points $t_{0},t_{1},\dots,t_{N}$, and the number of samples to simulate $N_{\text{samples}}$.
-Given this data, we can use the following algorithm to simulate the multi-dimensional GBM model (\ref{algo-multi-asset-gbm-simulation}).
+Given this data, we can use the following algorithm to simulate the multi-dimensional GBM model (Algorithm \ref{algo-multi-asset-gbm-simulation}).
 
 
 \begin{algorithm}[h]
-    \caption{Logarithmic Excess Growth Rate}\label{algo-multi-asset-gbm-simulation}
+    \caption{Multiasset Geometric Brownian Motion}\label{algo-multi-asset-gbm-simulation}
     \begin{algorithmic}[1]
+		\Statex
 		\Require The initial share price vector $\mathbf{S}(t_{0}) = \left\{S_{i}(t_{0})\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
 		\Require The drift vector $\mu = \left\{\mu_{i}\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
 		\Require The covariance matrix $\Sigma$ for the portfolio $\mathcal{P}$.
-		\Require The time step $\Delta{t}$ (units: years), the initial time $t_{\circ}$, the final time $t_{f}$, and the number of samples $N_{\text{samples}}$.
+		\Require The time step $\Delta{t}$ (units: years), the initial time $t_{\circ}$, the final time $t_{f}$, and the number of samples $N_{s}$.
 		\Require A Cholesky decomposition function $\texttt{cholesky}(\Sigma)$ that returns the Cholesky factor $\mathbf{A}$.
 
 		\Statex
 		\Procedure{Multiasset GBM}{$\mu$, $\Sigma$, $\mathbf{S}_{\circ}$, $(t_{\circ}, t_{f}, \Delta{t})$, $N_{\text{samples}}$}
+		\Statex
 		\State{$N_{a} \gets \text{length}(\mu)$}\Comment{Number of assets in the portfolio $\mathcal{P}$}
 		\State{$N_{t} \gets (t_{f} - t_{\circ})/\Delta{t}$}\Comment{Number of time steps}
-		\State{$X \gets \texttt{zeros}(N_{\text{samples},N_{t},N_{a}+1})$}\Comment{Pre-allocate the share price array}
+		\State{$T \gets \texttt{arange}(t_{\circ},t_{f},\Delta{t})$}\Comment{Time points}
+		\State{$X \gets \texttt{zeros}(N_{s},N_{t}, N_{a}+1)$}\Comment{Pre-allocate the share price array}
+		\State{$\mathcal{Z} \gets \mathcal{N}(0,1)$}\Comment{Instantiate a standard normal distribution}
 		\State{$\mathbf{A} \gets \texttt{cholesky}(\Sigma)$}\Comment{Cholesky decomposition of the covariance matrix $\Sigma$}
+		
+		
+		\Statex
+		\For{$i\in{1}~\text{to}~{N_{s}}}$\Comment{Loop over the number of samples}
+			
+			\For{$j\in\texttt{eachindex}(T)$}\Comment{Loop over the time points}
+				\State{$X[i,j,1] \gets T[j]$}\Comment{Set the time points in first column}
+			\EndFor
+			\Statex
+			\For{$j\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+				\State{$X[i,1,j+1] \gets \mathbf{S}_{\circ}[j]$}\Comment{Set the initial share price}
+			\EndFor
+			\Statex
+
+			\For{$j\in{2}~\text{to}~N_{t}$}\Comment{Loop over the number of time steps}
+				\For{$k\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+				\Statex
+				\State{$\text{noise} \gets 0.0$}
+				\For{$l\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+					\State{$\text{noise} \gets \text{noise} + \mathbf{A}[k,l]\cdot\texttt{rand}(\mathcal{Z})$}\Comment{Compute the noise term for asset $k$}
+				\EndFor
+				\Statex
+				\State{$X[i,j,k+1] \gets X[i,j-1,k+1]\cdot\exp\Biggl[\left(\mu[k]-a_{kk}^{2}/{2}\right)\Delta{t} + \sqrt{\Delta{t}}\cdot\text{noise}\Biggr]$}
+				\EndFor
+			\EndFor
+		\EndFor
 
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 
+\subsection*{Wealth of a portfolio $\mathcal{P}$}
+To compute the performance of a portfolio $\mathcal{P}$, we can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
+to simulate the share price of each firm in the portfolio $\mathcal{P}$ over a time-horizon, e.g., from now to until next year.
+Given the share price of each firm in the portfolio $\mathcal{P}$ at each time point, we can compute what combinations of shares of each firm in the portfolio $\mathcal{P}$.	
+However, to compute the wealth, we need to know the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$.
+The number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ is given by the fraction of the total wealth invested in each firm in the portfolio $\mathcal{P}$.
+Let's imagine a scenario where an investor has a total wealth of $W_{\text{total}}$ at time $t$, 
+and the fraction of the total wealth invested in each firm $i\in\mathcal{P}$
+is given by $0\leq{\omega_{i}}\leq{1}$, which is an element of the allocation vector $\omega_{i}\in\mathbf{\omega}$.
+The fraction of the total wealth invested in each firm $i\in\mathcal{P}$ is given by:
+\begin{equation*}
+\omega_{i}(t) = \frac{W_{i}(t)}{W_{\text{total}}}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+where $W_{i}(t)$ denotes the wealth of firm $i\in\mathcal{P}$ at time $t$.
+However, we know the total wealth at time $t$, is the liqidation value of the portfolio, thus, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
+\begin{equation*}
+\omega_{i}(t) = \frac{n_{i}(t)\cdot{S_{i}(t)}}{\displaystyle\sum_{k\in\mathcal{P}}n_{k}(t)\cdot{S}_{k}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+The wealth of a portfolio $\mathcal{P}$ at time $t$ 
+is given by the sum of the product of number of shares of firm $i$ with the share price of each firm in the portfolio $\mathcal{P}$ at time $t$:
+\begin{equation*}
+W(t) = \sum_{i\in\mathcal{P}}n_{i}(t)\cdot{S_{i}(t)}
+\end{equation*}
+where $n_{i}(t)$ denotes the number of shares of firm $i\in\mathcal{P}$ at time $t$.
+
+
 \section*{Summary}
-Fill me in.
+In this module, we have considered the multi-dimensional GBM model, 
+which describes the share price of a firm in a portfolio $\mathcal{P}$.
+We have shown how to estimate the drift vector $\mu$, the covariance matrix $\Sigma$, and the noise coefficients $a_{ij}$,
+and provided an algorithm to simulate the multi-dimensional GBM model to predict the share price of a firm at a future time point.
+Finally, we have shown how to compute the wealth of a portfolio $\mathcal{P}$ at time $t$, and its relationship 
+to the fraction of the total wealth invested in each firm in the portfolio $\mathcal{P}$.
+Later, we'll develop tools to compute these fractions, i.e., the portfolio weights, 
+but for we'll consider the case where the portfolio weights are equal, or are chosen by the investor by some approach
+(perhaps even randomly).
 
 \bibliography{References_v1}
 
