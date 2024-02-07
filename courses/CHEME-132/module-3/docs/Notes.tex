@@ -258,7 +258,7 @@ Given this data, we can use the following algorithm to simulate the multi-dimens
 					\State{$\text{noise} \gets \text{noise} + \mathbf{A}[k,l]\cdot\texttt{rand}(\mathcal{Z})$}\Comment{Compute the noise term for asset $k$}
 				\EndFor
 				\Statex
-				\State{$X[i,j,k+1] \gets X[i,j-1,k+1]\cdot\exp\Biggl[\left(\mu[k]-a_{kk}^{2}/{2}\right)\Delta{t} + \sqrt{\Delta{t}}\cdot\text{noise}\Biggr]$}
+				\State{$X[i,j,k+1] \gets X[i,j-1,k+1]\cdot\exp\Biggl[\left(\mu[k]-a_{kk}/{2}\right)\Delta{t} + \sqrt{\Delta{t}}\cdot\text{noise}\Biggr]$}
 				\EndFor
 			\EndFor
 		\EndFor
