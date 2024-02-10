@@ -24,9 +24,6 @@ using Distributions
 using DataStructures
 using PrettyTables
 
-# setup a  color -
-blue_color = colorant"rgb(68,152,242)"
-
 # load my codes -
 include(joinpath(_PATH_TO_SRC,"Types.jl"));
 include(joinpath(_PATH_TO_SRC,"Files.jl"));

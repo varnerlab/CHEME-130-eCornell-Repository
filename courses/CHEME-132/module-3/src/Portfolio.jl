@@ -45,10 +45,13 @@ function wealth(simulation::Dict{Int64,Array{Float64,2}}, ω::Array{Float64,1};
 end
 
 function allocation(simulation::Dict{Int64,Array{Float64,2}};
-    number_of_iterations::Int64 = 100, 
-    number_of_days::Int64 = 100, total_budget::Float64 = 1000.0, 
-    number_of_states::Int64 = 5)::DataFrame
+    number_of_iterations::Int64 = 100, total_budget::Float64 = 1000.0)::DataFrame
     
+    # get the time points, abd the number of states -
+    (number_of_rows, number_of_columns) = size(simulation[1]);
+    number_of_states = number_of_columns - 1;
+    number_of_time_steps = number_of_rows;
+
     # initialize -
     objective_best = 0.0;
     archive = DataFrame();
@@ -59,8 +62,7 @@ function allocation(simulation::Dict{Int64,Array{Float64,2}};
     tmp = simulation[1];
     Sₒ = Array{Float64,1}()
     for i ∈ 1:number_of_states
-        startprice = tmp[1,i+1];
-        push!(Sₒ,startprice)
+        push!(Sₒ, tmp[1, i+1])
     end
 
     # main -
@@ -77,27 +79,27 @@ function allocation(simulation::Dict{Int64,Array{Float64,2}};
             push!(Nₒ,nᵢ)
         end
 
-        simulated_wealth_array = Array{Float64,2}(undef, number_of_days, number_of_trials);
+        simulated_wealth_array = Array{Float64,2}(undef, number_of_time_steps, number_of_trials);
         for i ∈ 1:number_of_trials
     
             simulation_array = simulation[i]
-            portfolio_performance_array = Array{Float64,2}(undef, number_of_days, length(ω)+1)
+            portfolio_performance_array = Array{Float64,2}(undef, number_of_time_steps, length(ω)+1)
             for j ∈ 1:number_of_states
                 price_data = simulation_array[:,j+1];
                 nⱼ = Nₒ[j]
     
-                for k ∈ 1:number_of_days
+                for k ∈ 1:number_of_time_steps
                     portfolio_performance_array[k,j] = nⱼ*price_data[k];
                 end
             end
 
             # total -
-            for j ∈ 1:number_of_days
+            for j ∈ 1:number_of_time_steps
                 portfolio_performance_array[j,end] = sum(portfolio_performance_array[j,1:end-1])
             end
     
             # wealth -
-            for j ∈ 1:number_of_days
+            for j ∈ 1:number_of_time_steps
                 simulated_wealth_array[j,i] = portfolio_performance_array[j,end];
             end
         end
@@ -118,7 +120,7 @@ function allocation(simulation::Dict{Int64,Array{Float64,2}};
                 α = α
             );
             push!(archive,row_df);
-            α = rand(0.8:0.01:1.2,number_of_states).*α;
+            α = rand(0.2:0.01:1.8, number_of_states).*α;
         end
     end
 

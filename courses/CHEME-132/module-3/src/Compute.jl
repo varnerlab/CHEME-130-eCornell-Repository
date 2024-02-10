@@ -1,5 +1,6 @@
 _𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
+𝒟(r̄,t) = exp(r̄*t);
 
 function log_return_matrix(dataset::Dict{String, DataFrame}, 
     firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0)::Array{Float64,2}

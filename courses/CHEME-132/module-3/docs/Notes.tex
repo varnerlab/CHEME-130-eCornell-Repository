@@ -150,7 +150,7 @@ S_{i}(t_{k}) = S_{i}(t_{k-1})\cdot\exp\Biggl[\left(\mu_{i}-\frac{\sigma_{i}^{2}}
 where $S_{i}(t_{k-1})$ is the share price for firm $i\in\mathcal{P}$ at time $t_{k-1}$,  the term $\Delta{t} = t_{k} - t_{k-1}$ denotes the time difference (step-size) 
 for each time step (fixed), and $Z_{j}(0,1)$ is a standard normal random variable for firm $j\in\mathcal{P}$.
 
-\section*{Drift and Covariance}
+\section*{Drift and Covariance Estimation}
 The drift vector $\mu$ and covariance matrix $\Sigma$ are key parameters in the multi-dimensional GBM model.
 We can estimate the drift vector $\mu$, which will be a $\dim\mathcal{P}\times{1}$ vector, from historical data by computing the logarithmic excess growth rate of the assets in the portfolio $\mathcal{P}$, 
 as we have shown previosly; we simply repeat the process for each asset in the portfolio $\mathcal{P}$.
@@ -160,42 +160,8 @@ The $(i,j)$ element of the covariance matrix $\sigma_{ij}\in\Sigma$ is given by:
     \sigma_{ij} = \text{cov}\left(r_{i},r_{j}\right) = \sigma_{i}\sigma_{j}\rho_{ij}\qquad\text{for}\quad{i,j \in \mathcal{P}}
 \end{equation*}
 where $\sigma_{\star}$ denote the standard deviation of the logarithmic return of asset $\star$, i.e., the volatility parameter, and $\rho_{ij}$ 
-denotes the correlation between the returns of asset $i$ and $j$ in the portfolio $\mathcal{P}$. The correlation is given by:
-\begin{equation*}
-\rho_{ij} = \frac{\mathbb{E}(r_{i}-\mu_{i})\cdot\mathbb{E}(r_{j} - \mu_{j})}{\sigma_{i}\cdot\sigma_{j}}\qquad\text{for}\quad{i,j \in \mathcal{P}}
-\end{equation*}
-where $\mathbb{E}(r_{i}-\mu_{i})$ is the expected value of the difference between the logarithmic return of asset $i$ and its drift parameter 
-$\mu_{i}$, i.e., mean of the logorithmic return. The diagonal elements of the covariance matrix $\sigma_{ii}\in\Sigma$ are the variances, 
-while the off-diagonal measure the relationship between assets $i$ and $j$ in the portfolio $\mathcal{P}$.
+denotes the correlation between the returns of asset $i$ and $j$ in the portfolio $\mathcal{P}$. 
 
-\begin{algorithm}[h]
-    \caption{Logarithmic Excess Growth Rate}\label{algo-log-return-distributions-equity}
-    \begin{algorithmic}[1]
-
-        \Statex
-        \Require data set $\mathcal{D}_{i} = \left\{S_{i,t}\right\}_{t=1}^{N}\in\mathcal{D}$ where $S_{i,t}$ denotes the price of stock $i$ at time $t$, all stocks have the same time horizon $N\gg{2}$, 
-		and $\mathcal{D}$ denotes the data set of all stocks.
-        \Require The time interval $\Delta{t}$ between $t$ and $t-1$ (units: years), and a list of stocks $\mathcal{L} = \left\{i\right\}_{i=1}^{M}$ where $M = \dim\mathcal{L}$.
-        \Require The risk-free rate $r_{f}$ (units: inverse years).
-     
-        \Statex
-		\Procedure{log growth rate}{$\mathcal{D}$, $\mathcal{L}$, $\Delta{t}$, $r_{f}$}
-		\State{$N\leftarrow\text{length}(\mathcal{D})$}\Comment{Number of trading days for each stock $i\in\mathcal{L}$}
-        \For{$i\in\mathcal{L}$}
-			\State{$\mathcal{D}_{i} \gets \mathcal{D}[i]$}\Comment{Select the data for stock $i$ from the dataset collection $\mathcal{D}$}
-            \For{$t=2\rightarrow{N}$}
-                \State{$S_{i,t-1} \gets \mathcal{D}_{i}[t-1]$}\Comment{Select the price of stock $i$ at time $t-1$}
-                \State{$S_{i,t} \gets \mathcal{D}_{i}[t]$}\Comment{Select the price of stock $i$ at time $t$}
-                \State{$\mu^{(i)}_{t,t-1} \gets \left(1/\Delta{t}\right)\cdot\ln\left(S_{i,t}/{S_{i,t-1}}\right) - r_{f}$}\Comment{Set $r_{f} = 0$ for regular growth rate}
-            \EndFor
-        \EndFor
-        \Statex
-        \Return{$\mu^{(1)},\dots,\mu^{(\dim\mathcal{L})}$}\Comment{Return the logarithmic growth rate array for each stock $i\in\mathcal{L}$}
-		\EndProcedure
-    \end{algorithmic}
-\end{algorithm}
-
-\subsection*{Estimating the noise coefficients $a_{ij}$}
 The noise coefficients $a_{ij}$ modify the noise terms in the multi-dimensional GBM model, 
 and describe the connection between firms $i$ and firms $j$ in the portfolio $\mathcal{P}$. 
 The noise coefficients are given by the Cholesky decomposition of the covariance matrix $\Sigma$:
@@ -207,7 +173,7 @@ The Cholesky decomposition is a matrix factorization that decomposes the covaria
 into the product of a lower triangular matrix $\mathbf{A}$ and its complex conjugate transpose $\mathbf{A}^{\top}$;
 given that $\Sigma$ is a positive-definite matrix, the Cholesky decomposition is unique.
 
-\section*{Multiasset Simulation}
+\section*{Multiasset simulation}
 Now that we have estimated the drift vector $\mu$, the covariance matrix $\Sigma$, and the noise coefficients $a_{ij}$, we can
 simulate the multi-dimensional GBM model to predict the share price of a firm at a future time point. 
 Much like the single asset GBM model, we can simulate the multi-dimensional GBM model using the analytical solution, 
@@ -267,7 +233,7 @@ Given this data, we can use the following algorithm to simulate the multi-dimens
 	\end{algorithmic}
 \end{algorithm}
 
-\subsection*{Wealth of a portfolio $\mathcal{P}$}
+\subsection*{Computing the wealth of a portfolio $\mathcal{P}$}
 To compute the performance of a portfolio $\mathcal{P}$, we can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
 to simulate the share price of each firm in the portfolio $\mathcal{P}$ over a time-horizon, e.g., from now to until next year.
 Given the share price of each firm in the portfolio $\mathcal{P}$ at each time point, we can compute what combinations of shares of each firm in the portfolio $\mathcal{P}$.	
@@ -281,16 +247,30 @@ The fraction of the total wealth invested in each firm $i\in\mathcal{P}$ is give
 \omega_{i}(t) = \frac{W_{i}(t)}{W_{\text{total}}}\qquad\text{for}\quad{i\in\mathcal{P}}
 \end{equation*}
 where $W_{i}(t)$ denotes the wealth of firm $i\in\mathcal{P}$ at time $t$.
-However, we know the total wealth at time $t$, is the liqidation value of the portfolio, thus, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
-\begin{equation*}
-\omega_{i}(t) = \frac{n_{i}(t)\cdot{S_{i}(t)}}{\displaystyle\sum_{k\in\mathcal{P}}n_{k}(t)\cdot{S}_{k}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
-\end{equation*}
-The wealth of a portfolio $\mathcal{P}$ at time $t$ 
+However, we know the total wealth at time $t$, is the liqidation value of the portfolio. The wealth of a portfolio $\mathcal{P}$ at time $t$ 
 is given by the sum of the product of number of shares of firm $i$ with the share price of each firm in the portfolio $\mathcal{P}$ at time $t$:
 \begin{equation*}
 W(t) = \sum_{i\in\mathcal{P}}n_{i}(t)\cdot{S_{i}(t)}
 \end{equation*}
 where $n_{i}(t)$ denotes the number of shares of firm $i\in\mathcal{P}$ at time $t$.
+Thus, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
+\begin{equation*}
+\omega_{i}(t) = \frac{n_{i}(t)\cdot{S_{i}(t)}}{\displaystyle\sum_{k\in\mathcal{P}}n_{k}(t)\cdot{S}_{k}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+The investor can choose the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ by some approach,
+which, when combined with the share price, gives the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$:
+\begin{equation*}
+n_{i}(t) = \frac{\omega_{i}(t)\cdot{W_{\text{total}}}}{S_{i}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+
+Suppose the investor randomly chooses the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ 
+at $t=0$, and holds that portfolio for some time period, e.g., a year. 
+The investor can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
+to simulate the share price of each firm in the portfolio $\mathcal{P}$ over a year, and then calculate 
+the wealth of the portfolio $\mathcal{P}$ at the end of the year, assuming the investor
+does not buy or sell any shares of any firm in the portfolio $\mathcal{P}$. Let's think the case where the investor chooses the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ 
+to maximize or minimize some objective function, e.g., maximize the expected return, minimize the variance, 
+or to maximize a specific risk-adjusted return measure, e.g., the Sharpe ratio.
 
 
 \section*{Summary}
