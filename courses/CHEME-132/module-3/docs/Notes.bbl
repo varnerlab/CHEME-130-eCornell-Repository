@@ -10,4 +10,11 @@ Black F, Scholes M.
 \newblock The Pricing of Options and Corporate Liabilities.
 \newblock Journal of Political Economy. 1973;81(3):637--654.
 
+\bibitem{Glasserman:2004ua}
+Glasserman P.
+\newblock Monte Carlo methods in financial engineering. vol.~53.
+\newblock New York: Springer; 2004.
+\newblock Available from:
+  \url{http://www.loc.gov/catdir/enhancements/fy0813/2003050499-d.html}.
+
 \end{thebibliography}
