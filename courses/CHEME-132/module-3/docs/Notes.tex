@@ -62,7 +62,7 @@
 
 \fancypagestyle{proposal}{\fancyhf{}%
 	\fancyhead[RO,LE]{\thepage}%
-	\fancyhead[LO,RE]{CHEME 132 Module 3 Multi Asset Geometric Brownian Motion}%
+	\fancyhead[LO,RE]{CHEME 132 Module 3 Multiple Asset Geometric Brownian Motion}%
 	\renewcommand\headrulewidth{1pt}}
 \pagestyle{proposal}
 
@@ -180,7 +180,8 @@ Much like the single asset GBM model, we can simulate the multi-dimensional GBM 
 except in this case we will simulate the share price of each firm in the portfolio $\mathcal{P}$ at each time point.
 Thus, we'll need a vector of initial share prices $\mathbf{S}(t_{0})$, the drift vector $\mu$, the covariance matrix $\Sigma$,
 along with user-defined time points $t_{0},t_{1},\dots,t_{N}$, and the number of samples to simulate $N_{\text{samples}}$.
-Given this data, we can use the following algorithm to simulate the multi-dimensional GBM model (Algorithm \ref{algo-multi-asset-gbm-simulation}).
+Given this data, we can simulate the multi-dimensional GBM model using Algorithm \ref{algo-multi-asset-gbm-simulation}, and then fit a distribution to the simulated share price of each firm in the portfolio $\mathcal{P}$ at each time point.
+
 
 
 \begin{algorithm}[h]
@@ -233,44 +234,59 @@ Given this data, we can use the following algorithm to simulate the multi-dimens
 	\end{algorithmic}
 \end{algorithm}
 
-\subsection*{Computing the wealth of a portfolio $\mathcal{P}$}
-To compute the performance of a portfolio $\mathcal{P}$, we can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
-to simulate the share price of each firm in the portfolio $\mathcal{P}$ over a time-horizon, e.g., from now to until next year.
-Given the share price of each firm in the portfolio $\mathcal{P}$ at each time point, we can compute what combinations of shares of each firm in the portfolio $\mathcal{P}$.	
-However, to compute the wealth, we need to know the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$.
-The number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ is given by the fraction of the total wealth invested in each firm in the portfolio $\mathcal{P}$.
-Let's imagine a scenario where an investor has a total wealth of $W_{\text{total}}$ at time $t$, 
-and the fraction of the total wealth invested in each firm $i\in\mathcal{P}$
-is given by $0\leq{\omega_{i}}\leq{1}$, which is an element of the allocation vector $\omega_{i}\in\mathbf{\omega}$.
-The fraction of the total wealth invested in each firm $i\in\mathcal{P}$ is given by:
+\subsection*{Computing the Net Present Value (NPV) of the portfolio $\mathcal{P}$}
+To compute the Net Present Value (NPV) of a portfolio $\mathcal{P}$, we can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
+to simulate the share price of each firm in $\mathcal{P}$ over a time-horizon, e.g., from now to until next year.
+Given the share price of each firm over that horizon, we can compute what combinations of shares of each firm in the portfolio $\mathcal{P}$ are the best in some way. For example, we can compute which share combinations lead to the largest projected NPV of the portfolio $\mathcal{P}$ at time $t$ by computing the 
+two cash flow events that occur, first the purchase of the shares of each firm in the portfolio $\mathcal{P}$ at time $t_{0}$, and then the liquidation of the portfolio $\mathcal{P}$ at time $T$, where the future share price value is discounted back to the present value using an appropriate discount rate, such as the average risk-free rate over the time period $\bar{r}_{f}$:
+\begin{equation}\label{eqn:npv-mv-gbm}
+\text{NPV}(T,\bar{r}_{f}) = \sum_{i\in\mathcal{P}}n_{i}\cdot\left(\mathcal{D}_{T,0}^{-1}(\bar{r}_{f})\cdot{S_{i}(T)}-S_{i}(0)\right)
+\end{equation}
+where $n_{i}$ denotes the number of shares of firm $i\in\mathcal{P}$, $S_{i}(T)$ denotes the share price of firm $i\in\mathcal{P}$ at time $T$, $S_{i}(0)$ denotes the share price of firm $i\in\mathcal{P}$ at time $0$, and $\mathcal{D}_{T,0}(\bar{r}_{f})$ denotes the multiperiod discount factor between time $0\rightarrow{T}$ with the discount rate equal to the risk-free rate $\bar{r}_{f}$.
+
+To calculate the net present value at $t=T$, we need the share price of each firm in the portfolio $\mathcal{P}$ at time $T$, and the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t_{0}$, 
+where we assume the investor does not buy or sell any shares of any firm in the portfolio $\mathcal{P}$ over the time period $t_{0}\rightarrow{T}$. The number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ is given by the fraction of the total wealth invested in each firm in the portfolio $\mathcal{P}$. Let's imagine a scenario where an investor has a total wealth of $W_{\text{total}}$ at time $t$, and the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ is given by $0\leq{\omega_{i}}\leq{1}$:
 \begin{equation*}
 \omega_{i}(t) = \frac{W_{i}(t)}{W_{\text{total}}}\qquad\text{for}\quad{i\in\mathcal{P}}
 \end{equation*}
-where $W_{i}(t)$ denotes the wealth of firm $i\in\mathcal{P}$ at time $t$.
-However, we know the total wealth at time $t$, is the liqidation value of the portfolio. The wealth of a portfolio $\mathcal{P}$ at time $t$ 
-is given by the sum of the product of number of shares of firm $i$ with the share price of each firm in the portfolio $\mathcal{P}$ at time $t$:
+where $W_{i}(t)$ denotes the wealth invested in firm $i\in\mathcal{P}$ at time $t$.
+However, we know the total wealth of portfolio $\mathcal{P}$, is just the liqidation value of the portfolio: 
 \begin{equation*}
 W(t) = \sum_{i\in\mathcal{P}}n_{i}(t)\cdot{S_{i}(t)}
 \end{equation*}
-where $n_{i}(t)$ denotes the number of shares of firm $i\in\mathcal{P}$ at time $t$.
-Thus, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
+where $n_{i}(t)$ denotes the number of shares of firm $i\in\mathcal{P}$ at time $t$, and $S_{i}(t)$ denotes the share price of firm $i\in\mathcal{P}$ at time $t$. We can rewrite the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ as:
 \begin{equation*}
+	n_{i}(t) = \frac{\omega_{i}(t)\cdot{W_{\text{total}}}}{S_{i}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+Further, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
+\begin{equation}\label{eqn:portfolio-weights-derivation}
 \omega_{i}(t) = \frac{n_{i}(t)\cdot{S_{i}(t)}}{\displaystyle\sum_{k\in\mathcal{P}}n_{k}(t)\cdot{S}_{k}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
-\end{equation*}
-The investor can choose the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ by some approach,
-which, when combined with the share price, gives the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$:
-\begin{equation*}
-n_{i}(t) = \frac{\omega_{i}(t)\cdot{W_{\text{total}}}}{S_{i}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
-\end{equation*}
+\end{equation}
+The fractions $\omega_{i}(t)$, i.e., the portfolio weights at time $t$, have a few interesting properties (Concept \ref{concept:properties-of-omega}).
 
-Suppose the investor randomly chooses the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ 
-at $t=0$, and holds that portfolio for some time period, e.g., a year. 
-The investor can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
-to simulate the share price of each firm in the portfolio $\mathcal{P}$ over a year, and then calculate 
-the wealth of the portfolio $\mathcal{P}$ at the end of the year, assuming the investor
-does not buy or sell any shares of any firm in the portfolio $\mathcal{P}$. Let's think the case where the investor chooses the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ 
-to maximize or minimize some objective function, e.g., maximize the expected return, minimize the variance, 
-or to maximize a specific risk-adjusted return measure, e.g., the Sharpe ratio.
+\begin{concept}[Properties of allocation $\omega$]\label{concept:properties-of-omega}
+The fraction of the total wealth invested in each firm $i\in\mathcal{P}$ at time $t$, in the absence of borrowing shares, sums to one for all time points $t$:
+\begin{equation*}
+\sum_{i\in\mathcal{P}}\omega_{i}(t) = 1\quad\forall{t\geq{t_{0}}}
+\end{equation*}
+Further, because the share price of each firm in the portfolio $\mathcal{P}$ is positive, the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ at time $t$ is non-negative $\omega_{i}(t)\geq{0}$ for all $t\geq{t_{0}}$. 
+Finally, $\omega_{i}$, even with constant shares, is a function of time as the share price of each firm in the portfolio $\mathcal{P}$ changes over time.
+\end{concept}
+
+The investor can choose the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ by some approach, e.g., by formulating the choice as an optimization problem, or by sampling from probability distribution such as a Dirchlet distribution $\omega_{i}\sim\text{Dirchlet}(\alpha_{1},\alpha_{2},\dots,\alpha_{\dim\mathcal{P}})$, where $\alpha_{i}$ denotes the concentration parameter for firm $i\in\mathcal{P}$, and then compute the NPV of the portfolio $\mathcal{P}$ at time $T$ by sampling the final share price of each firm in the portfolio $\mathcal{P}$.
+
+
+% The final share price of each firm in the portfolio $\mathcal{P}$ at time $T$ can be computed using the multi-dimensional GBM model.
+% Further, we could sample the fraction of the total investment budget $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ from a
+% Dirchlet distribution, which is a multivariate generalization of the beta distribution, and then compute the NPV of the portfolio $\mathcal{P}$ at time $T$. There is a slight disconect here we we need to know the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ to compute the NPV of the portfolio $\mathcal{P}$ at time $T$. Then we could calculate the NPV for each sample, and then compute the expected NPV of the portfolio $\mathcal{P}$ at time $T$ by averaging the NPV over all the samples. Alternatively, we could first fit a 
+% Suppose the investor randomly chooses the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ 
+% at $t=0$, and holds that portfolio for some time period, e.g., a year. 
+% The investor can use Algorithm \ref{algo-multi-asset-gbm-simulation} 
+% to simulate the share price of each firm in the portfolio $\mathcal{P}$ over a year, and then calculate 
+% the wealth of the portfolio $\mathcal{P}$ at the end of the year, assuming the investor
+% does not buy or sell any shares of any firm in the portfolio $\mathcal{P}$. Let's think the case where the investor chooses the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ 
+% to maximize or minimize some objective function, e.g., maximize the expected return, minimize the variance, 
+% or to maximize a specific risk-adjusted return measure, e.g., the Sharpe ratio.
 
 
 \section*{Summary}
