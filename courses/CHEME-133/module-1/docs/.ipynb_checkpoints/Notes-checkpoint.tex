@@ -1,0 +1,321 @@
+\documentclass[11pt]{article}
+
+% load some asm stuff -
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{palatino,lettrine}
+\usepackage{fancyhdr}
+\usepackage{epsfig}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage{simplemargins}
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+%\usepackage{boiboites}
+\usepackage[margin=0pt,font=small,labelfont=bf]{caption}
+\newcommand{\boldindex}[1]{\textbf{\hyperpage{#1}}}
+\usepackage{makeidx}\makeindex
+\bibliographystyle{plos2015}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+
+% Set the size
+%\textwidth = 6.75 in
+%\textheight = 9.75 in
+%\oddsidemargin = 0.0 in
+%\evensidemargin = 0.0 in
+%\topmargin = 0.01 in
+%\headheight = 0.0 in
+%\headsep = 0.25 in
+%\parskip = 0.15in
+% \doublespace
+\setallmargins{1in}
+
+\newtheorem{example}{Example}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{property}{Property}[section]
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+
+\makeatletter
+% \renewcommand\subsection{\@startsection
+% 	{subsection}{2}{0mm}
+% 	{-0.05in}
+% 	{0.05\baselineskip}
+% 	{\normalfont\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection
+	{subsubsection}{2}{0mm}
+	{-0.05in}
+	{-0.5\baselineskip}
+	{\normalfont\normalsize\itshape\bfseries}}
+\renewcommand\paragraph{\@startsection
+	{paragraph}{2}{0mm}
+	{-0.05in}
+	{-0.5\baselineskip}
+	{\normalfont\normalsize\itshape}}
+\makeatother
+\linespread{1.1}
+
+\fancypagestyle{proposal}{\fancyhf{}%
+	\fancyhead[RO,LE]{\thepage}%
+	\fancyhead[LO,RE]{CHEME 132 Module 3 Multiple Asset Geometric Brownian Motion}%
+	\renewcommand\headrulewidth{1pt}}
+\pagestyle{proposal}
+
+\usepackage{mdframed}
+\definecolor{lgray}{rgb}{0.92,0.92,0.92}
+\definecolor{antiquewhite}{rgb}{0.98,0.92,0.84}
+\definecolor{lightskyblue}{rgb}{0.93,0.95,0.99}
+
+% defn environment
+\mdfdefinestyle{theoremstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lgray, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=theoremstyle]{definition}{Definition}
+
+% concept environment
+\mdfdefinestyle{conceptstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lightskyblue, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=conceptstyle]{concept}{Concept}
+\newcommand{\newterm}[1]{{\it #1}}
+
+% Single space'd bib -
+\setlength\bibsep{0pt}
+
+\renewcommand{\rmdefault}{phv}\renewcommand{\sfdefault}{phv}
+%\newboxedtheorem[boxcolor=black, background=gray!5,titlebackground=orange!20,titleboxcolor = black]{color_box_example}{Example}{test}
+
+% Change the number format in the ref list -
+\renewcommand{\bibnumfmt}[1]{#1.}
+
+% Change Figure to Fig.
+\renewcommand{\figurename}{Fig.}
+\usepackage{enumitem}
+\setlist{noitemsep} % or \setlist{noitemsep} to leave space around whole list
+
+%Joycelyn Chan, Joshua Lequieu, Michael Paull, Chidanand Balaji, Ryan Tasseff
+%Our derivation follows closely the earlier development of Fredrickson \citep{Fredrickson:1976fk}.
+
+% Begin ...
+\begin{document}
+
+%\begin{titlepage}
+{\par\centering\textbf{\Large CHEME 132 Module 3: Multiple Asset Geometric Brownian Motion}}
+\vspace{0.2in}
+{\par \centering \large{Jeffrey D. Varner}}
+\vspace{0.05in}
+{\par \centering \large{Smith School of Chemical and Biomolecular Engineering}}
+{\par \centering \large{Cornell University, Ithaca NY 14853}}
+% \vspace{0.1in}
+% {\par \centering \small{Copyright \copyright\ Jeffrey Varner 2018. All Rights Reserved.}}\\
+
+%\end{titlepage}
+\date{}
+\thispagestyle{empty}
+
+\setcounter{page}{1}
+
+\section*{Introduction}
+\href{https://en.wikipedia.org/wiki/Geometric_Brownian_motion}{Geometric Brownian motion (GBM)} is a continuous-time stochastic model in which the random variable $S(t)$, 
+e.g., the share price of a firm is described by a stochastic differential equation.
+Geometric Brownian motion was popularized as a financial model by Samuelson in the 1950s and 1960s \cite{Merton2006}, 
+but is arguably most commonly associated with the Black–Scholes options pricing model, which we will describe later 
+\cite{BlackScholes1973}. Previously, we considered the single asset GBM model, 
+where a firm's share price was modeled as a deterministic drift term corrupted by a Wiener noise process. 
+We showed that a firm's share price follows a log-normal distribution and derived the analytical solution for a firm's share price at a future point in time.
+However, in practice, investors often hold portfolios of assets, and a firm's share price is correlated with other firms' share price.
+Thus, let's consider the GBM for multiple simultaneous assets, where the share price of a firm is modeled as a deterministic drift term 
+that is corrupted by a Wiener noise process (same as before), but now we consider how the noise is correlated with other firms in a portfolio.
+
+Consider an asset portfolio $\mathcal{P}$, e.g., a collection of equities with a logarithmic return covariance matrix $\Sigma$ and drift vector $\mu$.
+The multi-dimensional geometric Brownian motion model describing the share price $S_{i}(t)$ for asset $i\in\mathcal{P}$ at time $t$ is given by: 
+\begin{equation*}
+\frac{dS_{i}\left(t\right)}{S_{i}(t)} = \mu_{i}\,{dt}+\sum_{j=1}^{\mathcal{P}}a_{ij}\cdot{dW_{j}(t)}\qquad\text{for}\quad{i=1,2,\dots,\mathcal{P}}
+\end{equation*}
+where $a_{ij}\in\mathbf{A}$ and $\mathbf{A}\mathbf{A}^{\top} = \Sigma$ are noise coefficients describing the connection between firms $i$ and firms $j$ in the portfolio $\mathcal{P}$,
+and $\mu_{i}$ denotes the drift parameter for asset $i$ in the portfolio $\mathcal{P}$.
+The multi-dimensional GBM model has the analytical solution:
+\begin{equation*}
+S_{i}(t_{k}) = S_{i}(t_{k-1})\cdot\exp\Biggl[\left(\mu_{i}-\frac{\sigma_{i}^{2}}{2}\right)\Delta{t} + \sqrt{\Delta{t}}\cdot\sum_{j\in\mathcal{P}}a_{ij}\cdot{Z_{j}(0,1)}\Biggr]\quad{i\in\mathcal{P}}
+\end{equation*}
+where $S_{i}(t_{k-1})$ is the share price for firm $i\in\mathcal{P}$ at time $t_{k-1}$,  the term $\Delta{t} = t_{k} - t_{k-1}$ denotes the time difference (step-size) 
+for each time step (fixed), and $Z_{j}(0,1)$ is a standard normal random variable for firm $j\in\mathcal{P}$.
+For more information on the derivation of the multi-dimensional GBM model, see Glasserman \cite{Glasserman:2004ua}.
+
+\section*{Drift and Covariance Estimation}
+The drift vector $\mu$ and covariance matrix $\Sigma$ are critical parameters in the multi-dimensional GBM model.
+We can estimate the drift vector $\mu$, which will be a $\dim\mathcal{P}\times{1}$ vector, from historical data by computing the logarithmic excess growth rate of the assets in the portfolio $\mathcal{P}$, 
+as we have shown previously; we repeat the process for each asset in the portfolio $\mathcal{P}$.
+On the other hand, the covariance matrix, a $\dim\mathcal{P}\times\dim\mathcal{P}$ symmetric matrix, describes the relationship between the logarithmic return series of firms $i$ and $j$.
+The $(i,j)$ element of the covariance matrix $\sigma_{ij}\in\Sigma$ is given by:
+\begin{equation*}
+    \sigma_{ij} = \text{cov}\left(r_{i},r_{j}\right) = \sigma_{i}\sigma_{j}\rho_{ij}\qquad\text{for}\quad{i,j \in \mathcal{P}}
+\end{equation*}
+where $\sigma_{\star}$ denote the standard deviation of the logarithmic return of asset $\star$, i.e., the volatility parameter, and $\rho_{ij}$ 
+denotes the correlation between the returns of asset $i$ and $j$ in the portfolio $\mathcal{P}$. 
+
+The noise coefficients $a_{ij}$ modify the noise terms in the multi-dimensional GBM model, 
+and describe the connection between firms $i$ and firms $j$ in the portfolio $\mathcal{P}$. 
+The noise coefficients are given by the Cholesky decomposition of the covariance matrix $\Sigma$:
+\begin{equation*}
+\Sigma = \mathbf{A}\mathbf{A}^{\top}
+\end{equation*}
+where $\mathbf{A}$ is a lower triangular matrix, and $\mathbf{A}^{\top}$ denotes the complex conjugate transpose of $\mathbf{A}$. The diagonal elements of the Cholesky factor $\mathbf{A}$ are the standard deviations of the logarithmic return series of the assets in the portfolio $\mathcal{P}$, i.e., the volatility of firm $i$. On the other hand, the off-diagonal elements of the Cholesky factor $\mathbf{A}$ are the correlation coefficients between the logarithmic return series of the assets in the portfolio $\mathcal{P}$. The Cholesky decomposition of the covariance matrix $\Sigma$ is unique and can be computed using the Cholesky decomposition algorithms provided by many common numerical linear algebra libraries.
+
+
+\section*{Multiasset Portfolio Simulations}
+We simulate the multi-dimensional GBM model using the analytical solution for the share price of each firm in the portfolio $\mathcal{P}$, given the initial share price $\mathbf{S}(t_{0})$ vector, the drift vector $\mu$, the covariance matrix $\Sigma$, along with user-defined time points $t_{0},t_{1},\dots,t_{N}$, and the number of samples to simulate $N_{\text{samples}}$. 
+
+\begin{definition}[Distribution of Share Price]\label{defn-log-normal-distribution-price}
+The share price of each firm in the portfolio $\mathcal{P}$ at time $t$ follows a log-normal distribution:
+\begin{equation*}
+S(t)\sim\text{LogNormal}\left(\mu_{t},\Sigma_{t}\right)
+\end{equation*}
+where $\mu_{t}$ denotes the mean log-transformed share price vector, and $\Sigma_{t}$ denotes the covariance matrix of the log-transformed share prices at time $t$. A log-normal distribution is a right-skewed distribution. It is often used to model the share price because of its positive support and its ability to model the exponential growth of the share price.
+\end{definition}
+We simulate the multi-dimensional GBM model using Algorithm \ref{algo-multi-asset-gbm-simulation}, and then fit a distribution to the simulated share price of each firm in the portfolio $\mathcal{P}$ (Defn. \ref{defn-log-normal-distribution-price}).
+
+
+\begin{algorithm}[h!]
+    \caption{Multiasset Geometric Brownian Motion}\label{algo-multi-asset-gbm-simulation}
+    \begin{algorithmic}[1]
+		\Statex
+		\Require The initial share price vector $\mathbf{S}(t_{0}) = \left\{S_{i}(t_{0})\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
+		\Require The drift vector $\mu = \left\{\mu_{i}\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
+		\Require The covariance matrix $\Sigma$ for the portfolio $\mathcal{P}$.
+		\Require The time step $\Delta{t}$ (units: years), the initial time $t_{\circ}$, the final time $t_{f}$, and the number of samples $N_{s}$.
+		\Require A Cholesky decomposition function $\texttt{cholesky}(\Sigma)$ that returns the Cholesky factor $\mathbf{A}$.
+
+		\Statex
+		\Procedure{Multiasset Geometric Brownian Motion}{}
+		\Statex
+		\State{$N_{a} \gets \text{length}(\mu)$}\Comment{Number of assets in the portfolio $\mathcal{P}$}
+		\State{$N_{t} \gets (t_{f} - t_{\circ})/\Delta{t}$}\Comment{Number of time steps}
+		\State{$T \gets \texttt{arange}(t_{\circ},t_{f},\Delta{t})$}\Comment{Time points}
+		\State{$X \gets \texttt{zeros}(N_{s},N_{t}, N_{a}+1)$}\Comment{Pre-allocate the share price array}
+		\State{$\mathcal{Z} \gets \mathcal{N}(0,1)$}\Comment{Instantiate a standard normal distribution}
+		\State{$\mathbf{A} \gets \texttt{cholesky}(\Sigma)$}\Comment{Cholesky decomposition of the covariance matrix $\Sigma$}
+		
+		
+		\Statex
+		\For{$i\in{1}~\text{to}~{N_{s}}}$\Comment{Loop over the number of samples}
+			
+			\For{$j\in\texttt{eachindex}(T)$}\Comment{Loop over the time points}
+				\State{$X_{i,j,1} \gets T_{j}$}\Comment{Set the time points in first column}
+			\EndFor
+			\Statex
+			\For{$j\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+				\State{$X_{i,1,j+1} \gets S_{\circ,j}$}\Comment{Set the initial share price for asset $j$}
+			\EndFor
+			\Statex
+
+			\For{$j\in{2}~\text{to}~N_{t}$}\Comment{Loop over the number of time steps}
+				\For{$k\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+				\Statex
+				\State{$\text{noise} \gets 0.0$}
+				\For{$l\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+					\State{$\text{noise} \gets \text{noise} + \mathbf{A}_{k,l}\cdot\texttt{rand}(\mathcal{Z})$}\Comment{Compute the noise term for asset $k$}
+				\EndFor
+				\Statex
+				\State{$X_{i,j,k+1} \gets X_{i,j-1,k+1}\cdot\exp\Biggl[\left(\mu_{k}-a_{kk}^2/{2}\right)\cdot\Delta{t} + \sqrt{\Delta{t}}\cdot\text{noise}\Biggr]$}
+				\EndFor
+			\EndFor
+		\EndFor
+
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection*{Computing the Net Present Value (NPV) of the portfolio $\mathcal{P}$}
+To compute the Net Present Value (NPV) of a portfolio $\mathcal{P}$, we can use Algorithm \ref{algo-multi-asset-gbm-simulation} to simulate the share price of each firm in $\mathcal{P}$ over a time-horizon, e.g., from now to until next year.
+Given the share price of each firm over that horizon, we can compute what combinations of shares of each firm in the portfolio $\mathcal{P}$ are the best in some way. For example, we can compute which share combinations lead to the largest projected NPV of the portfolio $\mathcal{P}$ at time $t$ by computing the 
+two cash flow events that occur, first the purchase of the shares of each firm in the portfolio $\mathcal{P}$ at time $t_{0}$, and then the liquidation of the portfolio $\mathcal{P}$ at time $T$, where the future share price value is discounted back to the present value using an appropriate discount rate, such as the average risk-free rate over the period $\bar{r}_{f}$:
+\begin{equation}\label{eqn:npv-mv-gbm}
+\text{NPV}(T,\bar{r}_{f}) = \sum_{i\in\mathcal{P}}n_{i}\cdot\left(\mathcal{D}_{T,0}^{-1}(\bar{r}_{f})\cdot{S_{i}(T)}-S_{i}(0)\right)
+\end{equation}
+where $n_{i}$ denotes the number of shares of firm $i\in\mathcal{P}$, $S_{i}(T)$ denotes the share price of firm $i\in\mathcal{P}$ at time $T$, $S_{i}(0)$ denotes the share price of firm $i\in\mathcal{P}$ at time $0$, and $\mathcal{D}_{T,0}(\bar{r}_{f})$ denotes the multiperiod discount factor between time $0\rightarrow{T}$ with the discount rate equal to the risk-free rate $\bar{r}_{f}$.
+
+To calculate the net present value at $t=T$, we need the share price of each firm in the portfolio $\mathcal{P}$ at time $T$ and the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t_{0}$, 
+where we assume the investor does not buy or sell any shares of any firm in the portfolio $\mathcal{P}$ over the period $t_{0}\rightarrow{T}$. The number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ is given by the fraction of the total wealth invested in each firm in the portfolio $\mathcal{P}$. Let's imagine a scenario where an investor has a total wealth of $W_{\text{total}}$ at time $t$, and the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ is given by $0\leq{\omega_{i}}\leq{1}$:
+\begin{equation*}
+\omega_{i}(t) = \frac{W_{i}(t)}{W_{\text{total}}}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+where $W_{i}(t)$ denotes the wealth invested in firm $i\in\mathcal{P}$ at time $t$.
+However, we know the total wealth of portfolio $\mathcal{P}$, is just the liqidation value of the portfolio: 
+\begin{equation*}
+W(t) = \sum_{i\in\mathcal{P}}n_{i}(t)\cdot{S_{i}(t)}
+\end{equation*}
+where $n_{i}(t)$ denotes the number of shares of firm $i\in\mathcal{P}$ at time $t$, and $S_{i}(t)$ denotes the share price of firm $i\in\mathcal{P}$ at time $t$. We can rewrite the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ as:
+\begin{equation*}
+	n_{i}(t) = \frac{\omega_{i}(t)\cdot{W_{\text{total}}}}{S_{i}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation*}
+Further, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
+\begin{equation}\label{eqn:portfolio-weights-derivation}
+\omega_{i}(t) = \frac{n_{i}(t)\cdot{S_{i}(t)}}{\displaystyle\sum_{k\in\mathcal{P}}n_{k}(t)\cdot{S}_{k}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
+\end{equation}
+The fractions $\omega_{i}(t)$, i.e., the portfolio weights at time $t$, have a few interesting properties (Concept \ref{concept:properties-of-omega}).
+
+\begin{concept}[Properties of allocation $\omega$]\label{concept:properties-of-omega}
+The fraction of the total wealth invested in each firm $i\in\mathcal{P}$ at time $t$, in the absence of borrowing shares, sums to one for all time points $t$:
+\begin{equation*}
+\sum_{i\in\mathcal{P}}\omega_{i}(t) = 1\quad\forall{t\geq{t_{0}}}
+\end{equation*}
+Further, because the share price of each firm in the portfolio $\mathcal{P}$ is positive, the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ at time $t$ is non-negative $\omega_{i}(t)\geq{0}$ for all $t\geq{t_{0}}$. 
+Finally, $\omega_{i}$, even with constant shares, is a function of time as the share price of each firm in the portfolio $\mathcal{P}$ changes over time.
+\end{concept}
+The investor can choose the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ by some approach, e.g., by formulating the choice as an optimization problem or by sampling from a probability distribution such as a Dirchlet distribution $\omega_{i}\sim\text{Dirchlet}(\alpha_{1},\alpha_{2},\dots,\alpha_{\dim\mathcal{P}})$, where $\alpha_{i}$ denotes the concentration parameter for firm $i\in\mathcal{P}$. Then, when combined with the multi-dimensional GBM model, the investor can simulate the share price of each firm in the portfolio $\mathcal{P}$ over a time period and compute the NPV of the portfolio. This process can be repeated many times, and the expected NPV of the portfolio $\mathcal{P}$ at time $T$ can be computed by averaging the NPV over all the samples (Algorithm \ref{algo-npv-monte-carlo-portfolios}).
+
+\begin{algorithm}[h]
+	\caption{Monte-Carlo Portfolio Net Present Value}\label{algo-npv-monte-carlo-portfolios}
+	\begin{algorithmic}[1]
+		\Require The initial share price vector $\mathbf{S}(t_{0}) = \left\{S_{i}(t_{0})\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
+		\Require Share price distribution $S(T)\sim\text{LogNormal}(\mu_{T},\Sigma_{T})$ 
+		\Require An allocation distribution function $\omega\sim\text{Dir}(\alpha_{1},\alpha_{2},\dots,\alpha_{\dim\mathcal{P}})$, where we assume equal concentration parameters $\alpha_{i}=1/\dim\mathcal{P}$ firm $i\in\mathcal{P}$.
+		\Require The average risk-free rate $\bar{r}_{f}$, the number of samples $N_{s}$ and the total wealth $W_{\text{total}}$.
+		\Statex
+		\Procedure{Portfolio Simulation}{}
+		\Statex
+		\State{$\text{NPV} \gets \texttt{zeros}(N_{s}, \dim\mathcal{P}+1)$}\Comment{Pre-allocate the NPV array}
+		\For{$i\in{1}~\text{to}~N_{s}$}\Comment{Loop over the number of samples}
+			\State{$\mathbf{S} \gets S(T)$}\Comment{Sample the share price of each firm in the portfolio $\mathcal{P}$ at time $T$}
+			\State{$\omega \gets \text{Dir}(\alpha)$}\Comment{Sample allocation $\omega$ at $t=t_{0}$}
+			\Statex
+			\State{$n\gets \texttt{zeros}(\dim\mathcal{P})$}\Comment{Pre-allocate the number of shares array}
+			\For{$j\in{1}~\text{to}~\dim\mathcal{P}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+				\State{$n_{j}\gets \omega_{j}\cdot{W}_{\text{total}}\cdot\left(S_{j}(t_{0})^{-1}\right)$}\Comment{Compute the number of shares of firm $j$ at time $t = t_{0}$}
+			\EndFor
+			\Statex
+			\State{$\text{NPV}_{i,1} \gets \sum_{k\in\mathcal{P}}n_{k}\cdot\left(\mathcal{D}_{T,0}^{-1}(\bar{r}_{f})\cdot{S_{k}(T)}-S_{k}(0)\right)$}\Comment{NPV of $\mathcal{P}$ at $T$, store column 1}
+
+			\For{$j\in{1}~\text{to}~\dim\mathcal{P}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
+				\State{$\text{NPV}_{i,j+1} \gets \omega_{j}$}\Comment{Store the portfolio weights in columns $2,\dots,\dim\mathcal{P}+1$}
+			\EndFor
+
+		\EndFor
+		\Statex
+		\EndProcedure
+
+	\end{algorithmic}
+\end{algorithm}
+
+\section*{Summary}
+In this module, we have considered the multi-dimensional GBM model, 
+which describes the share price of firms in a portfolio $\mathcal{P}$.
+We demonstrated how to estimate the drift vector $\mu$, the covariance matrix $\Sigma$, and the noise coefficients $a_{ij}$, and provided an algorithm to simulate the multi-dimensional GBM model. Finally, we introduced the concept of the Net Present Value (NPV) of a portfolio $\mathcal{P}$. We presented an algorithm to compute the NPV of a portfolio $\mathcal{P}$ at time $T$, 
+where we sampled the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ from a Dirichlet distribution and the share price at $t=T$ from a LogNormal distribution. Later, we'll develop tools to compute optimal values of these fractions, i.e., the portfolio weights, but for now, we considered the case where the portfolio weights are chosen by the investor by some approach (perhaps even randomly).
+
+\bibliography{References_v1}
+
+\clearpage
+\printindex
+
+\end{document}
