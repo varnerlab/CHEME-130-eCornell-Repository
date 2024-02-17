@@ -142,8 +142,7 @@ typically at a lower cost than the corresponding block of shares. Options contra
 the \href{https://www.cboe.com}{The Chicago Board Options Exchange} is the largest options exchange in the United States, 
 responsible for approximately 33\% of the daily options trading volume in the United States (approximately 32 million contracts are traded each day in the United States in 2023). 
 Worldwide, in 2023, there were \href{https://www.fia.org/fia/articles/global-futures-and-options-volume-hits-record-137-billion-contracts-2023}{approximately 137 billion derivatives contracts traded annually}.
-
-Options are attractive because they offer \href{https://www.merrilledge.com/investment-products/options/options-trading-leverage-risk}{leverage}, 
+Options are also attractive because they offer \href{https://www.merrilledge.com/investment-products/options/options-trading-leverage-risk}{leverage}, 
 i.e., an option contract can control a unit of asset, e.g., 100 shares of a stock, 
 at a cost that is typically less than the market value of that asset. 
 This allows option buyers to pay a relatively small premium for market exposure in relation to the value of the underlying asset. 
@@ -155,10 +154,17 @@ leverage magnifies the investment's percentage loss.
 In this module we'll begin our study of derivatives, and options in particular, by focusing on European style options contracts.
 For European style contracts, the holder can only excerise their right on the expiration date.
 However, for American style contracts which we'll consider later, the holder can exercise their right at any time before the expiration date.
-We'll study the two types of options contracts: \texttt{call} contracts and \texttt{put} contracts. 
+We'll study the two types of options contracts: \texttt{call} contracts and \texttt{put} contracts (Fig. \ref{fig:options-schematic}).
 
 % The holder of the option pays a premium for the right to buy or sell the underlying asset. 
 % The premium is the price of the option.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{./figs/Fig-Options-Table-Schematic.pdf}
+    \caption{Schematic of U.S. Government Debt Securities. You lend money to the United States Treasury by purchasing a treasury security.
+	The Treasury pays you back in different fix ways, dependent upon the security.}\label{fig:options-schematic}
+\end{figure}
 
 \subsection*{Call and Put Contracts}
 A \texttt{call} contract gives the holder (buyer) the right, but not the obligation, to sell a specified asset, 
@@ -281,15 +287,18 @@ d_{-} & = & d_{+} - \sigma\sqrt{T}
 
 
 \subsection*{Monte Carlo Simulation}
-The premium $\mathcal{P}_{\star}(K,S(0))$ the buyer must pay for a European \texttt{call} or \texttt{put} contract, when early excersise is not allowed, is given by the equality 
-cases in Defn \ref{defn:BSM-call-closed-form} and Defn \ref{defn:BSM-put-closed-form}, respectively:
+The premium $\mathcal{P}_{\star}(K,S(0))$ the buyer is willing to pay for a European \texttt{call} or \texttt{put} contract today, when early excersise is not allowed, 
+and the contract expires at some time $T$ in the future is given by the equality:
 \begin{equation}\label{eqn:BSM-premium-equality-mc}
-\mathcal{P}_{p}(K,S(0)) = \mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{p}}(K,S(T))\Bigr)
+\mathcal{P}_{\star}(K,S(0)) = \mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{\star}}(K,S(T))\Bigr)
 \end{equation}
-where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration.
-Equation \ref{eqn:BSM-premium-equality-mc} states that the premium an investor is willing to pay for a contract 
-is the expected value of the discounted future payoff from the contract. This is true for both \texttt{call} and \texttt{put} contracts.
-Thus, we can compute the premium of a European \texttt{call} or \texttt{put} contract by simulating the future share price `T` days in the future (at contract expiration)
+where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration using the discount rate $\bar{r}$,
+$V_{\star}(K,S(T))$ is the payoff of the contract $\star$ at expiration, $S(T)$ is the share price at expiration, $K$ is the strike price of the contract, 
+and $S(0)$ is the share price at time $t=0$ (now). Equation \ref{eqn:BSM-premium-equality-mc} states that the premium an investor is willing to pay for a contract 
+is the expected value of the discounted future payoff from the contract. This is true for both \texttt{call} and \texttt{put} contracts. But why is this true?
+
+The expectation in equation \ref{eqn:BSM-premium-equality-mc} can be computed using Monte Carlo simulation.
+We can compute the premium of a European \texttt{call} or \texttt{put} contract by simulating the future share price `T` days in the future (at contract expiration)
 using a geometric Brownian motion model for the future share price, and then directly computing the expected value of the discounted future payoff from the contract 
 using the simulated samples paths.
 
