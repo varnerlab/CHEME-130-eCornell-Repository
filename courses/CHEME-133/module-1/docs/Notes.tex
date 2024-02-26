@@ -128,31 +128,31 @@
 Derivatives are one of the three primary financial instrument categories: derivatives, equity (i.e., shares of stock), and debt (i.e., bonds and mortgages). 
 Derivatives provide payoffs that depend on the value of other assets, such as commodities, bonds, stocks, or market indexes. 
 Thus, the value of a derivative is based mainly on the price movements of an underlying asset, e.g., stocks, commodities, currencies, etc. 
-In this course, we will focus exclusively on options, a type of derivative product that uses stock as its underlying asset. 
+This course will focus exclusively on options, a derivative product that uses stock as its underlying asset. 
 Like bonds, options are contractural agreements between buyers and sellers to conduct a particular transaction at some later date. 
 Options, derivatives that use equity, i.e., shares of a stock or an exchange-traded fund, as their underlying asset, 
 are structured agreements between a buyer and a seller that give the option buyer the right, but not the obligation, 
 to execute the transaction described in the contract, i.e., to buy (or sell) an underlying asset in some predetermined way in a specified time frame. 
-The predetermined price is known as the strike price, and the specified time period is known as the lifetimne of the contract, where the lifetine ends on the expiration date. 
+The predetermined price is the strike price, and the specified period is the contract's lifetime, where the lifetime ends on the expiration date. 
 
-Investors can use options and other types of derivatives to \href{https://www.investopedia.com/terms/h/hedge.asp}{hedge} against future asset price movements or for speculation. 
+Investors can use options and other derivatives to \href{https://www.investopedia.com/terms/h/hedge.asp}{hedge} against future asset price movements or for speculation. 
 For example, a trader can buy an option contract instead of shares of an underlying stock to generate profits from the underlying stock's price movements, 
 typically at a lower cost than the corresponding block of shares. Options contracts are traded on exchanges throughout the world; 
 the \href{https://www.cboe.com}{The Chicago Board Options Exchange} is the largest options exchange in the United States, 
-responsible for approximately 33\% of the daily options trading volume in the United States (approximately 32 million contracts are traded each day in the United States in 2023). 
+responsible for approximately 33\% of the daily options trading volume in the United States (about 32 million contracts are traded each day in the United States in 2023). 
 Worldwide, in 2023, there were \href{https://www.fia.org/fia/articles/global-futures-and-options-volume-hits-record-137-billion-contracts-2023}{approximately 137 billion derivatives contracts traded annually}.
 Options are also attractive because they offer \href{https://www.merrilledge.com/investment-products/options/options-trading-leverage-risk}{leverage}, 
 i.e., an option contract can control a unit of asset, e.g., 100 shares of a stock, 
 at a cost that is typically less than the market value of that asset. 
 This allows option buyers to pay a relatively small premium for market exposure in relation to the value of the underlying asset. 
-An option buyer can see significant gains from comparatively small percentage moves in the price of the underlying asset. 
+An option buyer can see significant gains from comparatively small percentage moves in the underlying asset's price. 
 However, leverage also has a considerable downside. 
 For example, if the underlying asset price does not rise or fall as anticipated during the lifetime of the option contract, 
 leverage magnifies the investment's percentage loss.
 
-In this module we'll begin our study of derivatives, and options in particular, by focusing on European style options contracts.
-For European style contracts, the holder can only excerise their right on the expiration date.
-However, for American style contracts which we'll consider later, the holder can exercise their right at any time before the expiration date.
+In this module, we'll begin our study of derivatives, and options in particular, by focusing on European-style options contracts.
+For European-style contracts, holders can only exercise their right on the expiration date.
+However, for American-style contracts, which we'll consider later, the holder can exercise their right on or before the expiration date.
 We'll study the two types of options contracts: \texttt{call} contracts and \texttt{put} contracts (Fig. \ref{fig:options-schematic}).
 
 % The holder of the option pays a premium for the right to buy or sell the underlying asset. 
@@ -161,20 +161,20 @@ We'll study the two types of options contracts: \texttt{call} contracts and \tex
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{./figs/Fig-Options-Table-Schematic.pdf}
-    \caption{Schematic of U.S. Government Debt Securities. You lend money to the United States Treasury by purchasing a treasury security.
-	The Treasury pays you back in different fix ways, dependent upon the security.}\label{fig:options-schematic}
+    \caption{Schematic of call and put options contracts. The buyer pays a premium to the seller for the right, but 
+	not the obligation, to transact in the future, where the parameters of the transaction are describribed the contract.}\label{fig:options-schematic}
 \end{figure}
 
 \subsection*{Call and Put Contracts}
 A \texttt{call} contract gives the holder (buyer) the right, but not the obligation, to sell a specified asset, 
 such as stocks, commodities, or currencies, to their counterparty (contract seller). 
 Let's consider stock as the underlying asset. A single standard options contract controls 100 shares of stock. 
-From the buyer's perspective, call contracts allow an investor to benefit from upside price movement of a stock without purchasing the stock.
-Further, call options (again from the buyer's perspective) have limited downside risk, i.e., the maximum amount that the holder of the call option can lose 
+From the buyer's perspective, call contracts allow an investor to benefit from the upside price movement of a stock without purchasing the stock.
+Further, call options (again from the buyer's perspective) have limited downside risk, i.e., the maximum amount the holder of the call option can lose 
 is the premium paid for the option. Finally, call options are a mechanism to purchase shares of stock at the strike price of $K$ instead of the market price of $S$. 
-On other hand, from the seller's perspective, the main objective of selling a call contract is to collect the premium $\mathcal{P}$. 
+On the other hand, from the seller's perspective, the main objective of selling a call contract is to collect the premium $\mathcal{P}$. 
 Call contracts also allow the seller to benefit from downward price movement without purchasing shares of stock (in the case of a naked call).
-However, for a seller, call options have unlimted upside risk; 
+However, for a seller, call options have unlimited upside risk; 
 Thus, call options are often only sold by investors who already own the required number of shares of stock 
 (known as a \href{https://www.investopedia.com/terms/c/coveredcall.asp}{covered call position}. 
 Finally, call options offer the seller the opportunity to sell shares of stock at the strike price of $K$ instead of the market price of $S$.
@@ -182,12 +182,12 @@ Finally, call options offer the seller the opportunity to sell shares of stock a
 A \texttt{put} contract gives the holder (buyer) the right, but not the obligation, to sell a specified asset, 
 such as stocks, commodities, or currencies, at a specified price to their counterparty (contract seller). 
 Let's consider stock as the underlying asset. A single standard put contract controls 100 shares of stock.
-From the buyer's perspective, put contracts allow an investor to benefit from downward price movement of stock without purchasing the stock. 
-Further, put options (again from the buyer's perspective) have limited downside risk, i.e., the maximum amount that the holder of the put option can lose is the premium paid for the option. 
+From the buyer's perspective, put contracts allow an investor to benefit from the downward price movement of a stock without purchasing the stock. 
+Further, put options (again from the buyer's perspective) have limited downside risk, i.e., the maximum amount that the put option holder can lose is the premium paid for the option. 
 Finally, put contracts are a mechanism to sell shares of stock at the strike price of $K$ instead of the market price of $S$. 
 From the seller's perspective, the motivation for selling a put contract is to collect the premium $\mathcal{P}$. 
 Put contracts also allow the seller to benefit from the price movement to the upside without purchasing shares.
-However, for a seller, put options have unlimted downside risk; 
+However, for a seller, put options have unlimited downside risk; 
 thus, put options are often only sold by investors who have set aside the required capital to purchase the required number of shares of stock 
 (known as a \href{https://www.fidelity.com/learning-center/investment-products/options/know-about-cash-covered-puts}{cash-secured put position}).
 Finally, put options offer the seller the opportunity to buy shares of a firm at the strike price of $K-\mathcal{P}$ instead of the market price of $S$.
@@ -203,7 +203,7 @@ Finally, put options offer the seller the opportunity to buy shares of a firm at
 \end{concept}
 
 \section*{Payoff and Profit Diagrams for Long Contracts}
-Unlike equity, e.g., share of a stock or ETF, which have a linear payoff profile, both long and short options contracts have a nonlinear payoffs profile depending on the price of the underlying asset at expiration, 
+Unlike equity, e.g., shares of a stock or ETF, which have a linear payoff profile, both long and short options contracts have a nonlinear payoff profile depending on the price of the underlying asset at expiration, 
 the strike price of the contract, the premium paid for the contract, and the type of contract (call or put).
 For now, let's focus on long contracts, i.e., the buyer of the contract.
 
@@ -219,21 +219,21 @@ Thus, the buyer's profit per share at expiration is the contract payoff minus th
 P_{c}(K,S(T)) = V_{c}(K,S(T)) -  \mathcal{P}_{c}(K,S(0))
 \end{equation}
 where $P_{c}(K,S(T)) = 0$ denotes the breakeven point for the buyer. 
-Substiuting the payoff and profit expressions into the breakeven equation, 
+Substituting the payoff and profit expressions into the breakeven equation, 
 gives the breakeven share price $\mathcal{B}_{c}$ at expiration for the buyer 
 of the \texttt{call} contract:
 \begin{equation}
 \mathcal{B}_{c} = K + \mathcal{P}_{c}(K,S(0))
 \end{equation}
 Thus, the share price at expiration must exceed the sum of the strike price and the premium for the buyer to make a profit.
-An example payoff, profit and breakeven diagram for a \texttt{call} contract from the buyer's perspective 
+An example payoff, profit, and breakeven diagram for a \texttt{call} contract from the buyer's perspective 
 is shown in Fig. \ref{fig:call-payoff-profit-breakeven-diagram}.  
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.65\textwidth]{./figs/Fig-Example-Call-K80-62DTE.pdf}
     \caption{Schematic of the payoff, profit and breakeven for a \texttt{long call} 
 	contract. The gray dashed line denotes the payoff at expiration for the buyer.
-	The red-line denotes share prices at expiration that result in a loss for the buyer, 
+	The red line denotes share prices at expiration that result in a loss for the buyer, 
 	while the green line denotes share prices at expiration that result in a profit for the buyer.
 	Parameters: the \texttt{call} 
 	contract strike price is $K$ = 80 USD/share and the premium $\mathcal{P}_{c}$ = 5.25 USD/share.}\label{fig:call-payoff-profit-breakeven-diagram}
@@ -258,7 +258,7 @@ The buyer's profit per share at expiration is the payoff minus the contract prem
 P_{p}(K,S(T)) = V_{p}(K,S(T)) -  \mathcal{P}_{p}(K,S(0))
 \end{equation}
 where $P_{p}(K,S(T)) = 0$ denotes the breakeven point for the buyer. 
-Substiuting the payoff and profit expressions into the breakeven equation, gives the breakeven share price $\mathcal{B}_{p}$ at expiration for the buyer 
+Substituting the payoff and profit expressions into the breakeven equation gives the breakeven share price $\mathcal{B}_{p}$ at expiration for the buyer 
 of the \texttt{put} contract:
 \begin{equation}
 \mathcal{B}_{p} = K - \mathcal{P}_{p}(K,S(0))
@@ -271,7 +271,7 @@ contract to make a profit.
     \includegraphics[width=0.65\textwidth]{./figs/Fig-Example-Put-K75-62DTE.pdf}
     \caption{Schematic of the payoff, profit and breakeven for a \texttt{long call} 
 	contract. The gray dashed line denotes the payoff at expiration for the buyer.
-	The red-line denotes share prices at expiration that result in a loss for the buyer, 
+	The red line denotes share prices at expiration that result in a loss for the buyer, 
 	while the green line denotes share prices at expiration that result in a profit for the buyer.
 	Parameters: the \texttt{put} 
 	contract strike price is $K$ = 75 USD/share and a midpoint of premium $\mathcal{P}_{c}$ = 2.93 USD/share.}\label{fig:put-payoff-profit-breakeven-diagram}
@@ -283,17 +283,17 @@ contract to make a profit.
 % \end{equation}
 % where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration.
 
-\section*{Computing the Premium of European Contracts}
-The premium of an option is the price that the buyer pays the seller for the right to buy or sell an underlying asset at a specified price.
+\section*{European Contracts Premiums}
+An option's premium is the price that the buyer pays the seller for the right to buy or sell an underlying asset at a specified price.
 There are many methods to compute the premium of an options contract, but the most widely used method (by far) is the Black-Scholes-Merton (BSM) model (and its extensions).
 The BSM model has a closed-form solution, i.e., a mathematical expression that can be evaluated directly. Thus, it is computationally efficient.
 Alternatively, the premium of an options contract can be computed using numerical methods, such as binomial trees or Monte Carlo simulation.
-Let's consider the BSM model first, and then we'll explore the Monte Carlo method.
+Let's consider the BSM model first, and then we'll explore a Monte Carlo method to price European calls and put contracts.
 
-\subsection*{The Black-Scholes-Merton Model}
-The Black-Scholes-Merton model is used to compute the premium of a European-style options contracts \cite{BlackScholes1973};
-Robert C. Merton, Myron S. Scholes and Fischer Black won the \href{https://www.nobelprize.org/prizes/economic-sciences/1997/press-release/}{Nobel Prize in Economics in 1997} for their work on this model.
-The model assumes that the price of the underlying asset follows a geometric Brownian motion with constant drift and volatility, where the drift is taken to be the risk-free interest rate, i.e., we evaluate the option using a risk-neutral pricing paradigm.
+\subsection*{The Black-Scholes-Merton (BSM) Model}
+The Black-Scholes-Merton model is used to compute the premium of European-style options contracts \cite{BlackScholes1973};
+Robert C. Merton, Myron S. Scholes, and Fischer Black won the \href{https://www.nobelprize.org/prizes/economic-sciences/1997/press-release/}{Nobel Prize in Economics in 1997} for their work on this model.
+The model assumes that the underlying asset's price follows a geometric Brownian motion with constant drift and volatility, where the drift is taken to be the risk-free interest rate, i.e., we evaluate the option using a risk-neutral pricing paradigm.
 Further, the model assumes that the risk-free interest rate is constant and that the underlying stock does not pay dividends (although the model can be modified to include dividends).
 Under these assumptions, the price of the option can be computed using the Black-Scholes-Merton pricing formula, which is the parabolic partial differential equation:
 \begin{eqnarray}\label{eqn:BSM-pde}
@@ -301,13 +301,13 @@ Under these assumptions, the price of the option can be computed using the Black
 	\frac{dS}{S} & = & \bar{r}\,dt + \sigma\,{dW}\\
 	V(T,S) & = & K(S)
 \end{eqnarray}
-where $V(t,S)$ is the price of the option, $S$ is the price of the underlying asset (goverened by the risk-neutral geometric Brownian motion model), 
+where $V(t, S)$ is the price of the option, $S$ is the price of the underlying asset (governed by the risk-neutral geometric Brownian motion model), 
 $K(S)$ is the payoff of the option at expiration, $T$ is the expiration date, $t$ is time, 
 $\bar{r}$ is the risk-free interest rate, and $\sigma$ is the volatility of the underlying asset.
 $t$ is time, $r$ is the risk-free interest rate, and $\sigma$ is the volatility of the underlying asset.
-While we could solve the partial differential equation \ref{eqn:BSM-pde} directly, it is more common to use the closed-form solution of the Black-Scholes-Merton pricing formula, 
-which depends upon which type of option we are considering, i.e., a call or a put.
+While we could solve the partial differential equation \ref{eqn:BSM-pde} directly, it is more common to use the closed-form solution of the Black-Scholes-Merton pricing formula.
 
+The price of a European \texttt{call} option is given by Definition \ref{defn:BSM-call-closed-form}:
 \begin{definition}[Black-Scholes-Merton Pricing Formula for a European Call Option]\label{defn:BSM-call-closed-form}
 The Black-Scholes-Merton pricing formula for a European \texttt{call} option is given by the expression:
 \begin{equation}
@@ -321,12 +321,12 @@ d_{+} & = & \frac{1}{\sigma\sqrt{T}}\left[\ln(\frac{S_{\circ}}{K}) + (\bar{r}+\f
 d_{-} & = & d_{+} - \sigma\sqrt{T}
 \end{eqnarray}
 \end{definition}
-
+while the price of a European \texttt{put} option is given by Definition \ref{defn:BSM-put-closed-form}:
 \begin{definition}[Black-Scholes-Merton Pricing Formula for a European Put Option]\label{defn:BSM-put-closed-form}
 The Black-Scholes-Merton pricing formula for a European \texttt{put} option is given by the expression:
-\begin{equation*}
+\begin{equation}
 \mathcal{P}_{p}(K,S(0)) = N(-d_{-})\cdot{K}\cdot\mathcal{D}^{-1}_{T,0}(\bar{r}) - N(-d_{+})\cdot{S}(0)
-\end{equation*}
+\end{equation}
 where $N(\dots)$ denotes the standard normal cumulative distribution function, 
 $S(0)$ is the price of the underlying asset at time $t=0$ (when we are evaluating the option),
 $K$ is the strike price of the contract, and $\mathcal{D}^{-1}_{T,0}(\bar{r})$ is the discount factor from time $t=0$ to time $T$ evaluated at the risk-free interest rate $\bar{r}$.
@@ -339,27 +339,32 @@ d_{-} & = & d_{+} - \sigma\sqrt{T}
 
 
 \subsection*{Monte Carlo Simulation}
-The premium $\mathcal{P}_{\star}(K,S(0))$ the buyer is willing to pay for a European \texttt{call} or \texttt{put} contract today, when early excersise is not allowed, 
-and the contract expires at some time $T$ in the future is given by the equality:
+Alternatively, we can compute the premium of the European options contract using a Monte Carlo simulation.
+The premium $\mathcal{P}_{\star}(K,S(0))$ the buyer is willing to pay for a European \texttt{call} (or \texttt{put}) contract with an expiration $T$-periods from today is given by the equality:
 \begin{equation}\label{eqn:BSM-premium-equality-mc}
 \mathcal{P}_{\star}(K,S(0)) = \mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{\star}}(K,S(T))\Bigr)
 \end{equation}
 where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration using the discount rate $\bar{r}$,
 $V_{\star}(K,S(T))$ is the payoff of the contract $\star$ at expiration, $S(T)$ is the share price at expiration, $K$ is the strike price of the contract, 
-and $S(0)$ is the share price at time $t=0$ (now). Equation \ref{eqn:BSM-premium-equality-mc} states that the premium an investor is willing to pay for a contract 
+and $S(0)$ is the share price at time $t=0$ (now) when we are purchasing the contract. Equation \ref{eqn:BSM-premium-equality-mc} says the premium an investor is willing to pay for a contract 
 is the expected value of the discounted future payoff from the contract. This is true for both \texttt{call} and \texttt{put} contracts. But why is this true?
 
-The expectation in equation \ref{eqn:BSM-premium-equality-mc} can be computed using Monte Carlo simulation.
-We can compute the premium of a European \texttt{call} or \texttt{put} contract by simulating the future share price `T` days in the future (at contract expiration)
-using a geometric Brownian motion model for the future share price, and then directly computing the expected value of the discounted future payoff from the contract 
-using the simulated samples paths.
+\begin{concept}[Excerise risk]
+Because the buyer can \textit{only} exercise the contract at expiration, the premium of a European options contract is the expected value of the discounted future payoff from the contract.
+A rational investor will only pay as much for a contract as they expect to make from the contract. 
+They would lose money on average if they paid more than the expected value of the future payoff.
+\end{concept}
+The expectation in Eqn. \ref{eqn:BSM-premium-equality-mc} can be computed using Monte Carlo simulation.
+We can compute the premium of a European \texttt{call} or \texttt{put} contract by simulating the future share price $S(T)$ at contract expiration
+using a geometric Brownian motion model and then directly computing the expected value of the discounted future payoff from the contract 
+using the simulated samples paths. 
 
 \section*{Summary}
-In this module we introduced the concept of derivatives, and focused on European style options contracts.
+In this module, we introduced the concept of derivatives and focused on European-style options contracts.
 We introduced the two types of options contracts: \texttt{call} and \texttt{put} contracts.
 A \texttt{call} contract gives the holder the right, but not the obligation, to buy an underlying asset at a specified price (strike) on or before a future date (expiration).
 On the other hand, a \texttt{put} contract gives the holder the right, but not the obligation, to sell an underlying asset at a specified price (strike) on or before a future date (expiration).
-We introduced the payoff and profit diagrams for both types of contracts, and discussed the Black-Scholes-Merton model for computing the premium of European contracts.
+We introduced the payoff and profit diagrams for both types of contracts and discussed the Black-Scholes-Merton model for computing the premium of European contracts.
 Finally, we discussed how the premium of a European contract can be computed using Monte Carlo simulation.
 
 \bibliography{References_v1}

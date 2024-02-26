@@ -62,7 +62,7 @@
 
 \fancypagestyle{proposal}{\fancyhf{}%
 	\fancyhead[RO,LE]{\thepage}%
-	\fancyhead[LO,RE]{CHEME 132 Module 3 Multiple Asset Geometric Brownian Motion}%
+	\fancyhead[LO,RE]{CHEME 133 Module 1 European Options Contracts}%
 	\renewcommand\headrulewidth{1pt}}
 \pagestyle{proposal}
 
@@ -109,7 +109,7 @@
 \begin{document}
 
 %\begin{titlepage}
-{\par\centering\textbf{\Large CHEME 132 Module 3: Multiple Asset Geometric Brownian Motion}}
+{\par\centering\textbf{\Large CHEME 133 Module 1: Introduction to Derivatives and European Style Options Contracts at Expiration}}
 \vspace{0.2in}
 {\par \centering \large{Jeffrey D. Varner}}
 \vspace{0.05in}
@@ -125,193 +125,247 @@
 \setcounter{page}{1}
 
 \section*{Introduction}
-\href{https://en.wikipedia.org/wiki/Geometric_Brownian_motion}{Geometric Brownian motion (GBM)} is a continuous-time stochastic model in which the random variable $S(t)$, 
-e.g., the share price of a firm is described by a stochastic differential equation.
-Geometric Brownian motion was popularized as a financial model by Samuelson in the 1950s and 1960s \cite{Merton2006}, 
-but is arguably most commonly associated with the Black–Scholes options pricing model, which we will describe later 
-\cite{BlackScholes1973}. Previously, we considered the single asset GBM model, 
-where a firm's share price was modeled as a deterministic drift term corrupted by a Wiener noise process. 
-We showed that a firm's share price follows a log-normal distribution and derived the analytical solution for a firm's share price at a future point in time.
-However, in practice, investors often hold portfolios of assets, and a firm's share price is correlated with other firms' share price.
-Thus, let's consider the GBM for multiple simultaneous assets, where the share price of a firm is modeled as a deterministic drift term 
-that is corrupted by a Wiener noise process (same as before), but now we consider how the noise is correlated with other firms in a portfolio.
+Derivatives are one of the three primary financial instrument categories: derivatives, equity (i.e., shares of stock), and debt (i.e., bonds and mortgages). 
+Derivatives provide payoffs that depend on the value of other assets, such as commodities, bonds, stocks, or market indexes. 
+Thus, the value of a derivative is based mainly on the price movements of an underlying asset, e.g., stocks, commodities, currencies, etc. 
+This course will focus exclusively on options, a derivative product that uses stock as its underlying asset. 
+Like bonds, options are contractural agreements between buyers and sellers to conduct a particular transaction at some later date. 
+Options, derivatives that use equity, i.e., shares of a stock or an exchange-traded fund, as their underlying asset, 
+are structured agreements between a buyer and a seller that give the option buyer the right, but not the obligation, 
+to execute the transaction described in the contract, i.e., to buy (or sell) an underlying asset in some predetermined way in a specified time frame. 
+The predetermined price is the strike price, and the specified period is the contract's lifetime, where the lifetime ends on the expiration date. 
 
-Consider an asset portfolio $\mathcal{P}$, e.g., a collection of equities with a logarithmic return covariance matrix $\Sigma$ and drift vector $\mu$.
-The multi-dimensional geometric Brownian motion model describing the share price $S_{i}(t)$ for asset $i\in\mathcal{P}$ at time $t$ is given by: 
-\begin{equation*}
-\frac{dS_{i}\left(t\right)}{S_{i}(t)} = \mu_{i}\,{dt}+\sum_{j=1}^{\mathcal{P}}a_{ij}\cdot{dW_{j}(t)}\qquad\text{for}\quad{i=1,2,\dots,\mathcal{P}}
-\end{equation*}
-where $a_{ij}\in\mathbf{A}$ and $\mathbf{A}\mathbf{A}^{\top} = \Sigma$ are noise coefficients describing the connection between firms $i$ and firms $j$ in the portfolio $\mathcal{P}$,
-and $\mu_{i}$ denotes the drift parameter for asset $i$ in the portfolio $\mathcal{P}$.
-The multi-dimensional GBM model has the analytical solution:
-\begin{equation*}
-S_{i}(t_{k}) = S_{i}(t_{k-1})\cdot\exp\Biggl[\left(\mu_{i}-\frac{\sigma_{i}^{2}}{2}\right)\Delta{t} + \sqrt{\Delta{t}}\cdot\sum_{j\in\mathcal{P}}a_{ij}\cdot{Z_{j}(0,1)}\Biggr]\quad{i\in\mathcal{P}}
-\end{equation*}
-where $S_{i}(t_{k-1})$ is the share price for firm $i\in\mathcal{P}$ at time $t_{k-1}$,  the term $\Delta{t} = t_{k} - t_{k-1}$ denotes the time difference (step-size) 
-for each time step (fixed), and $Z_{j}(0,1)$ is a standard normal random variable for firm $j\in\mathcal{P}$.
-For more information on the derivation of the multi-dimensional GBM model, see Glasserman \cite{Glasserman:2004ua}.
+Investors can use options and other derivatives to \href{https://www.investopedia.com/terms/h/hedge.asp}{hedge} against future asset price movements or for speculation. 
+For example, a trader can buy an option contract instead of shares of an underlying stock to generate profits from the underlying stock's price movements, 
+typically at a lower cost than the corresponding block of shares. Options contracts are traded on exchanges throughout the world; 
+the \href{https://www.cboe.com}{The Chicago Board Options Exchange} is the largest options exchange in the United States, 
+responsible for approximately 33\% of the daily options trading volume in the United States (about 32 million contracts are traded each day in the United States in 2023). 
+Worldwide, in 2023, there were \href{https://www.fia.org/fia/articles/global-futures-and-options-volume-hits-record-137-billion-contracts-2023}{approximately 137 billion derivatives contracts traded annually}.
+Options are also attractive because they offer \href{https://www.merrilledge.com/investment-products/options/options-trading-leverage-risk}{leverage}, 
+i.e., an option contract can control a unit of asset, e.g., 100 shares of a stock, 
+at a cost that is typically less than the market value of that asset. 
+This allows option buyers to pay a relatively small premium for market exposure in relation to the value of the underlying asset. 
+An option buyer can see significant gains from comparatively small percentage moves in the underlying asset's price. 
+However, leverage also has a considerable downside. 
+For example, if the underlying asset price does not rise or fall as anticipated during the lifetime of the option contract, 
+leverage magnifies the investment's percentage loss.
 
-\section*{Drift and Covariance Estimation}
-The drift vector $\mu$ and covariance matrix $\Sigma$ are critical parameters in the multi-dimensional GBM model.
-We can estimate the drift vector $\mu$, which will be a $\dim\mathcal{P}\times{1}$ vector, from historical data by computing the logarithmic excess growth rate of the assets in the portfolio $\mathcal{P}$, 
-as we have shown previously; we repeat the process for each asset in the portfolio $\mathcal{P}$.
-On the other hand, the covariance matrix, a $\dim\mathcal{P}\times\dim\mathcal{P}$ symmetric matrix, describes the relationship between the logarithmic return series of firms $i$ and $j$.
-The $(i,j)$ element of the covariance matrix $\sigma_{ij}\in\Sigma$ is given by:
-\begin{equation*}
-    \sigma_{ij} = \text{cov}\left(r_{i},r_{j}\right) = \sigma_{i}\sigma_{j}\rho_{ij}\qquad\text{for}\quad{i,j \in \mathcal{P}}
-\end{equation*}
-where $\sigma_{\star}$ denote the standard deviation of the logarithmic return of asset $\star$, i.e., the volatility parameter, and $\rho_{ij}$ 
-denotes the correlation between the returns of asset $i$ and $j$ in the portfolio $\mathcal{P}$. 
+In this module, we'll begin our study of derivatives, and options in particular, by focusing on European-style options contracts.
+For European-style contracts, holders can only exercise their right on the expiration date.
+However, for American-style contracts, which we'll consider later, the holder can exercise their right on or before the expiration date.
+We'll study the two types of options contracts: \texttt{call} contracts and \texttt{put} contracts (Fig. \ref{fig:options-schematic}).
 
-The noise coefficients $a_{ij}$ modify the noise terms in the multi-dimensional GBM model, 
-and describe the connection between firms $i$ and firms $j$ in the portfolio $\mathcal{P}$. 
-The noise coefficients are given by the Cholesky decomposition of the covariance matrix $\Sigma$:
-\begin{equation*}
-\Sigma = \mathbf{A}\mathbf{A}^{\top}
-\end{equation*}
-where $\mathbf{A}$ is a lower triangular matrix, and $\mathbf{A}^{\top}$ denotes the complex conjugate transpose of $\mathbf{A}$. The diagonal elements of the Cholesky factor $\mathbf{A}$ are the standard deviations of the logarithmic return series of the assets in the portfolio $\mathcal{P}$, i.e., the volatility of firm $i$. On the other hand, the off-diagonal elements of the Cholesky factor $\mathbf{A}$ are the correlation coefficients between the logarithmic return series of the assets in the portfolio $\mathcal{P}$. The Cholesky decomposition of the covariance matrix $\Sigma$ is unique and can be computed using the Cholesky decomposition algorithms provided by many common numerical linear algebra libraries.
+% The holder of the option pays a premium for the right to buy or sell the underlying asset. 
+% The premium is the price of the option.
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{./figs/Fig-Options-Table-Schematic.pdf}
+    \caption{Schematic of U.S. Government Debt Securities. You lend money to the United States Treasury by purchasing a treasury security.
+	The Treasury pays you back in different fix ways, dependent upon the security.}\label{fig:options-schematic}
+\end{figure}
 
-\section*{Multiasset Portfolio Simulations}
-We simulate the multi-dimensional GBM model using the analytical solution for the share price of each firm in the portfolio $\mathcal{P}$, given the initial share price $\mathbf{S}(t_{0})$ vector, the drift vector $\mu$, the covariance matrix $\Sigma$, along with user-defined time points $t_{0},t_{1},\dots,t_{N}$, and the number of samples to simulate $N_{\text{samples}}$. 
+\subsection*{Call and Put Contracts}
+A \texttt{call} contract gives the holder (buyer) the right, but not the obligation, to sell a specified asset, 
+such as stocks, commodities, or currencies, to their counterparty (contract seller). 
+Let's consider stock as the underlying asset. A single standard options contract controls 100 shares of stock. 
+From the buyer's perspective, call contracts allow an investor to benefit from the upside price movement of a stock without purchasing the stock.
+Further, call options (again from the buyer's perspective) have limited downside risk, i.e., the maximum amount the holder of the call option can lose 
+is the premium paid for the option. Finally, call options are a mechanism to purchase shares of stock at the strike price of $K$ instead of the market price of $S$. 
+On the other hand, from the seller's perspective, the main objective of selling a call contract is to collect the premium $\mathcal{P}$. 
+Call contracts also allow the seller to benefit from downward price movement without purchasing shares of stock (in the case of a naked call).
+However, for a seller, call options have unlimited upside risk; 
+Thus, call options are often only sold by investors who already own the required number of shares of stock 
+(known as a \href{https://www.investopedia.com/terms/c/coveredcall.asp}{covered call position}. 
+Finally, call options offer the seller the opportunity to sell shares of stock at the strike price of $K$ instead of the market price of $S$.
 
-\begin{definition}[Distribution of Share Price]\label{defn-log-normal-distribution-price}
-The share price of each firm in the portfolio $\mathcal{P}$ at time $t$ follows a log-normal distribution:
-\begin{equation*}
-S(t)\sim\text{LogNormal}\left(\mu_{t},\Sigma_{t}\right)
-\end{equation*}
-where $\mu_{t}$ denotes the mean log-transformed share price vector, and $\Sigma_{t}$ denotes the covariance matrix of the log-transformed share prices at time $t$. A log-normal distribution is a right-skewed distribution. It is often used to model the share price because of its positive support and its ability to model the exponential growth of the share price.
-\end{definition}
-We simulate the multi-dimensional GBM model using Algorithm \ref{algo-multi-asset-gbm-simulation}, and then fit a distribution to the simulated share price of each firm in the portfolio $\mathcal{P}$ (Defn. \ref{defn-log-normal-distribution-price}).
+A \texttt{put} contract gives the holder (buyer) the right, but not the obligation, to sell a specified asset, 
+such as stocks, commodities, or currencies, at a specified price to their counterparty (contract seller). 
+Let's consider stock as the underlying asset. A single standard put contract controls 100 shares of stock.
+From the buyer's perspective, put contracts allow an investor to benefit from the downward price movement of a stock without purchasing the stock. 
+Further, put options (again from the buyer's perspective) have limited downside risk, i.e., the maximum amount that the put option holder can lose is the premium paid for the option. 
+Finally, put contracts are a mechanism to sell shares of stock at the strike price of $K$ instead of the market price of $S$. 
+From the seller's perspective, the motivation for selling a put contract is to collect the premium $\mathcal{P}$. 
+Put contracts also allow the seller to benefit from the price movement to the upside without purchasing shares.
+However, for a seller, put options have unlimited downside risk; 
+thus, put options are often only sold by investors who have set aside the required capital to purchase the required number of shares of stock 
+(known as a \href{https://www.fidelity.com/learning-center/investment-products/options/know-about-cash-covered-puts}{cash-secured put position}).
+Finally, put options offer the seller the opportunity to buy shares of a firm at the strike price of $K-\mathcal{P}$ instead of the market price of $S$.
 
+\begin{concept}[Jargon: Long and Short Contracts]\label{concept:long-short-contracts}
 
-\begin{algorithm}[h!]
-    \caption{Multiasset Geometric Brownian Motion}\label{algo-multi-asset-gbm-simulation}
-    \begin{algorithmic}[1]
-		\Statex
-		\Require The initial share price vector $\mathbf{S}(t_{0}) = \left\{S_{i}(t_{0})\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
-		\Require The drift vector $\mu = \left\{\mu_{i}\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
-		\Require The covariance matrix $\Sigma$ for the portfolio $\mathcal{P}$.
-		\Require The time step $\Delta{t}$ (units: years), the initial time $t_{\circ}$, the final time $t_{f}$, and the number of samples $N_{s}$.
-		\Require A Cholesky decomposition function $\texttt{cholesky}(\Sigma)$ that returns the Cholesky factor $\mathbf{A}$.
-
-		\Statex
-		\Procedure{Multiasset Geometric Brownian Motion}{}
-		\Statex
-		\State{$N_{a} \gets \text{length}(\mu)$}\Comment{Number of assets in the portfolio $\mathcal{P}$}
-		\State{$N_{t} \gets (t_{f} - t_{\circ})/\Delta{t}$}\Comment{Number of time steps}
-		\State{$T \gets \texttt{arange}(t_{\circ},t_{f},\Delta{t})$}\Comment{Time points}
-		\State{$X \gets \texttt{zeros}(N_{s},N_{t}, N_{a}+1)$}\Comment{Pre-allocate the share price array}
-		\State{$\mathcal{Z} \gets \mathcal{N}(0,1)$}\Comment{Instantiate a standard normal distribution}
-		\State{$\mathbf{A} \gets \texttt{cholesky}(\Sigma)$}\Comment{Cholesky decomposition of the covariance matrix $\Sigma$}
-		
-		
-		\Statex
-		\For{$i\in{1}~\text{to}~{N_{s}}}$\Comment{Loop over the number of samples}
-			
-			\For{$j\in\texttt{eachindex}(T)$}\Comment{Loop over the time points}
-				\State{$X_{i,j,1} \gets T_{j}$}\Comment{Set the time points in first column}
-			\EndFor
-			\Statex
-			\For{$j\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
-				\State{$X_{i,1,j+1} \gets S_{\circ,j}$}\Comment{Set the initial share price for asset $j$}
-			\EndFor
-			\Statex
-
-			\For{$j\in{2}~\text{to}~N_{t}$}\Comment{Loop over the number of time steps}
-				\For{$k\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
-				\Statex
-				\State{$\text{noise} \gets 0.0$}
-				\For{$l\in{1}~\text{to}~N_{a}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
-					\State{$\text{noise} \gets \text{noise} + \mathbf{A}_{k,l}\cdot\texttt{rand}(\mathcal{Z})$}\Comment{Compute the noise term for asset $k$}
-				\EndFor
-				\Statex
-				\State{$X_{i,j,k+1} \gets X_{i,j-1,k+1}\cdot\exp\Biggl[\left(\mu_{k}-a_{kk}^2/{2}\right)\cdot\Delta{t} + \sqrt{\Delta{t}}\cdot\text{noise}\Biggr]$}
-				\EndFor
-			\EndFor
-		\EndFor
-
-		\EndProcedure
-	\end{algorithmic}
-\end{algorithm}
-
-\subsection*{Computing the Net Present Value (NPV) of the portfolio $\mathcal{P}$}
-To compute the Net Present Value (NPV) of a portfolio $\mathcal{P}$, we can use Algorithm \ref{algo-multi-asset-gbm-simulation} to simulate the share price of each firm in $\mathcal{P}$ over a time-horizon, e.g., from now to until next year.
-Given the share price of each firm over that horizon, we can compute what combinations of shares of each firm in the portfolio $\mathcal{P}$ are the best in some way. For example, we can compute which share combinations lead to the largest projected NPV of the portfolio $\mathcal{P}$ at time $t$ by computing the 
-two cash flow events that occur, first the purchase of the shares of each firm in the portfolio $\mathcal{P}$ at time $t_{0}$, and then the liquidation of the portfolio $\mathcal{P}$ at time $T$, where the future share price value is discounted back to the present value using an appropriate discount rate, such as the average risk-free rate over the period $\bar{r}_{f}$:
-\begin{equation}\label{eqn:npv-mv-gbm}
-\text{NPV}(T,\bar{r}_{f}) = \sum_{i\in\mathcal{P}}n_{i}\cdot\left(\mathcal{D}_{T,0}^{-1}(\bar{r}_{f})\cdot{S_{i}(T)}-S_{i}(0)\right)
-\end{equation}
-where $n_{i}$ denotes the number of shares of firm $i\in\mathcal{P}$, $S_{i}(T)$ denotes the share price of firm $i\in\mathcal{P}$ at time $T$, $S_{i}(0)$ denotes the share price of firm $i\in\mathcal{P}$ at time $0$, and $\mathcal{D}_{T,0}(\bar{r}_{f})$ denotes the multiperiod discount factor between time $0\rightarrow{T}$ with the discount rate equal to the risk-free rate $\bar{r}_{f}$.
-
-To calculate the net present value at $t=T$, we need the share price of each firm in the portfolio $\mathcal{P}$ at time $T$ and the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t_{0}$, 
-where we assume the investor does not buy or sell any shares of any firm in the portfolio $\mathcal{P}$ over the period $t_{0}\rightarrow{T}$. The number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ is given by the fraction of the total wealth invested in each firm in the portfolio $\mathcal{P}$. Let's imagine a scenario where an investor has a total wealth of $W_{\text{total}}$ at time $t$, and the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ is given by $0\leq{\omega_{i}}\leq{1}$:
-\begin{equation*}
-\omega_{i}(t) = \frac{W_{i}(t)}{W_{\text{total}}}\qquad\text{for}\quad{i\in\mathcal{P}}
-\end{equation*}
-where $W_{i}(t)$ denotes the wealth invested in firm $i\in\mathcal{P}$ at time $t$.
-However, we know the total wealth of portfolio $\mathcal{P}$, is just the liqidation value of the portfolio: 
-\begin{equation*}
-W(t) = \sum_{i\in\mathcal{P}}n_{i}(t)\cdot{S_{i}(t)}
-\end{equation*}
-where $n_{i}(t)$ denotes the number of shares of firm $i\in\mathcal{P}$ at time $t$, and $S_{i}(t)$ denotes the share price of firm $i\in\mathcal{P}$ at time $t$. We can rewrite the number of shares of each firm in the portfolio $\mathcal{P}$ at time $t$ as:
-\begin{equation*}
-	n_{i}(t) = \frac{\omega_{i}(t)\cdot{W_{\text{total}}}}{S_{i}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
-\end{equation*}
-Further, we can rewrite the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ as:
-\begin{equation}\label{eqn:portfolio-weights-derivation}
-\omega_{i}(t) = \frac{n_{i}(t)\cdot{S_{i}(t)}}{\displaystyle\sum_{k\in\mathcal{P}}n_{k}(t)\cdot{S}_{k}(t)}\qquad\text{for}\quad{i\in\mathcal{P}}
-\end{equation}
-The fractions $\omega_{i}(t)$, i.e., the portfolio weights at time $t$, have a few interesting properties (Concept \ref{concept:properties-of-omega}).
-
-\begin{concept}[Properties of allocation $\omega$]\label{concept:properties-of-omega}
-The fraction of the total wealth invested in each firm $i\in\mathcal{P}$ at time $t$, in the absence of borrowing shares, sums to one for all time points $t$:
-\begin{equation*}
-\sum_{i\in\mathcal{P}}\omega_{i}(t) = 1\quad\forall{t\geq{t_{0}}}
-\end{equation*}
-Further, because the share price of each firm in the portfolio $\mathcal{P}$ is positive, the fraction of the total wealth invested in each firm $i\in\mathcal{P}$ at time $t$ is non-negative $\omega_{i}(t)\geq{0}$ for all $t\geq{t_{0}}$. 
-Finally, $\omega_{i}$, even with constant shares, is a function of time as the share price of each firm in the portfolio $\mathcal{P}$ changes over time.
+	\textbf{Long contracts}: Instead of saying the \texttt{call} (or \texttt{put})) contract holder or buyer, you may sometimes hear the term \texttt{long call} (or \texttt{long put}) to denote a person has purchased a \texttt{call} (or \texttt{put}) contract.
+	Thus, a person who buys an options contract is said to be \texttt{long} the \texttt{call} (or \texttt{put}) contract.
+	
+	\vspace{0.01in}
+	\noindent\textbf{Short contracts}: On the other hand, instead of saying the \texttt{call} (or \texttt{put}) contract seller, you may hear the term \texttt{short call} (or \texttt{short put}) to denote a person has sold a \texttt{call} (or \texttt{put}) contract.
+	Thus, a person who sells an options contract is said to be \texttt{short} the contract.
 \end{concept}
-The investor can choose the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ by some approach, e.g., by formulating the choice as an optimization problem or by sampling from a probability distribution such as a Dirchlet distribution $\omega_{i}\sim\text{Dirchlet}(\alpha_{1},\alpha_{2},\dots,\alpha_{\dim\mathcal{P}})$, where $\alpha_{i}$ denotes the concentration parameter for firm $i\in\mathcal{P}$. Then, when combined with the multi-dimensional GBM model, the investor can simulate the share price of each firm in the portfolio $\mathcal{P}$ over a time period and compute the NPV of the portfolio. This process can be repeated many times, and the expected NPV of the portfolio $\mathcal{P}$ at time $T$ can be computed by averaging the NPV over all the samples (Algorithm \ref{algo-npv-monte-carlo-portfolios}).
 
-\begin{algorithm}[h]
-	\caption{Monte-Carlo Portfolio Net Present Value}\label{algo-npv-monte-carlo-portfolios}
-	\begin{algorithmic}[1]
-		\Require The initial share price vector $\mathbf{S}(t_{0}) = \left\{S_{i}(t_{0})\right\}_{i=1}^{\dim\mathcal{P}}$ for each firm $i\in\mathcal{P}$.
-		\Require Share price distribution $S(T)\sim\text{LogNormal}(\mu_{T},\Sigma_{T})$ 
-		\Require An allocation distribution function $\omega\sim\text{Dir}(\alpha_{1},\alpha_{2},\dots,\alpha_{\dim\mathcal{P}})$, where we assume equal concentration parameters $\alpha_{i}=1/\dim\mathcal{P}$ firm $i\in\mathcal{P}$.
-		\Require The average risk-free rate $\bar{r}_{f}$, the number of samples $N_{s}$ and the total wealth $W_{\text{total}}$.
-		\Statex
-		\Procedure{Portfolio Simulation}{}
-		\Statex
-		\State{$\text{NPV} \gets \texttt{zeros}(N_{s}, \dim\mathcal{P}+1)$}\Comment{Pre-allocate the NPV array}
-		\For{$i\in{1}~\text{to}~N_{s}$}\Comment{Loop over the number of samples}
-			\State{$\mathbf{S} \gets S(T)$}\Comment{Sample the share price of each firm in the portfolio $\mathcal{P}$ at time $T$}
-			\State{$\omega \gets \text{Dir}(\alpha)$}\Comment{Sample allocation $\omega$ at $t=t_{0}$}
-			\Statex
-			\State{$n\gets \texttt{zeros}(\dim\mathcal{P})$}\Comment{Pre-allocate the number of shares array}
-			\For{$j\in{1}~\text{to}~\dim\mathcal{P}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
-				\State{$n_{j}\gets \omega_{j}\cdot{W}_{\text{total}}\cdot\left(S_{j}(t_{0})^{-1}\right)$}\Comment{Compute the number of shares of firm $j$ at time $t = t_{0}$}
-			\EndFor
-			\Statex
-			\State{$\text{NPV}_{i,1} \gets \sum_{k\in\mathcal{P}}n_{k}\cdot\left(\mathcal{D}_{T,0}^{-1}(\bar{r}_{f})\cdot{S_{k}(T)}-S_{k}(0)\right)$}\Comment{NPV of $\mathcal{P}$ at $T$, store column 1}
+\section*{Payoff and Profit Diagrams for Long Contracts}
+Unlike equity, e.g., shares of a stock or ETF, which have a linear payoff profile, both long and short options contracts have a nonlinear payoff profile depending on the price of the underlying asset at expiration, 
+the strike price of the contract, the premium paid for the contract, and the type of contract (call or put).
+For now, let's focus on long contracts, i.e., the buyer of the contract.
 
-			\For{$j\in{1}~\text{to}~\dim\mathcal{P}$}\Comment{Loop over the number of assets in the portfolio $\mathcal{P}$}
-				\State{$\text{NPV}_{i,j+1} \gets \omega_{j}$}\Comment{Store the portfolio weights in columns $2,\dots,\dim\mathcal{P}+1$}
-			\EndFor
+\subsection*{Call Options}
+The payoff per share at expiration at time $t = T$ for a \texttt{call} option is:
+\begin{equation}
+V_{c}(K,S(T)) = \max\left(S(T) - K,~0\right)
+\end{equation}
+where $K$ denotes the strike price and $S(T)$ is the share price at expiration. 
+The \texttt{seller} charges the \texttt{buyer} a premium at time $t=0$ (now), which we denote as $\mathcal{P}_{c}(K,S(0))$, for each contract.
+Thus, the buyer's profit per share at expiration is the contract payoff minus the contract premium:
+\begin{equation}
+P_{c}(K,S(T)) = V_{c}(K,S(T)) -  \mathcal{P}_{c}(K,S(0))
+\end{equation}
+where $P_{c}(K,S(T)) = 0$ denotes the breakeven point for the buyer. 
+Substituting the payoff and profit expressions into the breakeven equation, 
+gives the breakeven share price $\mathcal{B}_{c}$ at expiration for the buyer 
+of the \texttt{call} contract:
+\begin{equation}
+\mathcal{B}_{c} = K + \mathcal{P}_{c}(K,S(0))
+\end{equation}
+Thus, the share price at expiration must exceed the sum of the strike price and the premium for the buyer to make a profit.
+An example payoff, profit, and breakeven diagram for a \texttt{call} contract from the buyer's perspective 
+is shown in Fig. \ref{fig:call-payoff-profit-breakeven-diagram}.  
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{./figs/Fig-Example-Call-K80-62DTE.pdf}
+    \caption{Schematic of the payoff, profit and breakeven for a \texttt{long call} 
+	contract. The gray dashed line denotes the payoff at expiration for the buyer.
+	The red line denotes share prices at expiration that result in a loss for the buyer, 
+	while the green line denotes share prices at expiration that result in a profit for the buyer.
+	Parameters: the \texttt{call} 
+	contract strike price is $K$ = 80 USD/share and the premium $\mathcal{P}_{c}$ = 5.25 USD/share.}\label{fig:call-payoff-profit-breakeven-diagram}
+\end{figure}
 
-		\EndFor
-		\Statex
-		\EndProcedure
+% we can construct the payoff and profit diagrams for a call option (Fig. \ref{fig:call-option-payoff-profit}).
+% The premium (cost) for each contract is governed by:
+% \begin{equation*}
+% \mathcal{P}_{c}(K,S(0))\geq\mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{c}}(K,S(T))\Bigr)
+% \end{equation*}
+% where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and contract expiration.
 
-	\end{algorithmic}
-\end{algorithm}
+\subsection*{Put Options}
+The payoff per share at expiration for a put option contract is given by:
+\begin{equation}
+V_{p}(K,S(T)) = \max\left(K - S(T),~0\right)
+\end{equation}
+where $K$ denotes the strike price and $S(T)$ is the share price at expiration. 
+The \texttt{seller} charges the \texttt{buyer} a premium $\mathcal{P}_{p}(K,S(0))$ for each contract.
+The buyer's profit per share at expiration is the payoff minus the contract premium:
+\begin{equation}
+P_{p}(K,S(T)) = V_{p}(K,S(T)) -  \mathcal{P}_{p}(K,S(0))
+\end{equation}
+where $P_{p}(K,S(T)) = 0$ denotes the breakeven point for the buyer. 
+Substituting the payoff and profit expressions into the breakeven equation gives the breakeven share price $\mathcal{B}_{p}$ at expiration for the buyer 
+of the \texttt{put} contract:
+\begin{equation}
+\mathcal{B}_{p} = K - \mathcal{P}_{p}(K,S(0))
+\end{equation}
+Thus, the share price at expiration must fall below the strike price minus the premium for the buyer of the \texttt{put} 
+contract to make a profit.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{./figs/Fig-Example-Put-K75-62DTE.pdf}
+    \caption{Schematic of the payoff, profit and breakeven for a \texttt{long call} 
+	contract. The gray dashed line denotes the payoff at expiration for the buyer.
+	The red line denotes share prices at expiration that result in a loss for the buyer, 
+	while the green line denotes share prices at expiration that result in a profit for the buyer.
+	Parameters: the \texttt{put} 
+	contract strike price is $K$ = 75 USD/share and a midpoint of premium $\mathcal{P}_{c}$ = 2.93 USD/share.}\label{fig:put-payoff-profit-breakeven-diagram}
+\end{figure}
+
+% The premium (cost) for a put contract is governed by:
+% \begin{equation}
+% \mathcal{P}_{p}(K,S(0))\geq\mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{p}}(K,S(T))\Bigr)
+% \end{equation}
+% where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration.
+
+\section*{European Contracts Premiums}
+An option's premium is the price that the buyer pays the seller for the right to buy or sell an underlying asset at a specified price.
+There are many methods to compute the premium of an options contract, but the most widely used method (by far) is the Black-Scholes-Merton (BSM) model (and its extensions).
+The BSM model has a closed-form solution, i.e., a mathematical expression that can be evaluated directly. Thus, it is computationally efficient.
+Alternatively, the premium of an options contract can be computed using numerical methods, such as binomial trees or Monte Carlo simulation.
+Let's consider the BSM model first, and then we'll explore a Monte Carlo method to price European calls and put contracts.
+
+\subsection*{The Black-Scholes-Merton (BSM) Model}
+The Black-Scholes-Merton model is used to compute the premium of European-style options contracts \cite{BlackScholes1973};
+Robert C. Merton, Myron S. Scholes, and Fischer Black won the \href{https://www.nobelprize.org/prizes/economic-sciences/1997/press-release/}{Nobel Prize in Economics in 1997} for their work on this model.
+The model assumes that the underlying asset's price follows a geometric Brownian motion with constant drift and volatility, where the drift is taken to be the risk-free interest rate, i.e., we evaluate the option using a risk-neutral pricing paradigm.
+Further, the model assumes that the risk-free interest rate is constant and that the underlying stock does not pay dividends (although the model can be modified to include dividends).
+Under these assumptions, the price of the option can be computed using the Black-Scholes-Merton pricing formula, which is the parabolic partial differential equation:
+\begin{eqnarray}\label{eqn:BSM-pde}
+	\frac{\partial{V}}{\partial{t}} + \frac{1}{2}\sigma^{2}S^{2}\frac{\partial^{2}V}{\partial{S}^{2}} & = & \bar{r}V - rS\frac{\partial{V}}{\partial{S}}  \\
+	\frac{dS}{S} & = & \bar{r}\,dt + \sigma\,{dW}\\
+	V(T,S) & = & K(S)
+\end{eqnarray}
+where $V(t, S)$ is the price of the option, $S$ is the price of the underlying asset (governed by the risk-neutral geometric Brownian motion model), 
+$K(S)$ is the payoff of the option at expiration, $T$ is the expiration date, $t$ is time, 
+$\bar{r}$ is the risk-free interest rate, and $\sigma$ is the volatility of the underlying asset.
+$t$ is time, $r$ is the risk-free interest rate, and $\sigma$ is the volatility of the underlying asset.
+While we could solve the partial differential equation \ref{eqn:BSM-pde} directly, it is more common to use the closed-form solution of the Black-Scholes-Merton pricing formula.
+
+The price of a European \texttt{call} option is given by Definition \ref{defn:BSM-call-closed-form}:
+\begin{definition}[Black-Scholes-Merton Pricing Formula for a European Call Option]\label{defn:BSM-call-closed-form}
+The Black-Scholes-Merton pricing formula for a European \texttt{call} option is given by the expression:
+\begin{equation}
+	\mathcal{P}_{c}(K,S(0)) = N(d_{+})S(0) - N(d_{-})K\mathcal{D}^{-1}_{T,0}(\bar{r})
+\end{equation}
+where $N(\dots)$ denotes the standard normal cumulative distribution function, $S(0)$ is the price of the underlying asset at time $t=0$ (when we are evaluating the option),
+$K$ is the strike price of the contract, and $\mathcal{D}^{-1}_{T,0}(\bar{r})$ is the discount factor from time $t=0$ to time $T$ evaluated at the risk-free interest rate $\bar{r}$.
+The arguments of the normal cumulative distribution function are given by:
+\begin{eqnarray}
+d_{+} & = & \frac{1}{\sigma\sqrt{T}}\left[\ln(\frac{S_{\circ}}{K}) + (\bar{r}+\frac{\sigma^{2}}{2})T\right] \\
+d_{-} & = & d_{+} - \sigma\sqrt{T}
+\end{eqnarray}
+\end{definition}
+while the price of a European \texttt{put} option is given by Definition \ref{defn:BSM-put-closed-form}:
+\begin{definition}[Black-Scholes-Merton Pricing Formula for a European Put Option]\label{defn:BSM-put-closed-form}
+The Black-Scholes-Merton pricing formula for a European \texttt{put} option is given by the expression:
+\begin{equation}
+\mathcal{P}_{p}(K,S(0)) = N(-d_{-})\cdot{K}\cdot\mathcal{D}^{-1}_{T,0}(\bar{r}) - N(-d_{+})\cdot{S}(0)
+\end{equation}
+where $N(\dots)$ denotes the standard normal cumulative distribution function, 
+$S(0)$ is the price of the underlying asset at time $t=0$ (when we are evaluating the option),
+$K$ is the strike price of the contract, and $\mathcal{D}^{-1}_{T,0}(\bar{r})$ is the discount factor from time $t=0$ to time $T$ evaluated at the risk-free interest rate $\bar{r}$.
+The arguments of the normal cumulative distribution function are given by:
+\begin{eqnarray}
+d_{+} & = & \frac{1}{\sigma\sqrt{T}}\left[\ln(\frac{S_{\circ}}{K}) + (\bar{r}+\frac{\sigma^{2}}{2})T\right] \\
+d_{-} & = & d_{+} - \sigma\sqrt{T}
+\end{eqnarray}
+\end{definition}
+
+
+\subsection*{Monte Carlo Simulation}
+Alternatively, we can compute the premium of the European options contract using a Monte Carlo simulation.
+The premium $\mathcal{P}_{\star}(K,S(0))$ the buyer is willing to pay for a European \texttt{call} (or \texttt{put}) contract with an expiration $T$-periods from today is given by the equality:
+\begin{equation}\label{eqn:BSM-premium-equality-mc}
+\mathcal{P}_{\star}(K,S(0)) = \mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{\star}}(K,S(T))\Bigr)
+\end{equation}
+where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration using the discount rate $\bar{r}$,
+$V_{\star}(K,S(T))$ is the payoff of the contract $\star$ at expiration, $S(T)$ is the share price at expiration, $K$ is the strike price of the contract, 
+and $S(0)$ is the share price at time $t=0$ (now) when we are purchasing the contract. Equation \ref{eqn:BSM-premium-equality-mc} says the premium an investor is willing to pay for a contract 
+is the expected value of the discounted future payoff from the contract. This is true for both \texttt{call} and \texttt{put} contracts. But why is this true?
+
+\begin{concept}[Excerise risk]
+Because the buyer can \textit{only} exercise the contract at expiration, the premium of a European options contract is the expected value of the discounted future payoff from the contract.
+A rational investor will only pay as much for a contract as they expect to make from the contract. 
+They would lose money on average if they paid more than the expected value of the future payoff.
+\end{concept}
+The expectation in Eqn. \ref{eqn:BSM-premium-equality-mc} can be computed using Monte Carlo simulation.
+We can compute the premium of a European \texttt{call} or \texttt{put} contract by simulating the future share price $S(T)$ at contract expiration
+using a geometric Brownian motion model and then directly computing the expected value of the discounted future payoff from the contract 
+using the simulated samples paths. 
 
 \section*{Summary}
-In this module, we have considered the multi-dimensional GBM model, 
-which describes the share price of firms in a portfolio $\mathcal{P}$.
-We demonstrated how to estimate the drift vector $\mu$, the covariance matrix $\Sigma$, and the noise coefficients $a_{ij}$, and provided an algorithm to simulate the multi-dimensional GBM model. Finally, we introduced the concept of the Net Present Value (NPV) of a portfolio $\mathcal{P}$. We presented an algorithm to compute the NPV of a portfolio $\mathcal{P}$ at time $T$, 
-where we sampled the fraction of the total wealth $\omega_{i}$ invested in each firm $i\in\mathcal{P}$ from a Dirichlet distribution and the share price at $t=T$ from a LogNormal distribution. Later, we'll develop tools to compute optimal values of these fractions, i.e., the portfolio weights, but for now, we considered the case where the portfolio weights are chosen by the investor by some approach (perhaps even randomly).
+In this module, we introduced the concept of derivatives and focused on European-style options contracts.
+We introduced the two types of options contracts: \texttt{call} and \texttt{put} contracts.
+A \texttt{call} contract gives the holder the right, but not the obligation, to buy an underlying asset at a specified price (strike) on or before a future date (expiration).
+On the other hand, a \texttt{put} contract gives the holder the right, but not the obligation, to sell an underlying asset at a specified price (strike) on or before a future date (expiration).
+We introduced the payoff and profit diagrams for both types of contracts and discussed the Black-Scholes-Merton model for computing the premium of European contracts.
+Finally, we discussed how the premium of a European contract can be computed using Monte Carlo simulation.
 
 \bibliography{References_v1}
 
