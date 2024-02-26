@@ -125,6 +125,7 @@
 \setcounter{page}{1}
 
 \section*{Introduction}
+
 Derivatives are one of the three primary financial instrument categories: derivatives, equity (i.e., shares of stock), and debt (i.e., bonds and mortgages). 
 Derivatives provide payoffs that depend on the value of other assets, such as commodities, bonds, stocks, or market indexes. 
 Thus, the value of a derivative is based mainly on the price movements of an underlying asset, e.g., stocks, commodities, currencies, etc. 
@@ -158,7 +159,7 @@ We'll study the two types of options contracts: \texttt{call} contracts and \tex
 % The holder of the option pays a premium for the right to buy or sell the underlying asset. 
 % The premium is the price of the option.
 
-\begin{figure}[ht]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.85\textwidth]{./figs/Fig-Options-Table-Schematic.pdf}
     \caption{Schematic of U.S. Government Debt Securities. You lend money to the United States Treasury by purchasing a treasury security.
@@ -192,96 +193,43 @@ thus, put options are often only sold by investors who have set aside the requir
 (known as a \href{https://www.fidelity.com/learning-center/investment-products/options/know-about-cash-covered-puts}{cash-secured put position}).
 Finally, put options offer the seller the opportunity to buy shares of a firm at the strike price of $K-\mathcal{P}$ instead of the market price of $S$.
 
-\begin{concept}[Jargon: Long and Short Contracts]\label{concept:long-short-contracts}
-
-	\textbf{Long contracts}: Instead of saying the \texttt{call} (or \texttt{put})) contract holder or buyer, you may sometimes hear the term \texttt{long call} (or \texttt{long put}) to denote a person has purchased a \texttt{call} (or \texttt{put}) contract.
-	Thus, a person who buys an options contract is said to be \texttt{long} the \texttt{call} (or \texttt{put}) contract.
-	
-	\vspace{0.01in}
-	\noindent\textbf{Short contracts}: On the other hand, instead of saying the \texttt{call} (or \texttt{put}) contract seller, you may hear the term \texttt{short call} (or \texttt{short put}) to denote a person has sold a \texttt{call} (or \texttt{put}) contract.
-	Thus, a person who sells an options contract is said to be \texttt{short} the contract.
-\end{concept}
-
-\section*{Payoff and Profit Diagrams for Long Contracts}
-Unlike equity, e.g., share of a stock or ETF, which have a linear payoff profile, both long and short options contracts have a nonlinear payoffs profile depending on the price of the underlying asset at expiration, 
+\section*{Payoff and Profit Diagrams}
+Unlike stocks, which have a linear payoff profile, options have a nonlinear payoff profile depending on the price of the underlying asset at expiration, 
 the strike price of the contract, the premium paid for the contract, and the type of contract (call or put).
-For now, let's focus on long contracts, i.e., the buyer of the contract.
 
 \subsection*{Call Options}
-The payoff per share at expiration at time $t = T$ for a \texttt{call} option is:
-\begin{equation}
+The payoff per share at expiration for a call option is:
+\begin{equation*}
 V_{c}(K,S(T)) = \max\left(S(T) - K,~0\right)
-\end{equation}
+\end{equation*}
 where $K$ denotes the strike price and $S(T)$ is the share price at expiration. 
-The \texttt{seller} charges the \texttt{buyer} a premium at time $t=0$ (now), which we denote as $\mathcal{P}_{c}(K,S(0))$, for each contract.
-Thus, the buyer's profit per share at expiration is the contract payoff minus the contract premium:
-\begin{equation}
+The \texttt{seller} charges the \texttt{buyer} a premium $\mathcal{P}_{c}(K,S(0))$ for each contract.
+The buyer's profit per share at expiration is the payoff minus the contract premium:
+\begin{equation*}
 P_{c}(K,S(T)) = V_{c}(K,S(T)) -  \mathcal{P}_{c}(K,S(0))
-\end{equation}
-where $P_{c}(K,S(T)) = 0$ denotes the breakeven point for the buyer. 
-Substiuting the payoff and profit expressions into the breakeven equation, 
-gives the breakeven share price $\mathcal{B}_{c}$ at expiration for the buyer 
-of the \texttt{call} contract:
-\begin{equation}
-\mathcal{B}_{c} = K + \mathcal{P}_{c}(K,S(0))
-\end{equation}
-Thus, the share price at expiration must exceed the sum of the strike price and the premium for the buyer to make a profit.
-An example payoff, profit and breakeven diagram for a \texttt{call} contract from the buyer's perspective 
-is shown in Fig. \ref{fig:call-payoff-profit-breakeven-diagram}.  
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.65\textwidth]{./figs/Fig-Example-Call-K80-62DTE.pdf}
-    \caption{Schematic of the payoff, profit and breakeven for a \texttt{long call} 
-	contract. The gray dashed line denotes the payoff at expiration for the buyer.
-	The red-line denotes share prices at expiration that result in a loss for the buyer, 
-	while the green line denotes share prices at expiration that result in a profit for the buyer.
-	Parameters: the \texttt{call} 
-	contract strike price is $K$ = 80 USD/share and the premium $\mathcal{P}_{c}$ = 5.25 USD/share.}\label{fig:call-payoff-profit-breakeven-diagram}
-\end{figure}
-
-% we can construct the payoff and profit diagrams for a call option (Fig. \ref{fig:call-option-payoff-profit}).
-% The premium (cost) for each contract is governed by:
-% \begin{equation*}
-% \mathcal{P}_{c}(K,S(0))\geq\mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{c}}(K,S(T))\Bigr)
-% \end{equation*}
-% where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and contract expiration.
+\end{equation*}
+The premium (cost) for each contract is governed by:
+\begin{equation*}
+\mathcal{P}_{c}(K,S(0))\geq\mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{c}}(K,S(T))\Bigr)
+\end{equation*}
+where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and contract expiration.
 
 \subsection*{Put Options}
 The payoff per share at expiration for a put option contract is given by:
-\begin{equation}
+\begin{equation*}
 V_{p}(K,S(T)) = \max\left(K - S(T),~0\right)
-\end{equation}
+\end{equation*}
 where $K$ denotes the strike price and $S(T)$ is the share price at expiration. 
 The \texttt{seller} charges the \texttt{buyer} a premium $\mathcal{P}_{p}(K,S(0))$ for each contract.
 The buyer's profit per share at expiration is the payoff minus the contract premium:
-\begin{equation}
+\begin{equation*}
 P_{p}(K,S(T)) = V_{p}(K,S(T)) -  \mathcal{P}_{p}(K,S(0))
-\end{equation}
-where $P_{p}(K,S(T)) = 0$ denotes the breakeven point for the buyer. 
-Substiuting the payoff and profit expressions into the breakeven equation, gives the breakeven share price $\mathcal{B}_{p}$ at expiration for the buyer 
-of the \texttt{put} contract:
-\begin{equation}
-\mathcal{B}_{p} = K - \mathcal{P}_{p}(K,S(0))
-\end{equation}
-Thus, the share price at expiration must fall below the strike price minus the premium for the buyer of the \texttt{put} 
-contract to make a profit.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.65\textwidth]{./figs/Fig-Example-Put-K75-62DTE.pdf}
-    \caption{Schematic of the payoff, profit and breakeven for a \texttt{long call} 
-	contract. The gray dashed line denotes the payoff at expiration for the buyer.
-	The red-line denotes share prices at expiration that result in a loss for the buyer, 
-	while the green line denotes share prices at expiration that result in a profit for the buyer.
-	Parameters: the \texttt{put} 
-	contract strike price is $K$ = 75 USD/share and a midpoint of premium $\mathcal{P}_{c}$ = 2.93 USD/share.}\label{fig:put-payoff-profit-breakeven-diagram}
-\end{figure}
-
-% The premium (cost) for a put contract is governed by:
-% \begin{equation}
-% \mathcal{P}_{p}(K,S(0))\geq\mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{p}}(K,S(T))\Bigr)
-% \end{equation}
-% where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration.
+\end{equation*}
+The premium (cost) for a put contract is governed by:
+\begin{equation*}
+\mathcal{P}_{p}(K,S(0))\geq\mathbb{E}\Bigl(\mathcal{D}^{-1}_{T,0}(\bar{r})\cdot{V_{p}}(K,S(T))\Bigr)
+\end{equation*}
+where $\mathcal{D}_{T,0}(\bar{r})$ denotes the risk neutral discount factor computed between purchase and expiration.
 
 \section*{Computing the Premium of European Contracts}
 The premium of an option is the price that the buyer pays the seller for the right to buy or sell an underlying asset at a specified price.
