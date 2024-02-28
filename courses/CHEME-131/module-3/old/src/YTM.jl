@@ -56,7 +56,8 @@ end
 """
     YTM(model::MyUSTreasuryZeroCouponBondModel, compounding::T; rₒ::Float64 = 0.01) where T <: AbstractCompoundingModel
 """
-function YTM(model::MyUSTreasuryZeroCouponBondModel, compounding::T; rₒ::Float64 = 0.01) where T <: AbstractCompoundingModel
+function YTM(model::MyUSTreasuryZeroCouponBondModel, 
+    compounding::T; rₒ::Float64 = 0.01) where T <: AbstractCompoundingModel
 
     # initialize -    
     xinitial = [rₒ]

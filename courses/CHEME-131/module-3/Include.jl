@@ -17,6 +17,7 @@ using Plots
 using Statistics
 using LinearAlgebra
 using Colors
+using PrettyTables
 
 # load our codes -
 include(joinpath(_PATH_TO_SRC, "Files.jl"))
