@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.5)  4 MAR 2024 12:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.8.5)  4 MAR 2024 12:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -638,18 +638,27 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[4] (./Notes.aux)
+[4]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[5] (./Notes.aux)
 Package rerunfilecheck Info: File `Notes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13786 strings out of 478268
- 224108 string characters out of 5846348
+ 13788 strings out of 478268
+ 224124 string characters out of 5846348
  529827 words of memory out of 5000000
  31762 multiletter control sequences out of 15000+600000
  487254 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 70i,12n,77p,549b,458s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 70i,11n,77p,630b,415s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/te
 xlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/tex
@@ -664,10 +673,10 @@ f-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2022/texmf-
 dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2022/te
 xmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2022/texmf-dis
 t/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on Notes.pdf (4 pages, 151679 bytes).
+Output written on Notes.pdf (5 pages, 153107 bytes).
 PDF statistics:
- 140 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
- 25 named destinations out of 1000 (max. 500000)
+ 146 PDF objects out of 1000 (max. 8388607)
+ 101 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
