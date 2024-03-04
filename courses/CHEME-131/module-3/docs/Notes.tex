@@ -152,15 +152,18 @@ In this module, we'll explore the mathematics of STRIPS bonds, and how they can 
 \section*{Spot, Short and Forward Rates}
 A spot rate is the annual interest rate which is to be used for discounting the cash flows which occur at that date, i.e., now. Alternatively, the spot rate is the rate of return on a zero coupon bond that is purchased today and matures at some future date. Suppose a bond with a face value of $V_{P}$ (future USD) and a maturity of $T$ years is purchased today for $V_{B}$ (USD). The spot rate, $\bar{r}$, is the interest rate that makes the future face value of the bond equal to the purchase price, i.e.,
 \begin{equation}
-V_{B} = \frac{V_{P}}{(1+\bar{r})^{T}}
+V_{B}\cdot(1+\bar{r})^{T} = V_{P}
 \end{equation}
-Given the spot rate, we can compute the price of a bond with a face value of $V_{P}$ (USD) and a maturity of $T$ years or, alternatively, we can compute the spot rate $\bar{r}$ from the market price of a bond:
+Given the spot rate, we can compute the price of a bond with a face value of $V_{P}$ (USD) and a maturity of $T$ years or, alternatively, we can compute the spot rate $\bar{r}$ from the market price of a bond $V_{B}$:
 \begin{equation}
 \bar{r} = \left(\frac{V_{P}}{V_{B}}\right)^{\frac{1}{T}}-1
 \end{equation}
-The spot rate $\bar{r}$ is the annual interest rate which is constant for the entire life of the bond. The spot rate is also called the zero coupon rate, and it is the rate of return on a zero coupon bond that is purchased today and matures at some future date. However, we know that interest rates change in time, thus, we can take a more nuianced view of the spot rate as a function of time which we call the short rate.
+The spot rate $\bar{r}$ is constant for the entire life of the bond. However, we know that interest rates change in time, thus, we can take a more nuianced view of the spot rate as a function of time which we call the short rate.
 
-The short rate is the interest rate that occurs between two consecutive time periods, i.e., the interest rate that occurs between time $t$ and time $t+1$. We denote the short rate between time period $t$ and $t+1$ as $r_{t+1,t}$. The short rate is a random variable, and it is a function of time. We've seen the short rate before in another guise, i.e., in the multiperiod discrete discountr factor, $D_{t+1,t}$, which is the discount factor between time $t$ and $t+1$:
+The short rate is the interest rate that occurs between two consecutive time periods, i.e., the interest rate that occurs between time $t$ and time $t+1$. We denote the short rate between time period $t$ and $t+1$ as $r_{t+1,t}$. The short rate is a random variable. which flucates in time. We've seen the short rate before in another guise, i.e., in the multiperiod discrete discountr factor, $D_{t,0}$, which is the discount factor between time $t = 0$ and $t = t$. Of course, the short rates are related to the spot rate, $\bar{r}$, by the following relationship:
+\begin{equation}
+\prod_{j=0}^{t-1}\left(1+r_{j+1,j}\right) = \left(1+\bar{r}\right)^{t}
+\end{equation}
 
 \section*{Summary}
 Fill me in.
