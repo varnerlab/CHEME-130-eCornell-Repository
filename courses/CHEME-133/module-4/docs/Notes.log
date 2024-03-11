@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  11 MAR 2024 15:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  11 MAR 2024 16:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -611,10 +611,37 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 136
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+)
+LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10.95> not available
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 158.
+ [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
-al/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}] (./Notes.bbl
+al/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}]
+LaTeX Font Info:    Trying to load font information for TS1+phv on input line 1
+78.
+
+(/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/ts1phv.fd
+File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
+)
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[2]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[3] (./Notes.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 3.
 
@@ -627,18 +654,18 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[2] (./Notes.ind) (./Notes.aux)
+[4] (./Notes.ind) (./Notes.aux)
 Package rerunfilecheck Info: File `Notes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13881 strings out of 476025
- 226387 string characters out of 5790018
- 1862388 words of memory out of 5000000
- 34110 multiletter control sequences out of 15000+600000
- 525031 words of font info for 61 fonts, out of 8000000 for 9000
+ 13937 strings out of 476025
+ 227137 string characters out of 5790018
+ 1865388 words of memory out of 5000000
+ 34142 multiletter control sequences out of 15000+600000
+ 527230 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,11n,77p,487b,439s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,77p,487b,454s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 ></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></
@@ -648,11 +675,12 @@ ocal/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/lo
 cal/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loca
 l/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local
 /texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texliv
-e/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on Notes.pdf (2 pages, 91879 bytes).
+e/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2023/
+texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on Notes.pdf (4 pages, 119604 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 54 compressed objects within 1 object stream
- 12 named destinations out of 1000 (max. 500000)
+ 115 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
+ 30 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

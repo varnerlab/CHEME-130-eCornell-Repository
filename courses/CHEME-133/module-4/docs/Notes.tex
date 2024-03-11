@@ -146,25 +146,146 @@ The profit of the composite contract $\hat{P}$ at time $T$ (expiration) is given
 \hat{P}(S(T),K_{1},\dots,K_{d}) = \sum_{i\in\mathcal{C}}\theta_{i}\cdot{n}_{i}\cdot{P}_{i}(S(T),K_{i})
 \end{equation}
 where $P_{i}(S(T),K_{i})$ denotes the profit of contract $i$. 
-The profit of a contract is the payoff minus the initial cost of the contract, i.e., the premium paid to purchase the contract:
+Finally, the profit for contract of type $\star$ is given by:
 \begin{equation}
-P_{i}(S(T),K_{i}) = V_{i}(S(T),K_{i}) - \theta_{i}\cdot{\mathcal{P}}_{i}
+P_{\star}(K,S(T)) = {V}_{\star}(K,S(T)) -  \mathcal{P}_{\star}(K,S(0))
 \end{equation}
-where $\mathcal{P}_{i}$ denotes the premium paid to purchase contract $i$.
+where $\mathcal{P}_{\star}(K,S(0))$ denotes the premium of contract $\star$, and ${V}_{\star}(K,S(T))$ 
+denotes the payoff of contract $\star$ at expiration.
 
-\section*{Directional Composite Contracts}
+\section*{Defined-Risk Directional Composite Contracts}
 Directional composite contracts make a directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
 A common directional composite contract is a \textit{spread}.
 
-\subsection*{Credit Spreads}
-A credit spread is a composite contract that is opened for a net credit.
+\subsection*{Put Vertical Spread}
+A \texttt{put} vertical spread is constructed by combining 2 $\times$ \texttt{put} contracts, 
+a short \texttt{put} contract generates income while a \texttt{long} put contract controls downside risk.  
+Let contract $j$ have a strike price of $K_{j}$ and premium $\mathcal{P}_{j}$. 
+The share price at expiration is given by $S$. 
+Finally, let contract 1 be the short \texttt{put} leg $\theta_{1} = -1$ and contract 2 be the long \texttt{put} leg $\theta_{2} = 1$. 
+Then, the profit for a single \texttt{put} vertical spread at expiration is given by:
+\begin{equation}
+\hat{P} = -P_{1}+P_{2}
+\end{equation}
+which, after substitution of the profit functions for a put contract, gives:
+\begin{equation}
+\hat{P} = \left(K_{2} - S\right)^{+} - \left(K_{1} - S\right)^{+} + \left(\mathcal{P}_{1} - \mathcal{P}_{2}\right)
+\end{equation}
+where $V_{p} = (K-S)^{+}=\max(K-S,0)$ is the payoff function for a \texttt{put} contract. 
+The first term is the net payout of the two legs of the spread, while the second term is the net cost of the two contracts. 
+The maximum possible profit, loss, and breakeven conditions are given by:
+\begin{itemize}
+\item{The maximum possible profit of $\left(\mathcal{P}_{1} - \mathcal{P}_{2}\right)$ will occur when $S\geq{K_{1}}$.}
+\item{The maximum possible loss of $K_{2} - K_{1} + \left(\mathcal{P}_{1} - \mathcal{P}_{2}\right)$ will occur when $S\leq{K_{2}}$.}
+\item{The vertical put spread will breakeven when $S =  K_{1}+\left(\mathcal{P}_{2} - \mathcal{P}_{1}\right)$.}
+\end{itemize}
+
+\subsection*{Bearish call credit spread}
+A bear \texttt{call} credit spread, is an options strategy used 
+when a trader expects a decline in the price of the underlying asset. 
+Assume the initial share price of the underlying asset is $S_{o}$ (when we are opening the trade).
+For this trade, we sell a \texttt{call} contract at $K_{1}<S_{o}$ for $\mathcal{P}_{1}$, 
+and buy a \texttt{call} contract at $K_{2}>S_{o}$ for $\mathcal{P}_{2}$. The profit function 
+for the bear \texttt{call} credit spread is given by:
+\begin{equation}
+\hat{P} = (S-K_{2})^{+} - (S-K_{1})^{+} + (\mathcal{P}_{1}-\mathcal{P}_{2})
+\end{equation}
+where $V_{c} = (S-K)^{+}=\max(S-K,0)$ is the payoff function for a \texttt{call} contract. 
+The first two terms are the net payout of the two legs of the spread, while the last term is the net cost of the two contracts. 
+The maximum possible profit, loss, and breakeven conditions are given by:
+\begin{itemize}
+\item{The maximum possible profit of $\left(\mathcal{P}_{1} - \mathcal{P}_{2}\right)$ will occur when $S\leq{K_{1}}$.}
+\item{The maximum possible loss of $\left(\mathcal{P}_{1} - \mathcal{P}_{2}\right) -(K_{2} - K_{1})$ will occur when $S\geq{K_{2}}$.}
+\item{The bear \texttt{call} spread will breakeven when $S =  K_{1}+\left(\mathcal{P}_{1} - \mathcal{P}_{2}\right)$.}
+\end{itemize}
 
 \section*{Neutral Composite Contracts}
 Neutral composite contracts make no directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
 Two common directional composite contracts are the \textit{straddle} and the \textit{strangle}.	
 
+\subsection*{Straddles}
+A \href{https://www.investopedia.com/terms/s/straddle.asp}{straddle} is a neutral strategy constructed by simultaneously buying (or selling) 
+a put and a call option on the same underlying asset \texttt{XYZ}, with the same expiration, and the same strike price. 
+Depending upon the choice of the strike prices and whether an investor buys or sells both legs, 
+a \href{https://www.investopedia.com/terms/s/straddle.asp}{straddle} can be initiated as a credit or debit and can potentially have undefined profit or loss.
+Let $K_{j}$ denote the strike price of contract $j$ (USD/share), where the price of contract $j$ is $\mathcal{P}_{j}$ (USD/share). 
+Further, let index $j=1$ denote the \texttt{put} contract, $j=2$ denote the \texttt{call} contract; 
+for a straddle $K_{1}= K_{2}\equiv{K}$ (both legs have the same strike). The profit for a single straddle contract $\hat{P}$ at expiration is given by:
+\begin{equation}
+\hat{P} = \theta\cdot\left(P_{1}+P_{2}\right)
+\end{equation}
+where $\theta_{1}=\theta_{2}\equiv\theta$ denotes a direction parameter: $\theta=-1$ if each leg is sold (short),
+$\theta=1$ otherwise. After substitution of the profit functions for a \texttt{put} and a \texttt{call} contract, the overall profit $\hat{P}$ for a \texttt{straddle} 
+is given by:
+\begin{equation}
+\hat{P} = \theta\cdot\Bigl[(K-S)^{+}+(S-K)^{+}-(\mathcal{P}_{1}+\mathcal{P}_{2})\Bigr]
+\end{equation}
+where $V_{p} = (K-S)^{+}=\max(K-S,0)$ is the payoff function for the \texttt{put} contract, and $V_{c} = (S-K)^{+} = \max(S-K,0)$ is the payoff function for the \texttt{call} contract. 
+The profit (or loss) of a straddle has three regimes given by:
+\begin{equation}
+\hat{P} = \begin{cases}
+  \theta\cdot\Bigl[(S(T)-K)-\left(\mathcal{P}_{1}+\mathcal{P}_{2}\right)\Bigr]  & S(T)>K \\
+  -\theta\cdot\Bigl[\mathcal{P}_{1}+\mathcal{P}_{2}\Bigr] & S(T)=K \\
+    \theta\cdot\Bigl[(K-S(T))-\left(\mathcal{P}_{1}+\mathcal{P}_{2}\right)\Bigr] & S(T)<K
+\end{cases}
+\end{equation}
+where $S(T)$ denotes the share price of the underlying asset at expiration. Finally, a straddle has two possible breakeven points denoted as $S^{+}$ and $S^{-}$:
+\begin{equation}
+	\mathcal{B}(T) = \begin{cases}
+		S^{+} = K + \left(\mathcal{P}_{1}+\mathcal{P}_{2}\right) & S(T)>K \\
+		S^{-} = K - \left(\mathcal{P}_{1}+\mathcal{P}_{2}\right) & S(T)<K
+	\end{cases}
+\end{equation}
+where $S^{+}$ denotes the upper breakeven point, and $S^{-}$ denotes the lower breakeven point.
+
+\subsection*{Strangles}
+A \href{https://www.investopedia.com/terms/s/strangle.asp}{strangle} is a neutral strategy constructed by simultaneously buying (or selling)
+a \texttt{put} and a \texttt{call} option on the same underlying asset \texttt{XYZ}, with the same expiration, but with different strike prices.
+Depending upon the choice of the strike prices and whether an investor buys or sells both legs, a \href{https://www.investopedia.com/terms/s/strangle.asp}{strangle} 
+can be initiated for a credit or debit and can potentially have undefined profit or loss. Let $K_{j}$ denote the strike price of contract $j$ (USD/share), 
+where the price of contract $j$ is $\mathcal{P}_{j}$ (USD/share). Further, let index $j=1$ denote the \texttt{put} contract, $j=2$ denote the \texttt{call} contract; 
+for a strangle $K_{1}<K_{2}$. The profit for a single strangle contract $\hat{P}$ at expiration is given by:
+\begin{equation}
+\hat{P} = \theta\cdot\left(P_{1}+P_{2}\right)
+\end{equation}
+where $\theta_{1} = \theta_{2}\equiv\theta$ denotes a direction parameter: $\theta=-1$ if each leg is sold (short), $\theta=1$ otherwise. 
+After substitution of the profit functions for a \texttt{put} and a \texttt{call} contract, the overall profit $\hat{P}$ for a \texttt{strangle} 
+is given by:
+\begin{equation}
+\hat{P} = \theta\cdot\Bigl[(K_{1}-S)^{+}+(S-K_{2})^{+}-(\mathcal{P}_{1}+\mathcal{P}_{2})\Bigr]
+\end{equation}
+where $V_{p} = (K_{1}-S)^{+}=\max(K_{1}-S,0)$ is the payoff for the \texttt{put} contract, 
+and $V_{c} = (S-K_{2})^{+} = \max(S-K_{2},0)$ is the payoff for the \texttt{call} contract. 
+The profit (or loss) of a strangle has three regimes given by:
+\begin{equation}
+\hat{P} = \begin{cases}
+  \theta\cdot\Bigl[(S(T)-K_{2})-\left(\mathcal{P}_{1}+\mathcal{P}_{2}\right)\Bigr]  & S(T)>K_{2} \\
+  -\theta\cdot\Bigl[\mathcal{P}_{1}+\mathcal{P}_{2}\Bigr] & K_{1}\leq{S(T)}\leq{K_{2}} \\
+  \theta\cdot\Bigl[(K_{1}-S(T))-\left(\mathcal{P}_{1}+\mathcal{P}_{2}\right)\Bigr] & S(T)<{K_{1}}
+\end{cases}
+\end{equation}
+where $S(T)$ denotes the share price of the underlying asset at expiration. 
+Finally, a strangle has two possible breakeven points denoted as $S^{+}$ and $S^{-}$:
+\begin{equation}
+	\mathcal{B}(T) = \begin{cases}
+		S^{+} = K_{1} - \left(\mathcal{P}_{1}+\mathcal{P}_{2}\right) & S(T) > K_{2} \\
+		S^{-} = K_{2} + \left(\mathcal{P}_{1}+\mathcal{P}_{2}\right) & S(T) < K_{1}
+	\end{cases}
+\end{equation}
+where $S^{+}$ denotes the upper breakeven point, and $S^{-}$ denotes the lower breakeven point.
+
+\subsection*{Iron Flys and Condors}
+Iron flys and condors are examples of defined-risk neutral strategies, i.e., they make no directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
+However, unlike straddles and strangles, iron flys and condors have a defined maximum loss and maximum possible profit.
+
+
 \section*{Summary}
-Fill me in.
+In this module, we have analyzed the profit and loss of American-style composite contracts at expiration.
+We considered two types of composite contracts: directional and neutral.
+Directional composite contracts make a directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
+Directional composite contracts include put vertical spreads and bearish call credit spreads, and are examples of a defined-risk directional strategy.
+On the other hand, neutral composite contracts make no directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
+These include straddles, and strangles, which are examples of undefined profit or loss strategies, and iron flys and condors, which are examples of defined-risk neutral strategies.
 
 \bibliography{References_v1}
 
