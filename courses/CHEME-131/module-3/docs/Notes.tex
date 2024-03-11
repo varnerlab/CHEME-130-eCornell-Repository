@@ -169,10 +169,10 @@ interest rate, i.e., the short rate, changes in each period. Of course, the shor
 where the product on the right-hand side is the discount factor between time $t = 0$ and $t = t$.
 This must be true; otherwise, we could make money by borrowing at the short rate and investing at the spot rate.
 
-Finally, the forward rate is the expectation of the short rate between two time periods, i.e., the expected interest rate between time $t$ and time $t+1$, given the information available at time $t$. 
-The forward rate between period $j-1\rightarrow{j}$ is denoted by $f_{t+1,t}$ and is related to the short rate by the relationship:
+Finally, the forward rate is the expectation of the short rate between two time periods, i.e., the expected interest rate between time $t-1$ and time $t$, given the information available at time $t-1$. 
+The forward rate between period $j-1\rightarrow{j}$ is denoted by $f_{t,t-1}$ and is related to the short rate by the relationship:
 \begin{equation}
-	f_{t+1,t} = \mathbb{E}_{t}\left[r_{t+1,t}\right]
+	f_{t,t-1} = \mathbb{E}_{t}\left[r_{t,t-1}\right]
 \end{equation}
 
 \section*{STRIPS and the Yield Curve}
@@ -224,9 +224,8 @@ where we can use to solve for the spot rate for STRIP $i$ in terms of the escala
 \begin{equation}
 \bar{r}_{i} = \left(\frac{1}{\alpha}\right)^{1/T_{i}} - 1
 \end{equation}
-In this case, the spot rate is a function of the escalating factor $\alpha$, however, under this pricing scheme, 
-the spot rate is not constant for all maturities, i.e., it decreases as the time to maturity increases.
-Thus, the yeild curve is downward sloping (inverted) for this pricing scheme.
+In this case, the spot rate $\bar{r}_{i}$ is a function of the escalating factor $\alpha$ and the maturity $T_{i}$. 
+However, under this pricing scheme, the spot rate is not constant for all maturities, i.e., it decreases as the time to maturity increases. Thus, the yeild curve is downward sloping (inverted) for this pricing scheme.
 
 \subsection*{Scheme 3: Increasing Yield}
 Suppose we are the brokerage, and the yield we are willing to sell each STRIPS bond is given by:
