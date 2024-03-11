@@ -1,0 +1,174 @@
+\documentclass[11pt]{article}
+
+% load some asm stuff -
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{palatino,lettrine}
+\usepackage{fancyhdr}
+\usepackage{epsfig}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage{simplemargins}
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+%\usepackage{boiboites}
+\usepackage[margin=0pt,font=small,labelfont=bf]{caption}
+\newcommand{\boldindex}[1]{\textbf{\hyperpage{#1}}}
+\usepackage{makeidx}\makeindex
+\bibliographystyle{plos2015}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+
+% Set the size
+%\textwidth = 6.75 in
+%\textheight = 9.75 in
+%\oddsidemargin = 0.0 in
+%\evensidemargin = 0.0 in
+%\topmargin = 0.01 in
+%\headheight = 0.0 in
+%\headsep = 0.25 in
+%\parskip = 0.15in
+% \doublespace
+\setallmargins{1in}
+
+\newtheorem{example}{Example}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{property}{Property}[section]
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+
+\makeatletter
+% \renewcommand\subsection{\@startsection
+% 	{subsection}{2}{0mm}
+% 	{-0.05in}
+% 	{0.05\baselineskip}
+% 	{\normalfont\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection
+	{subsubsection}{2}{0mm}
+	{-0.05in}
+	{-0.5\baselineskip}
+	{\normalfont\normalsize\itshape\bfseries}}
+\renewcommand\paragraph{\@startsection
+	{paragraph}{2}{0mm}
+	{-0.05in}
+	{-0.5\baselineskip}
+	{\normalfont\normalsize\itshape}}
+\makeatother
+\linespread{1.1}
+
+\fancypagestyle{proposal}{\fancyhf{}%
+	\fancyhead[RO,LE]{\thepage}%
+	\fancyhead[LO,RE]{CHEME 133 Module 4 Composite Contracts}%
+	\renewcommand\headrulewidth{1pt}}
+\pagestyle{proposal}
+
+\usepackage{mdframed}
+\definecolor{lgray}{rgb}{0.92,0.92,0.92}
+\definecolor{antiquewhite}{rgb}{0.98,0.92,0.84}
+\definecolor{lightskyblue}{rgb}{0.93,0.95,0.99}
+
+% defn environment
+\mdfdefinestyle{theoremstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lgray, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=theoremstyle]{definition}{Definition}
+
+% concept environment
+\mdfdefinestyle{conceptstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lightskyblue, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=conceptstyle]{concept}{Concept}
+\newcommand{\newterm}[1]{{\it #1}}
+
+% Single space'd bib -
+\setlength\bibsep{0pt}
+
+\renewcommand{\rmdefault}{phv}\renewcommand{\sfdefault}{phv}
+%\newboxedtheorem[boxcolor=black, background=gray!5,titlebackground=orange!20,titleboxcolor = black]{color_box_example}{Example}{test}
+
+% Change the number format in the ref list -
+\renewcommand{\bibnumfmt}[1]{#1.}
+
+% Change Figure to Fig.
+\renewcommand{\figurename}{Fig.}
+\usepackage{enumitem}
+\setlist{noitemsep} % or \setlist{noitemsep} to leave space around whole list
+
+%Joycelyn Chan, Joshua Lequieu, Michael Paull, Chidanand Balaji, Ryan Tasseff
+%Our derivation follows closely the earlier development of Fredrickson \citep{Fredrickson:1976fk}.
+
+% Begin ...
+\begin{document}
+
+%\begin{titlepage}
+{\par\centering\textbf{\Large CHEME 133 Module 4: Analysis of American-Style Composite Options Contracts at Expiration}}
+\vspace{0.2in}
+{\par \centering \large{Jeffrey D. Varner}}
+\vspace{0.05in}
+{\par \centering \large{Smith School of Chemical and Biomolecular Engineering}}
+{\par \centering \large{Cornell University, Ithaca NY 14853}}
+% \vspace{0.1in}
+% {\par \centering \small{Copyright \copyright\ Jeffrey Varner 2018. All Rights Reserved.}}\\
+
+%\end{titlepage}
+\date{}
+\thispagestyle{empty}
+
+\setcounter{page}{1}
+
+\section*{Introduction}
+Composite options contracts are financial instruments that are composed of two or more individual options contracts. 
+The payoff and profite of a composite contract at expiration is the sum of the values of the individual contracts. 
+The advantage of constructing composite contracts is that they can be used to construct complex payoffs and profits startegies 
+from simple contract components. In this module, we will analyze composite contracts at expiration, 
+where the composite contract is composed of two or more American-style options.
+
+\subsection*{General Formulation}
+Call and put contracts can be combined to develop composite contract structures with interesting payoff diagrams. 
+Let $\mathcal{C}$ be a composite contract with $d$ legs (individual contracts) where each leg is written
+with respect to the same underlying asset \texttt{XYZ} and same expiration date. 
+Then, the payoff of the composite contract $\hat{V}(S(T),K_{1},\dots,K_{d})$ at time $T$ (expiration) is given by:
+\begin{equation}
+\hat{V}(S(T),K_{1},\dots,K_{d}) = \sum_{i\in\mathcal{C}}\theta_{i}\cdot{n_{i}}\cdot{V_{i}(S(T),K_{i}})
+\end{equation}
+where $K_{i}$ denotes the strike price of contract $i$, $\theta_{i}$ denotes the contract orientation $i$: $\theta_{i}=-1$ if contract $i$ is short (sold), 
+otherwise $\theta_{i}=1$, and the quantity $n_{i}$ denotes the copy number of contract $i$.
+The profit of the composite contract $\hat{P}$ at time $T$ (expiration) is given by:
+\begin{equation}
+\hat{P}(S(T),K_{1},\dots,K_{d}) = \sum_{i\in\mathcal{C}}\theta_{i}\cdot{n}_{i}\cdot{P}_{i}(S(T),K_{i})
+\end{equation}
+where $P_{i}(S(T),K_{i})$ denotes the profit of contract $i$. 
+The profit of a contract is the payoff minus the initial cost of the contract, i.e., the premium paid to purchase the contract:
+\begin{equation}
+P_{i}(S(T),K_{i}) = V_{i}(S(T),K_{i}) - \theta_{i}\cdot{\mathcal{P}}_{i}
+\end{equation}
+where $\mathcal{P}_{i}$ denotes the premium paid to purchase contract $i$.
+
+\section*{Directional Composite Contracts}
+Directional composite contracts make a directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
+A common directional composite contract is a \textit{spread}.
+
+\subsection*{Credit Spreads}
+A credit spread is a composite contract that is opened for a net credit.
+
+\section*{Neutral Composite Contracts}
+Neutral composite contracts make no directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
+Two common directional composite contracts are the \textit{straddle} and the \textit{strangle}.	
+
+\section*{Summary}
+Fill me in.
+
+\bibliography{References_v1}
+
+\clearpage
+\printindex
+
+\end{document}
