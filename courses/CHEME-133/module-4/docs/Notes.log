@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  18 MAR 2024 10:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  18 MAR 2024 11:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -600,26 +600,26 @@ Package hyperref Info: Link coloring OFF on input line 109.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 136
+LaTeX Font Info:    Trying to load font information for U+msa on input line 135
 .
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 136
+LaTeX Font Info:    Trying to load font information for U+msb on input line 135
 .
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 158.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 156.
  [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
 al/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}]
 LaTeX Font Info:    Trying to load font information for TS1+phv on input line 1
-78.
+75.
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/psnfss/ts1phv.fd
 File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
@@ -637,7 +637,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 File: ./figs/Fig-AMD-Profit-Short-Straddle.pdf Graphic file (type pdf)
 <use ./figs/Fig-AMD-Profit-Short-Straddle.pdf>
 Package pdftex.def Info: ./figs/Fig-AMD-Profit-Short-Straddle.pdf  used on inpu
-t line 212.
+t line 209.
 (pdftex.def)             Requested size: 352.31625pt x 234.88573pt.
 
 
@@ -653,7 +653,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 File: ./figs/Fig-AMD-Profit-Short-Strangle.pdf Graphic file (type pdf)
 <use ./figs/Fig-AMD-Profit-Short-Strangle.pdf>
 Package pdftex.def Info: ./figs/Fig-AMD-Profit-Short-Strangle.pdf  used on inpu
-t line 260.
+t line 256.
 (pdftex.def)             Requested size: 352.31625pt x 234.88573pt.
 
 
@@ -669,7 +669,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 File: ./figs/Fig-MU-Profit-IronCondor.pdf Graphic file (type pdf)
 <use ./figs/Fig-MU-Profit-IronCondor.pdf>
 Package pdftex.def Info: ./figs/Fig-MU-Profit-IronCondor.pdf  used on input lin
-e 319.
+e 315.
 (pdftex.def)             Requested size: 352.31625pt x 234.88573pt.
 
 
@@ -706,13 +706,13 @@ Package rerunfilecheck Info: File `Notes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13978 strings out of 476025
- 228429 string characters out of 5790018
+ 13977 strings out of 476025
+ 228416 string characters out of 5790018
  1867388 words of memory out of 5000000
  34170 multiletter control sequences out of 15000+600000
  530791 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,77p,990b,453s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,77p,979b,453s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 ></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></
@@ -724,10 +724,10 @@ l/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local
 /texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texliv
 e/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2023/
 texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on Notes.pdf (7 pages, 230554 bytes).
+Output written on Notes.pdf (7 pages, 230199 bytes).
 PDF statistics:
- 156 PDF objects out of 1000 (max. 8388607)
- 120 compressed objects within 2 object streams
- 40 named destinations out of 1000 (max. 500000)
+ 154 PDF objects out of 1000 (max. 8388607)
+ 118 compressed objects within 2 object streams
+ 39 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

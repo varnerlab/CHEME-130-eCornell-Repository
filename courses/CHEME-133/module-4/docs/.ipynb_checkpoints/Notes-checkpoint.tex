@@ -336,19 +336,22 @@ where $(K_{\star}-S)^{+}=\max(K_{\star}-S,0)$ and $(S-K_{\star})^{+} = \max(S-K_
 The profit (or loss) of an iron condor has several important regimes given by:
 \begin{equation}
 \hat{P} = \begin{cases}
-  K_{2} - K_{4} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)  & S(T)>K_{4} \\
-  K_{2} - S(T) + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)  & K_{2}<S(T)<K_{4} \\
-  \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{1}\leq{S(T)}\leq{K_{2}} \\
-  S(T) - K_{1} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{3}<S(T)<K_{1} \\
-  K_{3} - K_{1} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & S(T)<K_{3}
+  K_{2} - K_{4} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)  & S>K_{4} \\
+  K_{2} - S + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)  & K_{2}<S<K_{4} \\
+  \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{1}\leq{S}\leq{K_{2}} \\
+  S - K_{1} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{3}<S<K_{1} \\
+  K_{3} - K_{1} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & S<K_{3}
 \end{cases}
 \end{equation}
 Finally, an iron condor has two possible breakeven points denoted as $S^{+}$ and $S^{-}$:
+An \href{https://www.investopedia.com/terms/i/ironcondor.asp}{iron condor} has two break-even points $S^{+}$ and $S^{-}$ 
+where we know that $K_{2}<S^{+}<K_{4}$ and $K_{3}<S^{-}<K_{1}$. Thus, the low break-even point $S^{-}$ is given by:
 \begin{equation}
-	\mathcal{B}(T) = \begin{cases}
-		S^{+} = K_{2} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{2}<S(T)<K_{4}  \\
-		S^{-} = K_{2} + \left(\mathcal{P}_{1}+\mathcal{P}_{2}\right) & K_{3}<S(T)<K_{1}
-	\end{cases}
+S^{-} = K_{1} - \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)
+\end{equation}
+while the high break-even point $S^{+}$ is given by:
+\begin{equation}
+S^{+} = K_{2} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)
 \end{equation}
 
 \section*{Summary}
