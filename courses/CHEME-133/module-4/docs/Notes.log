@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  11 MAR 2024 16:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.9)  18 MAR 2024 10:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -633,6 +633,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [2]
+<./figs/Fig-AMD-Profit-Short-Straddle.pdf, id=38, 602.25pt x 401.5pt>
+File: ./figs/Fig-AMD-Profit-Short-Straddle.pdf Graphic file (type pdf)
+<use ./figs/Fig-AMD-Profit-Short-Straddle.pdf>
+Package pdftex.def Info: ./figs/Fig-AMD-Profit-Short-Straddle.pdf  used on inpu
+t line 212.
+(pdftex.def)             Requested size: 352.31625pt x 234.88573pt.
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -641,11 +648,14 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[3] (./Notes.bbl
+[3 <./figs/Fig-AMD-Profit-Short-Straddle.pdf>]
+<./figs/Fig-AMD-Profit-Short-Strangle.pdf, id=51, 602.25pt x 401.5pt>
+File: ./figs/Fig-AMD-Profit-Short-Strangle.pdf Graphic file (type pdf)
+<use ./figs/Fig-AMD-Profit-Short-Strangle.pdf>
+Package pdftex.def Info: ./figs/Fig-AMD-Profit-Short-Strangle.pdf  used on inpu
+t line 260.
+(pdftex.def)             Requested size: 352.31625pt x 234.88573pt.
 
-Package natbib Warning: Empty `thebibliography' environment on input line 3.
-
-)
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -654,18 +664,55 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[4] (./Notes.ind) (./Notes.aux)
+[4 <./figs/Fig-AMD-Profit-Short-Strangle.pdf>]
+<./figs/Fig-MU-Profit-IronCondor.pdf, id=67, 602.25pt x 401.5pt>
+File: ./figs/Fig-MU-Profit-IronCondor.pdf Graphic file (type pdf)
+<use ./figs/Fig-MU-Profit-IronCondor.pdf>
+Package pdftex.def Info: ./figs/Fig-MU-Profit-IronCondor.pdf  used on input lin
+e 319.
+(pdftex.def)             Requested size: 352.31625pt x 234.88573pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[5]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[6 <./figs/Fig-MU-Profit-IronCondor.pdf>]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[7] (./Notes.ind) (./Notes.aux)
 Package rerunfilecheck Info: File `Notes.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 13937 strings out of 476025
- 227137 string characters out of 5790018
- 1865388 words of memory out of 5000000
- 34142 multiletter control sequences out of 15000+600000
- 527230 words of font info for 64 fonts, out of 8000000 for 9000
+ 13978 strings out of 476025
+ 228429 string characters out of 5790018
+ 1867388 words of memory out of 5000000
+ 34170 multiletter control sequences out of 15000+600000
+ 530791 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,77p,487b,454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,77p,990b,453s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 ></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></
@@ -677,10 +724,10 @@ l/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local
 /texlive/2023/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texliv
 e/2023/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2023/
 texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on Notes.pdf (4 pages, 119604 bytes).
+Output written on Notes.pdf (7 pages, 230554 bytes).
 PDF statistics:
- 115 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
- 30 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 156 PDF objects out of 1000 (max. 8388607)
+ 120 compressed objects within 2 object streams
+ 40 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

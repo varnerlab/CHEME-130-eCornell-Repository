@@ -205,7 +205,20 @@ Two common directional composite contracts are the \textit{straddle} and the \te
 
 \subsection*{Straddles}
 A \href{https://www.investopedia.com/terms/s/straddle.asp}{straddle} is a neutral strategy constructed by simultaneously buying (or selling) 
-a put and a call option on the same underlying asset \texttt{XYZ}, with the same expiration, and the same strike price. 
+a put and a call option on the same underlying asset \texttt{XYZ}, with the same expiration, and the same strike price (Fig. \ref{fig:options-short-straddle-profit}). 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{./figs/Fig-AMD-Profit-Short-Straddle.pdf}
+    \caption{Schematic of the profit for a short straddle trade written for Advanced Micro Devices, Inc. with ticker symbol \texttt{AMD}.
+	A short straddle is a neutral strategy constructed by simultaneously selling a put and a call option on the same underlying asset \texttt{AMD}, with the same expiration, and the same strike price.
+	On the the other hand, a long straddle is a neutral strategy constructed by simultaneously buying a put and a call option on the same underlying asset \texttt{AMD}, with the same expiration, and the same strike price.
+	A long straddle has the same breakeven points as a short straddle, but the profit and loss are reversed, i.e., the profit diagram is rotated around the breakeven line.
+	Thus, a long straddle has a defined maximum loss and an unlimited maximum possible profit.
+	}\label{fig:options-short-straddle-profit}
+\end{figure}
+
+
 Depending upon the choice of the strike prices and whether an investor buys or sells both legs, 
 a \href{https://www.investopedia.com/terms/s/straddle.asp}{straddle} can be initiated as a credit or debit and can potentially have undefined profit or loss.
 Let $K_{j}$ denote the strike price of contract $j$ (USD/share), where the price of contract $j$ is $\mathcal{P}_{j}$ (USD/share). 
@@ -240,7 +253,19 @@ where $S^{+}$ denotes the upper breakeven point, and $S^{-}$ denotes the lower b
 
 \subsection*{Strangles}
 A \href{https://www.investopedia.com/terms/s/strangle.asp}{strangle} is a neutral strategy constructed by simultaneously buying (or selling)
-a \texttt{put} and a \texttt{call} option on the same underlying asset \texttt{XYZ}, with the same expiration, but with different strike prices.
+a \texttt{put} and a \texttt{call} option on the same underlying asset \texttt{XYZ}, with the same expiration, but with different strike prices (Fig. \ref{fig:options-short-strangle-profit}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{./figs/Fig-AMD-Profit-Short-Strangle.pdf}
+    \caption{Schematic of the profit for a short strangle trade written for Advanced Micro Devices, Inc.  with ticker symbol \texttt{AMD}.
+	A short strangle is a neutral undefined risk strategy constructed by simultaneously selling a put and a call option on the same underlying asset \texttt{AMD}, with the same expiration, but with different strike prices.
+	On the other hand, a long strangle is a neutral strategy constructed by simultaneously buying a put and a call option on the same underlying asset \texttt{AMD}, with the same expiration, but with different strike prices.
+	A long strangle has the same breakeven points as a short strangle, but the profit and loss are reversed, i.e., the profit diagram is rotated around the breakeven line.
+	Thus, a long strangle has a defined maximum loss and an undefined maximum possible profit.
+	}\label{fig:options-short-strangle-profit}
+\end{figure}
+
 Depending upon the choice of the strike prices and whether an investor buys or sells both legs, a \href{https://www.investopedia.com/terms/s/strangle.asp}{strangle} 
 can be initiated for a credit or debit and can potentially have undefined profit or loss. Let $K_{j}$ denote the strike price of contract $j$ (USD/share), 
 where the price of contract $j$ is $\mathcal{P}_{j}$ (USD/share). Further, let index $j=1$ denote the \texttt{put} contract, $j=2$ denote the \texttt{call} contract; 
@@ -274,10 +299,64 @@ Finally, a strangle has two possible breakeven points denoted as $S^{+}$ and $S^
 \end{equation}
 where $S^{+}$ denotes the upper breakeven point, and $S^{-}$ denotes the lower breakeven point.
 
-\subsection*{Iron Flys and Condors}
-Iron flys and condors are examples of defined-risk neutral strategies, i.e., they make no directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
-However, unlike straddles and strangles, iron flys and condors have a defined maximum loss and maximum possible profit.
+\subsection*{Iron Condor}
+Iron Condors are examples of defined-risk neutral strategies, i.e., they make no directional assumption about the price movement of the underlying asset, 
+and can be opened for a credit or a debit.
+However, unlike straddles and strangles, iron condors have a defined maximum loss and maximum possible profit (Fig. \ref{fig:options-iron-condor-profit}).
+An \href{https://www.investopedia.com/terms/i/ironcondor.asp}{iron condor} is a neutral defined risk position constructed 
+by \textit{selling} a put (1) and call (2) options on the underlying asset \texttt{XYZ}, 
+while simultaneously \textit{buying} a put (3) and call (4) options on \texttt{XYZ}. 
+All the legs of an \href{https://www.investopedia.com/terms/i/ironcondor.asp}{iron condor} have the same underlying asset \texttt{XYZ}, 
+and have the same expiration, but they have different strike prices where $K_{3}<K_{1}<K_{2}<K_{4}$. 
+In particular, the two short options are sold with strikes on either side of the current share price $S_{o}$ of \texttt{XYZ}, 
+with the short put strike price $K_{1}<S_{o}$ and the short call strike price $K_{2}>S_{o}$. 
+Then, the long legs are purchased above and below the short strikes.  
+Thus, an \href{https://www.investopedia.com/terms/i/ironcondor.asp}{iron condor} position has the character of a 
+\href{https://www.investopedia.com/terms/s/strangle.asp}{strangle} combined with a vertical spread. 
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{./figs/Fig-MU-Profit-IronCondor.pdf}
+    \caption{Schematic of the profit for an Iron Condor on Micron Technologies with ticker symbol \texttt{MU}.
+	An iron condor is a neutral defined risk position constructed by selling a put and call options on the underlying asset \texttt{MU},
+	while simultaneously buying a put and call options on \texttt{MU}. Thus, the maximum possible profit and loss are defined at the time the trade is opened.
+	}\label{fig:options-iron-condor-profit}
+\end{figure}
+
+Let the current share price of \texttt{XYZ} be $S_{o}$ USD/share, and let $S(T)$ denote the share price of \texttt{XYZ} at expiration. 
+Further, let $K_{j}$ denote the strike price of contract $j$ (USD/share), where the price of contract $j$ is $\mathcal{P}_{j}$ (USD/share). 
+Finally, let index $j=1$ denote the short put contract, $j=2$ denote the short call contract,  $j=3$ denote the long put contract and  $j=4$ denote the long call contract; 
+for an \href{https://www.investopedia.com/terms/i/ironcondor.asp}{iron condor} $K_{3} < K_{1} <K_{2} < K_{3}$. 
+Then, the profit for a single iron condor contract $\hat{P}$ at expiration is given by:
+\begin{equation}
+\hat{P} = \theta_{1}P_{1} + \theta_{2}P_{2} + \theta_{3}P_{3} + \theta_{4}P_{4}
+\end{equation}
+where $\theta_{1}=\theta_{2} = -1$ (short legs) and $\theta_{3}=\theta_{4} = 1$ (long legs). 
+After substitution of the profit functions for put and call contracts, the overall profit $\hat{P}$ is given by:
+\begin{equation}
+\hat{P} = -(K_{1}-S)^{+} - (S-K_{2})^{+} + (K_{3} - S)^{+} + (S-K_{4})^{+} + \left(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\right)
+\end{equation}
+where $(K_{\star}-S)^{+}=\max(K_{\star}-S,0)$ and $(S-K_{\star})^{+} = \max(S-K_{\star},0)$. 
+The profit (or loss) of an iron condor has several important regimes given by:
+\begin{equation}
+\hat{P} = \begin{cases}
+  K_{2} - K_{4} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)  & S>K_{4} \\
+  K_{2} - S + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)  & K_{2}<S<K_{4} \\
+  \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{1}\leq{S}\leq{K_{2}} \\
+  S - K_{1} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & K_{3}<S<K_{1} \\
+  K_{3} - K_{1} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr) & S<K_{3}
+\end{cases}
+\end{equation}
+Finally, an iron condor has two possible breakeven points denoted as $S^{+}$ and $S^{-}$:
+An \href{https://www.investopedia.com/terms/i/ironcondor.asp}{iron condor} has two break-even points $S^{+}$ and $S^{-}$ 
+where we know that $K_{2}<S^{+}<K_{4}$ and $K_{3}<S^{-}<K_{1}$. Thus, the low break-even point $S^{-}$ is given by:
+\begin{equation}
+S^{-} = K_{1} - \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)
+\end{equation}
+while the high break-even point $S^{+}$ is given by:
+\begin{equation}
+S^{+} = K_{2} + \Bigl(\mathcal{P}_{1} + \mathcal{P}_{2} - \mathcal{P}_{3}-\mathcal{P}_{4}\Bigr)
+\end{equation}
 
 \section*{Summary}
 In this module, we have analyzed the profit and loss of American-style composite contracts at expiration.
@@ -287,7 +366,7 @@ Directional composite contracts include put vertical spreads and bearish call cr
 On the other hand, neutral composite contracts make no directional assumption about the price movement of the underlying asset, and can be opened for a credit or a debit.
 These include straddles, and strangles, which are examples of undefined profit or loss strategies, and iron flys and condors, which are examples of defined-risk neutral strategies.
 
-\bibliography{References_v1}
+% \bibliography{References_v1}
 
 \clearpage
 \printindex
