@@ -7,7 +7,7 @@ function search(dataset::Dict{Int64, Vector{Dict{String, Any}}}, DTE::Int64, log
     records = dataset[DTE];
     for record in records
 
-        if (logic(record) == true)
+        if (logic(DTE, record) == true)
 
             # @show record["details"]
             
@@ -16,9 +16,9 @@ function search(dataset::Dict{Int64, Vector{Dict{String, Any}}}, DTE::Int64, log
                 underlying = record["underlying_asset"]["price"],
                 strike = record["details"]["strike_price"] |> x-> convert(Float64, x),
                 type = record["details"]["contract_type"],
-                bid = record["last_quote"]["bid"],
-                ask = record["last_quote"]["ask"],
-                midpoint = record["last_quote"]["midpoint"]
+                bid = record["last_quote"]["bid"] |> x-> convert(Float64, x),
+                ask = record["last_quote"]["ask"] |> x-> convert(Float64, x),
+                midpoint = record["last_quote"]["midpoint"] |> x-> convert(Float64, x)
             );
 
 
