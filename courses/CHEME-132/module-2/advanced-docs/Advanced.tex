@@ -250,9 +250,9 @@ used for approximating the solution of ordinary differential equations (ODEs).
 
 \begin{definition}[Euler-Maruyama Method]\label{defn-em-method}
 For the general scalar stochastic differential equation describing the random variable $X$ (assuming Wiener noise):
-\begin{equation}\label{eqn-generic-scalar-sde}
+\begin{equation*}\label{eqn-generic-scalar-sde}
 dX = a(X,t)dt + b(X,t)dW
-\end{equation}
+\end{equation*}
 where $a(X,t)$ and $b(X,t)$ are functions of the state $X$ and $t$, and $dW$ is the Wiener noise process.
 The EM method gives the approximate solution:
 \begin{equation*}\label{eqn-em-method}
@@ -262,8 +262,10 @@ where the step size $h=t_{k+1} - t_{k}$ and $Z(0,1)$ denotes a standard normal r
 While the EM method is straightforward to implement, it has a poor overall accuracy with error on order $\sqrt{h}$; 
 thus, small step sizes are required to get accurate solutions.
 \end{definition}
+Let's apply the EM method to two examples with time-dependent parameters, 
+namely the Ornstein-Uhlenbeck model [REFME] and the Heston model of stochastic volatility [REFME].
 
-\subsubsection*{Ornstein-Uhlenbeck model}
+\subsection*{Ornstein-Uhlenbeck model}
 The \href{https://en.wikipedia.org/wiki/Ornstein–Uhlenbeck_process}{Ornstein-Uhlenbeck model} of mean reversion is a type of Brownian motion model 
 with a modified mean-reverting drift term:
 \begin{equation*}\label{eqn-ou-model}
@@ -271,12 +273,47 @@ dX = \theta\left(\mu-X\right)dt + {\sigma}dW
 \end{equation*}
 where $\theta>0$ is the time-constant controlling the mean reversion, 
 $\mu$ is the long-term price target, and $\sigma>0$ denotes the volatility parameter [REFME]. 
+
+\begin{definition}[Discretized Ornstein-Uhlenbeck Model]\label{defn-ou-model}
 We can use the EM method to discretize the Ornstein-Uhlenbeck model:
 \begin{equation*}\label{eqn-EM-soln-OU-model}
 X_{k+1} = X_{k} + \theta\left(\mu-X_{k}\right)h + \left(\sigma\sqrt{h}\right)Z(0,1)
 \end{equation*}
 where $Z(0,1)$ denotes a standard normally distributed random variable, 
-and $h = t_{k+1} - t_{k}$ denotes the fixed time step size, where the subsscript $k$ denotes the time index. 
+and $h = t_{k+1} - t_{k}$ denotes the fixed time step size, where the subsscript $k$ denotes the time index.
+\end{definition} 
+
+\subsection*{Heston model of stochastic volatility}
+The \href{https://en.wikipedia.org/wiki/Heston_model}{Heston model}
+is an example of a stochastic volatility model in which the volatility parameter 
+controlling the price is described by a random variable whose value is governed by a separate stochastic differential equation [REFME]. 
+In the \href{https://en.wikipedia.org/wiki/Heston_model}{Heston model}, the price $X(t)$ is governed by:
+\begin{equation*}\label{eqn-price-heston-model}
+dX = \mu{X}dt + \left(\sqrt{\nu}\right)X{dW}^{X}
+\end{equation*}
+while the evolution of the volatility parameter $\nu$ is governed by a separate \href{https://en.wikipedia.org/wiki/Cox-Ingersoll-Ross_model}{Cox-Ingersoll-Ross (CIR)} process:
+\begin{equation*}\label{eqn-vol-heston-model}
+d\nu = \kappa\left(\theta - \nu\right)dt +\left(\xi\sqrt{\nu}\right)dW^{\nu}
+\end{equation*}
+where $\mu$ is the long-term drift (return growth rate), 
+$\kappa$ is the rate of mean reversion for the volatility parameter,
+$\theta$ is the long-term volatility, and $\xi$ is the volatility of the volatility parameter.
+Finally, each equation of the \href{https://en.wikipedia.org/wiki/Heston_model}{Heston model} 
+is driven by a separate potentially correlated Weiner noise process, labeled $dW^{X}$ and $dW^{\nu}$, respectively.
+
+\begin{definition}[Discretized Heston Model]\label{defn-heston-model}
+The EM discretization of the \href{https://en.wikipedia.org/wiki/Heston_model}{Heston model} gives 
+price and volatility equations of the form:
+\begin{eqnarray*}\label{eqn-heston-price-em-discrete}
+X_{k+1} & = & X_{k} + \mu{X_{k}}h + \left(\sqrt{\nu_{k}h}\right)X_{k}Z^{X}(0,\Sigma)\\
+\nu_{k+1} & = & \nu_{k} + \kappa\left(\theta - \nu_{k}\right)h + \left(\xi\sqrt{\nu_{k}h}\right)Z^{\nu}(0,\Sigma)
+\end{eqnarray*}
+where the price and volatility noise processes $Z^{X}$ and $Z^{\nu}$ are samples 
+from a multivariate normal distribution with mean zero and a covariance matrix $\Sigma$.
+The covariance matrix $\Sigma$ has entries $\Sigma_{ij}=\sigma_{i}\sigma_{j}\rho_{ij}$, where 
+$\sigma_{i}$ and $\sigma_{j}$ are the standard deviations of the individual noise processes,
+and $\rho_{ij}$ is the correlation coefficient between the noise processes.
+\end{definition}
 
 \subsection*{Time-series Models of Time-Dependent Parameters}
 Fill me in.
