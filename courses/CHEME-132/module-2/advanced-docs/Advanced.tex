@@ -1,0 +1,292 @@
+\documentclass[11pt]{article}
+
+% load some asm stuff -
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{palatino,lettrine}
+\usepackage{fancyhdr}
+\usepackage{epsfig}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage{simplemargins}
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+%\usepackage{boiboites}
+\usepackage[margin=0pt,font=small,labelfont=bf]{caption}
+\newcommand{\boldindex}[1]{\textbf{\hyperpage{#1}}}
+\usepackage{makeidx}\makeindex
+\bibliographystyle{plos2015}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+
+% Set the size
+%\textwidth = 6.75 in
+%\textheight = 9.75 in
+%\oddsidemargin = 0.0 in
+%\evensidemargin = 0.0 in
+%\topmargin = 0.01 in
+%\headheight = 0.0 in
+%\headsep = 0.25 in
+%\parskip = 0.15in
+% \doublespace
+\setallmargins{1in}
+
+\newtheorem{example}{Example}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{property}{Property}[section]
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+
+\makeatletter
+% \renewcommand\subsection{\@startsection
+% 	{subsection}{2}{0mm}
+% 	{-0.05in}
+% 	{0.05\baselineskip}
+% 	{\normalfont\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection
+	{subsubsection}{2}{0mm}
+	{-0.05in}
+	{-0.5\baselineskip}
+	{\normalfont\normalsize\itshape\bfseries}}
+\renewcommand\paragraph{\@startsection
+	{paragraph}{2}{0mm}
+	{-0.05in}
+	{-0.5\baselineskip}
+	{\normalfont\normalsize\itshape}}
+\makeatother
+\linespread{1.1}
+
+\fancypagestyle{proposal}{\fancyhf{}%
+	\fancyhead[RO,LE]{\thepage}%
+	\fancyhead[LO,RE]{CHEME 132 Module 2 Advanced Single Asset Geometric Brownian Motion}%
+	\renewcommand\headrulewidth{1pt}}
+\pagestyle{proposal}
+
+\usepackage{mdframed}
+\definecolor{lgray}{rgb}{0.92,0.92,0.92}
+\definecolor{antiquewhite}{rgb}{0.98,0.92,0.84}
+\definecolor{lightskyblue}{rgb}{0.93,0.95,0.99}
+
+% defn environment
+\mdfdefinestyle{theoremstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lgray, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=theoremstyle]{definition}{Definition}
+
+% concept environment
+\mdfdefinestyle{conceptstyle}{% 
+    linecolor=black,linewidth=1pt,% 
+    frametitlerule=true,% 
+    frametitlebackgroundcolor=lightskyblue, 
+    innertopmargin=\topskip,} 
+\mdtheorem[style=conceptstyle]{concept}{Concept}
+\newcommand{\newterm}[1]{{\it #1}}
+
+% Single space'd bib -
+\setlength\bibsep{0pt}
+
+\renewcommand{\rmdefault}{phv}\renewcommand{\sfdefault}{phv}
+%\newboxedtheorem[boxcolor=black, background=gray!5,titlebackground=orange!20,titleboxcolor = black]{color_box_example}{Example}{test}
+
+% Change the number format in the ref list -
+\renewcommand{\bibnumfmt}[1]{#1.}
+
+% Change Figure to Fig.
+\renewcommand{\figurename}{Fig.}
+\usepackage{enumitem}
+\setlist{noitemsep} % or \setlist{noitemsep} to leave space around whole list
+
+%Joycelyn Chan, Joshua Lequieu, Michael Paull, Chidanand Balaji, Ryan Tasseff
+%Our derivation follows closely the earlier development of Fredrickson \citep{Fredrickson:1976fk}.
+
+% Begin ...
+\begin{document}
+
+%\begin{titlepage}
+{\par\centering\textbf{\Large CHEME 132 Module 2 Advanced: Weighted Returns, Time Depending Parameters and Dividends for Single Asset Geometric Brownian Motion}}
+\vspace{0.2in}
+{\par \centering \large{Jeffrey D. Varner}}
+\vspace{0.05in}
+{\par \centering \large{Smith School of Chemical and Biomolecular Engineering}}
+{\par \centering \large{Cornell University, Ithaca NY 14853}}
+% \vspace{0.1in}
+% {\par \centering \small{Copyright \copyright\ Jeffrey Varner 2018. All Rights Reserved.}}\\
+
+%\end{titlepage}
+\date{}
+\thispagestyle{empty}
+
+\setcounter{page}{1}
+
+\section*{Introduction}
+\href{https://en.wikipedia.org/wiki/Geometric_Brownian_motion}{Geometric Brownian motion (GBM)} is a continuous-time stochastic model in which the random variable $S(t)$, 
+e.g., the share price of a firm. 
+Geometric Brownian motion was popularized as a financial model by Samuelson in the 1950s and 1960s \cite{Merton2006}, 
+but is arguably most commonly associated with the Black–Scholes options pricing model, which we will describe later 
+\cite{BlackScholes1973}. Geometric Brownian motion (GBM) assumes that the share price $S(t)$ of a firm can be modeled as a deterministic
+drift term (which is proportional to the share price) that is corrupted by a \href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}, also proportional to the share price:
+\begin{equation}\label{eqn:GBM}
+\frac{dS}{S} = {\mu}\,dt + \sigma\,{dW}
+\end{equation}
+The constant $\mu$ denotes a drift parameter, i.e., the growth rate of the share price return, $\sigma>0$ is a volatility parameter, i.e., 
+the dispersion of the return, $dt$ denotes an infinitesimal time step, and $dW$ is the output of a 
+\href{https://en.wikipedia.org/wiki/Wiener_process}{Wiener noise process}.  A \href{https://en.wikipedia.org/wiki/Wiener_process)}{Wiener Process} 
+(also often referred to as a standard Brownian motion) is a real-valued continuous-time stochastic 
+process named after \href{https://en.wikipedia.org/wiki/Norbert_Wiener}{Norbert Wiener} for the study of one-dimensional Brownian motion (Defn. \ref{defn-wiener-process}):
+\begin{definition}[Wiener Process]\label{defn-wiener-process}
+A Wiener process is a continuous one-dimensional stochastic process $\left\{W\left(t\right), 0\leq{t}\leq{T}\right\}$ with the following properties:
+\begin{itemize}
+\setlength\itemsep{0em}
+\item{W$\left(0\right)$ = $0$ with probability $1$}
+\item{The increments $\left\{W(t_{1}) - W(t_{o}),\dots, W(t_{k}) - W(t_{k-1})\right\}$ are independent for any $k$ and $0\leq{t_{o}}< t_{1} < \dots < t_{k} \leq{T}$}
+\item{The increment W(t) - W(s) $\sim~N\left(0,t-s\right)$ for any $0\leq{s}< t \leq{T}$, where $N\left(0,t-s\right)$ denotes a normally distributed random variable with mean $0$ and variance $t - s$.}
+\end{itemize}
+\end{definition}
+Equation \ref{eqn:GBM} is a continuous-time analog of the discrete-time binomial lattice model we developed previously. 
+It has several exciting properties; for example, it has an analytical solution and analytical expressions 
+for the expectation and variance of the share price. In this module, we will develop analytical solutions to Eqn. \ref{eqn:GBM}, 
+and tools to estimate the parameters $\mu$ and $\sigma$ from historical data. We'll then use these tools to simulate the share 
+price of firms and analyze properties of the return distributions in the example and project for this module. 
+
+\section*{Weighted Expected Return}
+Previously, we used the arithmetic mean of historical data to estimate the expected annualized growth rate $\mu$ for a particular firm.
+However, one could argue that the arithmetic mean is not the best estimator of the expected growth rate in the current market environment.
+For example, the arithmetic mean is sensitive to outliers and does not account for the time-varying nature of the growth rate 
+or current macroeconomic conditions. To address these issues, we will develop a weighted return estimator for the expected growth rate $\mu$
+that be be used to focus on more recent data, or to down-weight the impact of outliers. 
+
+The weighted return estimator is a generalization of the arithmetic mean that assigns a weight to each data point in the historical data set.
+Suppose we had a data set $\mathcal{D}$ that contained the close, or the volume-weighted-average (VWAP) price 
+or some other price associated with a firm $i$ over $T$ periods, e.g., VWAP samples from periods $1\rightarrow{T}$.
+Then, from the definition of discrete expectation, we know the expected excess return for firm $i$ is given by:
+
+\begin{equation}\label{eqn:expected-return}
+\mathbb{E}\left(R_{i}\right) = \sum_{t=1}^{T}p_{i}(t)\cdot{R_{i,t}}
+\end{equation}
+where $R_{i,t}$ is the excess return for firm $i$ at time $t$, 
+and $p_{i}(t)$ denotes the probability of observing the excess return $R_{i,t}$ at time $t$ for firm $i$, 
+where the probability $\sum_{t}p_{i}(t) = 1$. 
+The probability terms in Eqn. \eqref{eqn:expected-return} have several interpretations. 
+First, they could represent the output of some (unknown) market process governing the returns. 
+Another actionable interpretation is to think of them as weighting factors. 
+
+Suppose the recent trend in prices for firm $i$ is significantly different from long-term historical price trends, 
+e.g., firm $i$ has recently experienced a sustained period of decline. 
+You could weigh the recent data more highly to calculate a localized expected return (or volatility) 
+that is more representative of current trends. 
+Of course, the opposite could be true; you could also empathize with older versus newer data. Many weighting schemes could be used; any approach that obeys the axioms of probability will work!
+However, let's borrow a strategy from chemical physics; namely, we'll assume $p(t)$ follows the 
+\href{https://en.wikipedia.org/wiki/Boltzmann_distribution}{Boltzmann distribution}:
+
+\begin{definition}[Boltzmann weighted excess returns]\label{defn-bwer}
+Let the probability factors $p(t)$ follow a \href{https://en.wikipedia.org/wiki/Boltzmann_distribution}{Boltzmann distribution}:
+\begin{equation*}\label{eqn-boltzmann-weight}
+    p(t) = \frac{1}{Z}\cdot\exp(-\lambda\cdot\epsilon_{t})
+\end{equation*}
+where the partition function $Z \equiv \sum_{t=1}^{T}\exp(-\lambda\cdot\epsilon_{t})$.
+The parameter $\lambda\geq{0}$ controls the rate of decay, while $\epsilon_{t}>0$ is a pseudo energy of the market at time $t$, 
+which we model as $\epsilon_{t} = t$. Then, the Boltzmann weighted expected excess return for the choice of $\epsilon_{t} \sim t$ is given by: 
+\begin{equation*}\label{eqn-boltzmann-weight-expectation}
+    \mathbb{E}_{B}\left(R_{i}\right) = \frac{1}{Z}\cdot\sum_{t=1}^{T}\exp\left(-\lambda\cdot{t}\right){R}_{i,t}
+\end{equation*}
+\end{definition}
+Depending upon how we choose the decay parameter $\lambda$ and the pseudo energies in \ref{defn-bwer}, we can recover 
+equally weighted, past or present exponentially weighted expectations. Algorithm \ref{algo-boltzmann-weighted-excess-returns} 
+describes how to calculate the Boltzmann weighted expected excess return for a firm $i$ given a historical data set $\mathcal{D}_{i}$:
+\begin{algorithm}[h]
+\caption{Boltzmann weighted excess returns}\label{algo-boltzmann-weighted-excess-returns}
+\begin{algorithmic}[1]
+\State \textbf{Input:} Historical data set $\mathcal{D}_{i}$ for firm $i$, hyperparameter $\lambda\geq{0}$, the time step $\Delta{t}$,
+and the risk-free rate $r_{f}$.
+\Statex
+\Procedure{Boltzmann-Weighted-Returns}{$\mathcal{D}$, $\lambda$, $\Delta{t}$, $r_{f}$}
+\Statex
+\State $\bar{\mathcal{D}_{i}}\leftarrow\mathcal{D}_{i}$ \Comment{Sort dataset $\mathcal{D}_{i}$ from newest to oldest prices for firm $i$}.
+\State initialize $\mathcal{R}~\leftarrow~\mathbf{0}$ \Comment{Initialize the return array as zeros}
+\State initialize $W~\leftarrow~\mathbf{0}$ \Comment{Initialize the weight array as zeros}
+\Statex
+\For{$t=2\rightarrow{T-1}$}
+\State $\epsilon_{t} \leftarrow t - 1$ \Comment{Set the pseudo energy}
+\State $W(t) \leftarrow \exp(-\lambda\cdot\epsilon_{t})$ \Comment{Calculate the weight factor $W(t)$}
+\State{$S_{i,t-1} \gets \bar{\mathcal{D}}_{i}[t-1]$}\Comment{Select the price of stock $i$ at time $t-1$}
+\State{$S_{i,t} \gets \bar{\mathcal{D}}_{i}[t]$}\Comment{Select the price of stock $i$ at time $t$}
+\State{$\mathcal{R}(t) \gets W(t)\cdot\left(\left(1/\Delta{t}\right)\cdot\ln\left(S_{i,t}/{S_{i,t-1}}\right) - r_{f}\right)$}\Comment{Set $r_{f} = 0$ for regular growth rate}
+\EndFor
+
+\Statex
+\State $Z \leftarrow \sum_{t=1}^{T}W(t)$ \Comment{Calculate the partition function $Z$}
+\State $\mathbb{E}_{B}\left(R\right)\leftarrow(1/Z)\times\sum\mathcal{R}$ \Comment{Calculate the Boltzmann weighted expected return}
+\EndProcedure
+
+\end{algorithmic}
+\end{algorithm}
+
+\section*{Weighted Variance}
+Fill me in.
+
+\section*{Time-Dependent Return and Variance Parameters}
+For the standard geometric Brownian motion equations, the drift (growth) coefficient $\mu$ and the diffusion (volatility) coefficient $\sigma^{2}$ are assumed constant. 
+However, in many practical cases, this may not be true. For example, macroeconomic conditions may change, leading to different price dynamics. 
+Thus, one could imagine modifying the geometric Brownian motion model to capture time-dependent drift and diffusion coefficients.
+For example, we could construct a separate model that accounts for how the diffusion (volatility) coefficient $\sigma$ 
+changes as a function of time. However, these more sophisticated models do not have quickly developed analytical solutions except in rare cases. 
+Thus, we must develop numerical methods to approximate the solutions of these models. There are several approaches to numerically estimating a solution to the time-dependent drift and diffusion coefficient problem.
+However, we'll consider the simplest and the most accessible approach, albeit the least accurate, 
+namely the Euler-Maruyama (EM) method. 
+Alternatively, we could use time-series models, e.g., ARIMA, GARCH, etc., to estimate the time-dependent drift and diffusion coefficients.
+Let's start with the EM method.
+
+\subsection*{Euler-Maruyama Method}
+The Euler-Maruyama method is a simple numerical method for solving stochastic differential equations (SDEs). 
+The \href{https://en.wikipedia.org/wiki/Euler–Maruyama_method}{Euler-Maruyama (EM) method}
+is an extension to stochastic differential equations (SDEs) of the \href{https://en.wikipedia.org/wiki/Euler_method}{Euler method}
+used for approximating the solution of ordinary differential equations (ODEs). 
+
+\begin{definition}[Euler-Maruyama Method]\label{defn-em-method}
+For the general scalar stochastic differential equation describing the random variable $X$ (assuming Wiener noise):
+\begin{equation}\label{eqn-generic-scalar-sde}
+dX = a(X,t)dt + b(X,t)dW
+\end{equation}
+where $a(X,t)$ and $b(X,t)$ are functions of the state $X$ and $t$, and $dW$ is the Wiener noise process.
+The EM method gives the approximate solution:
+\begin{equation*}\label{eqn-em-method}
+X_{k+1} = X_{k} + a(X_{k}, t_{k})h + b(X_{k},t_{k})\sqrt{h}Z\left(0,1\right)
+\end{equation*}
+where the step size $h=t_{k+1} - t_{k}$ and $Z(0,1)$ denotes a standard normal random variable.  
+While the EM method is straightforward to implement, it has a poor overall accuracy with error on order $\sqrt{h}$; 
+thus, small step sizes are required to get accurate solutions.
+\end{definition}
+
+\subsubsection*{Ornstein-Uhlenbeck model}
+The \href{https://en.wikipedia.org/wiki/Ornstein–Uhlenbeck_process}{Ornstein-Uhlenbeck model} of mean reversion is a type of Brownian motion model 
+with a modified mean-reverting drift term:
+\begin{equation*}\label{eqn-ou-model}
+dX = \theta\left(\mu-X\right)dt + {\sigma}dW
+\end{equation*}
+where $\theta>0$ is the time-constant controlling the mean reversion, 
+$\mu$ is the long-term price target, and $\sigma>0$ denotes the volatility parameter [REFME]. 
+We can use the EM method to discretize the Ornstein-Uhlenbeck model:
+\begin{equation*}\label{eqn-EM-soln-OU-model}
+X_{k+1} = X_{k} + \theta\left(\mu-X_{k}\right)h + \left(\sigma\sqrt{h}\right)Z(0,1)
+\end{equation*}
+where $Z(0,1)$ denotes a standard normally distributed random variable, 
+and $h = t_{k+1} - t_{k}$ denotes the fixed time step size, where the subsscript $k$ denotes the time index. 
+
+\subsection*{Time-series Models of Time-Dependent Parameters}
+Fill me in.
+
+\section*{Summary}
+Fill me in. 
+
+\bibliography{References_v1}
+
+\clearpage
+\printindex
+
+\end{document}
