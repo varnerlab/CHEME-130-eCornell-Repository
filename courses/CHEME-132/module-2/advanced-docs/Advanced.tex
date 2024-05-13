@@ -154,7 +154,7 @@ for the expectation and variance of the share price. In this module, we will dev
 and tools to estimate the parameters $\mu$ and $\sigma$ from historical data. We'll then use these tools to simulate the share 
 price of firms and analyze properties of the return distributions in the example and project for this module. 
 
-\section*{Weighted Expected Return}
+\section*{Weighted Expected Return and Variance}
 Previously, we used the arithmetic mean of historical data to estimate the expected annualized growth rate $\mu$ for a particular firm.
 However, one could argue that the arithmetic mean is not the best estimator of the expected growth rate in the current market environment.
 For example, the arithmetic mean is sensitive to outliers and does not account for the time-varying nature of the growth rate 
@@ -223,14 +223,11 @@ and the risk-free rate $r_{f}$.
 \State $Z \leftarrow \sum_{t=1}^{T}W(t)$ \Comment{Calculate the partition function $Z$}
 \State $\mathbb{E}_{B}\left(R\right)\leftarrow(1/Z)\times\sum\mathcal{R}$ \Comment{Calculate the Boltzmann weighted expected return}
 \EndProcedure
-
 \end{algorithmic}
 \end{algorithm}
 
-\section*{Weighted Variance}
-Fill me in.
 
-\section*{Time-Dependent Return and Variance Parameters}
+\section*{Variable Return and Variance Parameters}
 For the standard geometric Brownian motion equations, the drift (growth) coefficient $\mu$ and the diffusion (volatility) coefficient $\sigma^{2}$ are assumed constant. 
 However, in many practical cases, this may not be true. For example, macroeconomic conditions may change, leading to different price dynamics. 
 Thus, one could imagine modifying the geometric Brownian motion model to capture time-dependent drift and diffusion coefficients.
