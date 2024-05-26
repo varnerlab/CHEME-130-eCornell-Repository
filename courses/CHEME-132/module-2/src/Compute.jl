@@ -1,56 +1,6 @@
 _𝔼(X::Array{Float64,1}, p::Array{Float64,1}) = sum(X.*p)
 
 
-function log_return_matrix(dataset::Dict{String, DataFrame}, 
-    firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0, testfirm="AAPL")::Array{Float64,2}
-
-    # initialize -
-    number_of_firms = length(firms);
-    number_of_trading_days = nrow(dataset[testfirm]);
-    return_matrix = Array{Float64,2}(undef, number_of_trading_days-1, number_of_firms);
-
-    # main loop -
-    for i ∈ eachindex(firms) 
-
-        # get the firm data -
-        firm_index = firms[i];
-        firm_data = dataset[firm_index];
-
-        # compute the log returns -
-        for j ∈ 2:number_of_trading_days
-            S₁ = firm_data[j-1, :volume_weighted_average_price];
-            S₂ = firm_data[j, :volume_weighted_average_price];
-            return_matrix[j-1, i] = (1/Δt)*log(S₂/S₁) - risk_free_rate;
-        end
-    end
-
-    # return -
-    return return_matrix;
-end
-
-function log_return_matrix(dataset::Dict{String, DataFrame}, 
-    firm::String; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0)::Array{Float64,1}
-
-    # initialize -
-    number_of_trading_days = nrow(dataset["AAPL"]);
-    return_matrix = Array{Float64,1}(undef, number_of_trading_days-1);
-
-    # get the firm data -
-    firm_data = dataset[firm];
-
-    # compute the log returns -
-    for j ∈ 2:number_of_trading_days
-        S₁ = firm_data[j-1, :volume_weighted_average_price];
-        S₂ = firm_data[j, :volume_weighted_average_price];
-        return_matrix[j-1] = (1/Δt)*log(S₂/S₁) - risk_free_rate;
-    end
-
-    # return -
-    return return_matrix;
-end
-
-
-
 """
     𝔼(model::MyBinomialEquityPriceTree; level::Int = 0) -> Float64
 """
@@ -251,4 +201,55 @@ function _𝕍(model::MyGeometricBrownianMotionEquityModel, data::NamedTuple)::A
    
     # return -
     return variance_array
+end
+
+
+function log_return_matrix(dataset::Dict{String, DataFrame}, 
+    firms::Array{String,1}; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0, 
+    testfirm="AAPL", keycol::Symbol = :volume_weighted_average_price)::Array{Float64,2}
+
+    # initialize -
+    number_of_firms = length(firms);
+    number_of_trading_days = nrow(dataset[testfirm]);
+    return_matrix = Array{Float64,2}(undef, number_of_trading_days-1, number_of_firms);
+
+    # main loop -
+    for i ∈ eachindex(firms) 
+
+        # get the firm data -
+        firm_index = firms[i];
+        firm_data = dataset[firm_index];
+
+        # compute the log returns -
+        for j ∈ 2:number_of_trading_days
+            S₁ = firm_data[j-1, keycol];
+            S₂ = firm_data[j, keycol];
+            return_matrix[j-1, i] = (1/Δt)*log(S₂/S₁) - risk_free_rate;
+        end
+    end
+
+    # return -
+    return return_matrix;
+end
+
+function log_return_matrix(dataset::Dict{String, DataFrame}, 
+    firm::String; Δt::Float64 = (1.0/252.0), risk_free_rate::Float64 = 0.0, 
+    keycol::Symbol = :volume_weighted_average_price)::Array{Float64,1}
+
+    # initialize -
+    number_of_trading_days = nrow(dataset["AAPL"]);
+    return_matrix = Array{Float64,1}(undef, number_of_trading_days-1);
+
+    # get the firm data -
+    firm_data = dataset[firm];
+
+    # compute the log returns -
+    for j ∈ 2:number_of_trading_days
+        S₁ = firm_data[j-1, keycol];
+        S₂ = firm_data[j, keycol];
+        return_matrix[j-1] = (1/Δt)*log(S₂/S₁) - risk_free_rate;
+    end
+
+    # return -
+    return return_matrix;
 end
