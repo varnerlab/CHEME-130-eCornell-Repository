@@ -1,4 +1,4 @@
-function search(dataset::Dict{Int64, Vector{Dict{String, Any}}}, DTE::Int64, logic::Function)
+function search(dataset::Dict{Int64, Vector{Dict{String, Any}}}, DTE::Int64, logic::Function)::DataFrame
 
     # initialize -
     results = DataFrame();
@@ -23,7 +23,7 @@ function search(dataset::Dict{Int64, Vector{Dict{String, Any}}}, DTE::Int64, log
                 ask_size = record["last_quote"]["ask_size"] |> x-> convert(Int64, x)
             );
 
-
+            # capture -
             push!(results, row_df);
         end
     end
