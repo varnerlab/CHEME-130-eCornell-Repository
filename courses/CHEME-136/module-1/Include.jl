@@ -5,9 +5,11 @@ const _PATH_TO_DATA = joinpath(_ROOT, "data");
 
 # check: do we have the required packahes loaded??
 using Pkg
+Pkg.add(path="https://github.com/varnerlab/VLQuantitativeFinancePackage.jl.git")
 Pkg.activate("."); Pkg.resolve(); Pkg.instantiate(); Pkg.update();
 
 # load external packages -
+using VLQuantitativeFinancePackage;
 using LinearAlgebra;
 using Statistics;
 using Distributions;
