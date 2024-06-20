@@ -22,3 +22,4 @@ using LinearAlgebra
 using StatsPlots
 using Distributions
 using HypothesisTests
+using Images
