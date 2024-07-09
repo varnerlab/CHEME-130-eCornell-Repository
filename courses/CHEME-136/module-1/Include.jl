@@ -20,6 +20,7 @@ using Plots;
 using Colors;
 using StatsPlots;
 using HypothesisTests;
+using CSV;
 
 # include my codes -
 include(joinpath(_PATH_TO_SRC, "Files.jl"));
