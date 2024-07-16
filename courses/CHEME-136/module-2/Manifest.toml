@@ -2,7 +2,7 @@
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "9a354bac4aa703eccbcd5d80b55b5aab9ee4daf3"
+project_hash = "58e6304ab6ab646bdab558a59e09a53ea7c5db02"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1385,7 +1385,7 @@ version = "0.2.0"
 
 [[deps.VLQuantitativeFinancePackage]]
 deps = ["CSV", "DataFrames", "DataStructures", "Distributions", "JLD2", "JuMP", "LinearAlgebra", "LsqFit", "MadNLP", "Optim", "Statistics", "StatsBase"]
-git-tree-sha1 = "e8aceccbec2ba217332e08763710f440a24def99"
+git-tree-sha1 = "6a2878186b41e1d8ad3e8f8b0cc894856d833e0e"
 repo-rev = "main"
 repo-url = "https://github.com/varnerlab/VLQuantitativeFinancePackage.jl.git"
 uuid = "4119e0bf-20d0-4785-913e-5ebdb0caa218"
