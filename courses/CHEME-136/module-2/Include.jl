@@ -19,6 +19,7 @@ using StatsBase
 using StatsPlots
 using Colors
 using PrettyTables
+using LinearAlgebra
 
 # load my codes -
 include(joinpath(_PATH_TO_SRC, "Files.jl"));
