@@ -5,9 +5,12 @@ const _PATH_TO_DATA = joinpath(_ROOT, "data");
 const _PATH_TO_FIGS = joinpath(_ROOT, "figs");
 
 # check: do we have the required packahes loaded??
-using Pkg
-Pkg.add(path="https://github.com/varnerlab/VLQuantitativeFinancePackage.jl.git")
-Pkg.activate("."); Pkg.resolve(); Pkg.instantiate(); Pkg.update();
+using Pkg;
+if (isfile(joinpath(_ROOT, "Manifest.toml")) == false) # have manifest file, we are good. Otherwise, we need to instantiate the environment
+    Pkg.add(path="https://github.com/varnerlab/VLQuantitativeFinancePackage.jl.git")
+    Pkg.activate("."); Pkg.resolve(); Pkg.instantiate(); Pkg.update();
+end
+
 
 # load external packages -
 using VLQuantitativeFinancePackage;
